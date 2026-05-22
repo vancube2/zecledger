@@ -1,0 +1,3016 @@
+{
+  "generated_at": "2026-05-22T10:45:15.476722027Z",
+  "summary": {
+    "avg_tx_size_zec": 4.3585,
+    "block_height": 2800000,
+    "generated_at": "2026-05-22T10:45:15.476506771Z",
+    "shield_rate_pct": 50.0,
+    "shielded_count": 150,
+    "total_transactions": 300,
+    "total_volume_usd": 37265.175,
+    "total_volume_zec": 1307.55,
+    "transparent_count": 75
+  },
+  "transactions": [
+    {
+      "amount_usd": 14.25,
+      "amount_zec": 0.5,
+      "block_height": 2800000,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T10:45:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "e8addaf00a3a41998ce2daa2d9d2b91d"
+    },
+    {
+      "amount_usd": 37.050000000000004,
+      "amount_zec": 1.3,
+      "block_height": 2800000,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T10:43:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "22d543d3997049559c785cbf4597cc3e"
+    },
+    {
+      "amount_usd": 171.0,
+      "amount_zec": 6.0,
+      "block_height": 2800000,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T10:41:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "f411b42d511a4636a3589d81bad18e0b"
+    },
+    {
+      "amount_usd": 58.425,
+      "amount_zec": 2.05,
+      "block_height": 2800001,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T10:39:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "e0e056a5fa424b81a37f70705d71400e"
+    },
+    {
+      "amount_usd": 105.45,
+      "amount_zec": 3.7,
+      "block_height": 2800001,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T10:37:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "6730d57543e24593bc156a1c26cb9fe3"
+    },
+    {
+      "amount_usd": 128.25,
+      "amount_zec": 4.5,
+      "block_height": 2800001,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T10:35:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "89c6d067bc374cb2b12014a6c549c6e7"
+    },
+    {
+      "amount_usd": 99.75,
+      "amount_zec": 3.5,
+      "block_height": 2800002,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T10:33:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "fd6e04bcc32c4e33a3ebc4afd4e25ec1"
+    },
+    {
+      "amount_usd": 126.825,
+      "amount_zec": 4.45,
+      "block_height": 2800002,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T10:31:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "82f6ddb0eee44c6e85c3566c185e3f80"
+    },
+    {
+      "amount_usd": 196.65,
+      "amount_zec": 6.9,
+      "block_height": 2800002,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T10:29:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "9acc4c8bfa334bf6846a4172847ae2f7"
+    },
+    {
+      "amount_usd": 219.45000000000002,
+      "amount_zec": 7.7,
+      "block_height": 2800003,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T10:27:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "33f8b559dffe420c9140b7129892da11"
+    },
+    {
+      "amount_usd": 28.5,
+      "amount_zec": 1.0,
+      "block_height": 2800003,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T10:25:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "32e4490f225c44989238458099ce5e50"
+    },
+    {
+      "amount_usd": 58.425,
+      "amount_zec": 2.05,
+      "block_height": 2800003,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T10:23:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "fede9e95d5074a418143ebdcf57d1e4b"
+    },
+    {
+      "amount_usd": 59.85,
+      "amount_zec": 2.1,
+      "block_height": 2800004,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T10:21:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "bf503a2693a64bea8e4d5a04bca6e237"
+    },
+    {
+      "amount_usd": 82.65,
+      "amount_zec": 2.9000000000000004,
+      "block_height": 2800004,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T10:19:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "2116294e5dad44d7a438f90a6ceac77b"
+    },
+    {
+      "amount_usd": 313.5,
+      "amount_zec": 11.0,
+      "block_height": 2800004,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T10:17:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "7d3e1effc3094021b29100c8750a6988"
+    },
+    {
+      "amount_usd": 126.825,
+      "amount_zec": 4.45,
+      "block_height": 2800005,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T10:15:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "a009acd2fc1f45b09055f7f67ce470a8"
+    },
+    {
+      "amount_usd": 151.05,
+      "amount_zec": 5.300000000000001,
+      "block_height": 2800005,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T10:13:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "bb5c7518fe7043bcbf948199456d67b4"
+    },
+    {
+      "amount_usd": 173.85000000000002,
+      "amount_zec": 6.1000000000000005,
+      "block_height": 2800005,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T10:11:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "4d7c0809cb144f62afff1905bf779244"
+    },
+    {
+      "amount_usd": 242.25,
+      "amount_zec": 8.5,
+      "block_height": 2800006,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T10:09:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "6bb64494ef524cc4adef637dc243ab28"
+    },
+    {
+      "amount_usd": 58.425,
+      "amount_zec": 2.05,
+      "block_height": 2800006,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T10:07:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "68a57f2b67204f2cb18cd0a55b42c703"
+    },
+    {
+      "amount_usd": 14.25,
+      "amount_zec": 0.5,
+      "block_height": 2800006,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T10:05:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "1a957a0594924764a7e599153cdf9dd0"
+    },
+    {
+      "amount_usd": 37.050000000000004,
+      "amount_zec": 1.3,
+      "block_height": 2800007,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T10:03:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "2049934ef4df423185a9471628d24c21"
+    },
+    {
+      "amount_usd": 171.0,
+      "amount_zec": 6.0,
+      "block_height": 2800007,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T10:01:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "6eea90d3fa6d4c19ac1b6c9b6cdb9382"
+    },
+    {
+      "amount_usd": 126.825,
+      "amount_zec": 4.45,
+      "block_height": 2800007,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T09:59:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "ed28befce6e94e749fd743748e4fc08c"
+    },
+    {
+      "amount_usd": 105.45,
+      "amount_zec": 3.7,
+      "block_height": 2800008,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T09:57:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "c0a0f11ed44c49b989d59cc4306a7b02"
+    },
+    {
+      "amount_usd": 128.25,
+      "amount_zec": 4.5,
+      "block_height": 2800008,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T09:55:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "66b91c0a11ca4549ac3c178a5f0c28e0"
+    },
+    {
+      "amount_usd": 99.75,
+      "amount_zec": 3.5,
+      "block_height": 2800008,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T09:53:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "8c01d693b7ec42d98bf4946df63a63eb"
+    },
+    {
+      "amount_usd": 58.425,
+      "amount_zec": 2.05,
+      "block_height": 2800009,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T09:51:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "27e8c5f7e4e54ac8943c8e6ff128db83"
+    },
+    {
+      "amount_usd": 196.65,
+      "amount_zec": 6.9,
+      "block_height": 2800009,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T09:49:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "eef372e4111149bc84b08112bdd1f1bb"
+    },
+    {
+      "amount_usd": 219.45000000000002,
+      "amount_zec": 7.7,
+      "block_height": 2800009,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T09:47:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "af07d643bf0942bdb55055e65018a46d"
+    },
+    {
+      "amount_usd": 28.5,
+      "amount_zec": 1.0,
+      "block_height": 2800010,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T09:45:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "fe70037b348746bbadf174304372bb3a"
+    },
+    {
+      "amount_usd": 126.825,
+      "amount_zec": 4.45,
+      "block_height": 2800010,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T09:43:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "3b9f0889d6a34c3aa253a3f02678cf1e"
+    },
+    {
+      "amount_usd": 59.85,
+      "amount_zec": 2.1,
+      "block_height": 2800010,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T09:41:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "1dfd2c9fffee4e90965667df80aefb2d"
+    },
+    {
+      "amount_usd": 82.65,
+      "amount_zec": 2.9000000000000004,
+      "block_height": 2800011,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T09:39:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "d235ddda7f2643c99c0afd1b67c239c1"
+    },
+    {
+      "amount_usd": 313.5,
+      "amount_zec": 11.0,
+      "block_height": 2800011,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T09:37:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "01e1a4ca3304489fb01e2e920dbafc7e"
+    },
+    {
+      "amount_usd": 58.425,
+      "amount_zec": 2.05,
+      "block_height": 2800011,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T09:35:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "b036e3e499704895bbf11ba50188024a"
+    },
+    {
+      "amount_usd": 151.05,
+      "amount_zec": 5.300000000000001,
+      "block_height": 2800012,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T09:33:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "16747e22887643619ecc181a88ed0fc5"
+    },
+    {
+      "amount_usd": 173.85000000000002,
+      "amount_zec": 6.1000000000000005,
+      "block_height": 2800012,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T09:31:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "30302a41f5e040aba3241e181d9b5e0d"
+    },
+    {
+      "amount_usd": 242.25,
+      "amount_zec": 8.5,
+      "block_height": 2800012,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T09:29:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "d182a72df5064a539a938d505cbe1d92"
+    },
+    {
+      "amount_usd": 126.825,
+      "amount_zec": 4.45,
+      "block_height": 2800013,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T09:27:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "ac3289a5038e49fb9628e47e635495e7"
+    },
+    {
+      "amount_usd": 14.25,
+      "amount_zec": 0.5,
+      "block_height": 2800013,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T09:25:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "11a91638d2214785a3a807017e6f20a7"
+    },
+    {
+      "amount_usd": 37.050000000000004,
+      "amount_zec": 1.3,
+      "block_height": 2800013,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T09:23:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "92d9560846fa467b80f82a87d30fb71c"
+    },
+    {
+      "amount_usd": 171.0,
+      "amount_zec": 6.0,
+      "block_height": 2800014,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T09:21:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "94797223939a445b8b7cb9eadb5a58d3"
+    },
+    {
+      "amount_usd": 58.425,
+      "amount_zec": 2.05,
+      "block_height": 2800014,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T09:19:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "d514922ce1b64d6abc346e392b021063"
+    },
+    {
+      "amount_usd": 105.45,
+      "amount_zec": 3.7,
+      "block_height": 2800014,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T09:17:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "e7f98636f0cc49f4a99ccd91fd4ac175"
+    },
+    {
+      "amount_usd": 128.25,
+      "amount_zec": 4.5,
+      "block_height": 2800015,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T09:15:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "d4975d5ed6bb46c9af74c84b5d20da56"
+    },
+    {
+      "amount_usd": 99.75,
+      "amount_zec": 3.5,
+      "block_height": 2800015,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T09:13:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "62fe7a55ef294e1293f2c7090a50c49b"
+    },
+    {
+      "amount_usd": 126.825,
+      "amount_zec": 4.45,
+      "block_height": 2800015,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T09:11:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "e5a28828c860430f96383f73b07f95b7"
+    },
+    {
+      "amount_usd": 196.65,
+      "amount_zec": 6.9,
+      "block_height": 2800016,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T09:09:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "af7cd9416dbd45738e3a95200a03e988"
+    },
+    {
+      "amount_usd": 219.45000000000002,
+      "amount_zec": 7.7,
+      "block_height": 2800016,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T09:07:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "53d0b183ccd348e0a4e7533802dac80d"
+    },
+    {
+      "amount_usd": 28.5,
+      "amount_zec": 1.0,
+      "block_height": 2800016,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T09:05:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "ff49b1ed06954a4b8ece007bc101d760"
+    },
+    {
+      "amount_usd": 58.425,
+      "amount_zec": 2.05,
+      "block_height": 2800017,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T09:03:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "6b5abcdb0fe940c9ac3965d27f35f7e9"
+    },
+    {
+      "amount_usd": 59.85,
+      "amount_zec": 2.1,
+      "block_height": 2800017,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T09:01:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "0865c756464f41008fdafe9a4c600358"
+    },
+    {
+      "amount_usd": 82.65,
+      "amount_zec": 2.9000000000000004,
+      "block_height": 2800017,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T08:59:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "cb3d0c2adc4b44ccb43fba47bce7a38b"
+    },
+    {
+      "amount_usd": 313.5,
+      "amount_zec": 11.0,
+      "block_height": 2800018,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T08:57:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "6e65bf2955a9427a8119ffb3ed794220"
+    },
+    {
+      "amount_usd": 126.825,
+      "amount_zec": 4.45,
+      "block_height": 2800018,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T08:55:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "a843423260aa489f95daf42c0518f077"
+    },
+    {
+      "amount_usd": 151.05,
+      "amount_zec": 5.300000000000001,
+      "block_height": 2800018,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T08:53:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "8a905c495c6b461ba07f76fd861e9c0e"
+    },
+    {
+      "amount_usd": 173.85000000000002,
+      "amount_zec": 6.1000000000000005,
+      "block_height": 2800019,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T08:51:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "791fecd1dd83406fadef2bf8e78e90ed"
+    },
+    {
+      "amount_usd": 242.25,
+      "amount_zec": 8.5,
+      "block_height": 2800019,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T08:49:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "d62a8d287e13464290ce4d8df402e4b8"
+    },
+    {
+      "amount_usd": 58.425,
+      "amount_zec": 2.05,
+      "block_height": 2800019,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T08:47:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "939ddcc0081e42ffa1cb64f8427442f0"
+    },
+    {
+      "amount_usd": 14.25,
+      "amount_zec": 0.5,
+      "block_height": 2800020,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T08:45:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "77eb4356b46e4f58a11de734ef4845cb"
+    },
+    {
+      "amount_usd": 37.050000000000004,
+      "amount_zec": 1.3,
+      "block_height": 2800020,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T08:43:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "757d04f78d854014877eed01074887a4"
+    },
+    {
+      "amount_usd": 171.0,
+      "amount_zec": 6.0,
+      "block_height": 2800020,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T08:41:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "a0251b2f4b9d410d9c8a15ba41b84872"
+    },
+    {
+      "amount_usd": 126.825,
+      "amount_zec": 4.45,
+      "block_height": 2800021,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T08:39:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "e51ac8a0652f47a39fb2dcb565f3117e"
+    },
+    {
+      "amount_usd": 105.45,
+      "amount_zec": 3.7,
+      "block_height": 2800021,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T08:37:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "a7cfcaf460744e86b928a7d1857e30fd"
+    },
+    {
+      "amount_usd": 128.25,
+      "amount_zec": 4.5,
+      "block_height": 2800021,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T08:35:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "bb454f7560c64f1a8547651d93b6b02f"
+    },
+    {
+      "amount_usd": 99.75,
+      "amount_zec": 3.5,
+      "block_height": 2800022,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T08:33:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "37c95ad175e24e45be89d22efcc9dd92"
+    },
+    {
+      "amount_usd": 58.425,
+      "amount_zec": 2.05,
+      "block_height": 2800022,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T08:31:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "db06145a49fc4fbc8afff3d21a1162d2"
+    },
+    {
+      "amount_usd": 196.65,
+      "amount_zec": 6.9,
+      "block_height": 2800022,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T08:29:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "06a951c9af6342b885218441b47c6128"
+    },
+    {
+      "amount_usd": 219.45000000000002,
+      "amount_zec": 7.7,
+      "block_height": 2800023,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T08:27:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "b63d5d295c24428ebf530e31932e0502"
+    },
+    {
+      "amount_usd": 28.5,
+      "amount_zec": 1.0,
+      "block_height": 2800023,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T08:25:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "f6f778bd182f41ff93c8f8c469c31458"
+    },
+    {
+      "amount_usd": 126.825,
+      "amount_zec": 4.45,
+      "block_height": 2800023,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T08:23:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "5934a85cde274cb88e07d64fbe06c32b"
+    },
+    {
+      "amount_usd": 59.85,
+      "amount_zec": 2.1,
+      "block_height": 2800024,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T08:21:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "eee3e048a6d945e38f23263538fc1722"
+    },
+    {
+      "amount_usd": 82.65,
+      "amount_zec": 2.9000000000000004,
+      "block_height": 2800024,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T08:19:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "33afb18e35f94325b0bf4c32db919822"
+    },
+    {
+      "amount_usd": 313.5,
+      "amount_zec": 11.0,
+      "block_height": 2800024,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T08:17:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "c7cd07f5c6554da9ac8c7670faf92ae9"
+    },
+    {
+      "amount_usd": 58.425,
+      "amount_zec": 2.05,
+      "block_height": 2800025,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T08:15:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "c7165318aaff4f6badfbd1bfc97d927a"
+    },
+    {
+      "amount_usd": 151.05,
+      "amount_zec": 5.300000000000001,
+      "block_height": 2800025,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T08:13:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "a13b36f4d847463aa528f572cd3f29b0"
+    },
+    {
+      "amount_usd": 173.85000000000002,
+      "amount_zec": 6.1000000000000005,
+      "block_height": 2800025,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T08:11:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "8f8f695b0e0c4834a62f4f048dfb15b3"
+    },
+    {
+      "amount_usd": 242.25,
+      "amount_zec": 8.5,
+      "block_height": 2800026,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T08:09:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "98112744f4084c7695cc34f05f1b5373"
+    },
+    {
+      "amount_usd": 126.825,
+      "amount_zec": 4.45,
+      "block_height": 2800026,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T08:07:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "cb7aa94822c94bd6a130595a425ea021"
+    },
+    {
+      "amount_usd": 14.25,
+      "amount_zec": 0.5,
+      "block_height": 2800026,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T08:05:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "8f9f1885f0e04a169e506687028192e6"
+    },
+    {
+      "amount_usd": 37.050000000000004,
+      "amount_zec": 1.3,
+      "block_height": 2800027,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T08:03:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "0287b444cb9c48c0929a9e0338caa86d"
+    },
+    {
+      "amount_usd": 171.0,
+      "amount_zec": 6.0,
+      "block_height": 2800027,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T08:01:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "5bdb3577adc444c392266f25e8bddbe1"
+    },
+    {
+      "amount_usd": 58.425,
+      "amount_zec": 2.05,
+      "block_height": 2800027,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T07:59:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "505297ab27354d41bbd394194a894419"
+    },
+    {
+      "amount_usd": 105.45,
+      "amount_zec": 3.7,
+      "block_height": 2800028,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T07:57:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "c0770ec8335b4ee5978f800234b813b8"
+    },
+    {
+      "amount_usd": 128.25,
+      "amount_zec": 4.5,
+      "block_height": 2800028,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T07:55:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "fa35303297394815898f86659164f252"
+    },
+    {
+      "amount_usd": 99.75,
+      "amount_zec": 3.5,
+      "block_height": 2800028,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T07:53:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "8a5fad5ef08c4b7689087ed1885a01e2"
+    },
+    {
+      "amount_usd": 126.825,
+      "amount_zec": 4.45,
+      "block_height": 2800029,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T07:51:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "f2add813824342f1829c7eeed06450cd"
+    },
+    {
+      "amount_usd": 196.65,
+      "amount_zec": 6.9,
+      "block_height": 2800029,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T07:49:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "b80852f2a2a54cf1a3be8dc64666267a"
+    },
+    {
+      "amount_usd": 219.45000000000002,
+      "amount_zec": 7.7,
+      "block_height": 2800029,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T07:47:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "7efe079940ec4ef889bc7e649f9ebeb5"
+    },
+    {
+      "amount_usd": 28.5,
+      "amount_zec": 1.0,
+      "block_height": 2800030,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T07:45:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "2ec425ca369c4a0b889aa25e7053ccaa"
+    },
+    {
+      "amount_usd": 58.425,
+      "amount_zec": 2.05,
+      "block_height": 2800030,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T07:43:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "b2238446741f489f8bbd11f8fbcc7a37"
+    },
+    {
+      "amount_usd": 59.85,
+      "amount_zec": 2.1,
+      "block_height": 2800030,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T07:41:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "7496d05ce313461fb29e3efc67686d10"
+    },
+    {
+      "amount_usd": 82.65,
+      "amount_zec": 2.9000000000000004,
+      "block_height": 2800031,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T07:39:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "eb322a319d324a56b9e57e3c44ef1b1d"
+    },
+    {
+      "amount_usd": 313.5,
+      "amount_zec": 11.0,
+      "block_height": 2800031,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T07:37:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "98ce734b778e47e6a5a95bfcb5be877b"
+    },
+    {
+      "amount_usd": 126.825,
+      "amount_zec": 4.45,
+      "block_height": 2800031,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T07:35:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "1080e0ad2b684a14a14f5bd63fc4acf0"
+    },
+    {
+      "amount_usd": 151.05,
+      "amount_zec": 5.300000000000001,
+      "block_height": 2800032,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T07:33:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "80fd115cc6074a8ebc38b0989476c34c"
+    },
+    {
+      "amount_usd": 173.85000000000002,
+      "amount_zec": 6.1000000000000005,
+      "block_height": 2800032,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T07:31:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "60fe09f087724b698564384a65435fc2"
+    },
+    {
+      "amount_usd": 242.25,
+      "amount_zec": 8.5,
+      "block_height": 2800032,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T07:29:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "bd655c2132df468cb3635ba961d51de2"
+    },
+    {
+      "amount_usd": 58.425,
+      "amount_zec": 2.05,
+      "block_height": 2800033,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T07:27:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "e641ec6f8b244ee48666fe964413dc05"
+    },
+    {
+      "amount_usd": 14.25,
+      "amount_zec": 0.5,
+      "block_height": 2800033,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T07:25:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "cbeff00d2fef4278b9385d5588283548"
+    },
+    {
+      "amount_usd": 37.050000000000004,
+      "amount_zec": 1.3,
+      "block_height": 2800033,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T07:23:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "f0278dbd7e3d43c9976c1c146bf1ce6a"
+    },
+    {
+      "amount_usd": 171.0,
+      "amount_zec": 6.0,
+      "block_height": 2800034,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T07:21:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "e088daf36e3a4eb5b8c7906d9fdb3af9"
+    },
+    {
+      "amount_usd": 126.825,
+      "amount_zec": 4.45,
+      "block_height": 2800034,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T07:19:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "97ace0ad0af1456185ebb08555a9d0f9"
+    },
+    {
+      "amount_usd": 105.45,
+      "amount_zec": 3.7,
+      "block_height": 2800034,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T07:17:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "24972fab8dfc483ca00e990f06b6e764"
+    },
+    {
+      "amount_usd": 128.25,
+      "amount_zec": 4.5,
+      "block_height": 2800035,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T07:15:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "7396d3b2a32840b59df60cc7deee6dfb"
+    },
+    {
+      "amount_usd": 99.75,
+      "amount_zec": 3.5,
+      "block_height": 2800035,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T07:13:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "f2c4fc3a7bb94952a85b2c21faa10443"
+    },
+    {
+      "amount_usd": 58.425,
+      "amount_zec": 2.05,
+      "block_height": 2800035,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T07:11:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "66c0c1e6c37a482fb561da5ab21e04fb"
+    },
+    {
+      "amount_usd": 196.65,
+      "amount_zec": 6.9,
+      "block_height": 2800036,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T07:09:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "6fc3f14208804f60b3ce615caa394668"
+    },
+    {
+      "amount_usd": 219.45000000000002,
+      "amount_zec": 7.7,
+      "block_height": 2800036,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T07:07:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "fa9d09723fac44d4926a2a24f1e39e47"
+    },
+    {
+      "amount_usd": 28.5,
+      "amount_zec": 1.0,
+      "block_height": 2800036,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T07:05:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "8af6efd9a4524e04b8fce4e7e8dcb840"
+    },
+    {
+      "amount_usd": 126.825,
+      "amount_zec": 4.45,
+      "block_height": 2800037,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T07:03:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "5a293684b5254465ba991a0161feae73"
+    },
+    {
+      "amount_usd": 59.85,
+      "amount_zec": 2.1,
+      "block_height": 2800037,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T07:01:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "6c89176060c24838ba904734f0f2c0c8"
+    },
+    {
+      "amount_usd": 82.65,
+      "amount_zec": 2.9000000000000004,
+      "block_height": 2800037,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T06:59:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "23756598332c4cbcbae3ed2bce6ace6e"
+    },
+    {
+      "amount_usd": 313.5,
+      "amount_zec": 11.0,
+      "block_height": 2800038,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T06:57:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "056c91c65a904626bef09679c18e4d8e"
+    },
+    {
+      "amount_usd": 58.425,
+      "amount_zec": 2.05,
+      "block_height": 2800038,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T06:55:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "15ada5d73199460ab61a2a6146fb9aac"
+    },
+    {
+      "amount_usd": 151.05,
+      "amount_zec": 5.300000000000001,
+      "block_height": 2800038,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T06:53:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "4e6fc7878a724dd58b99ef499715ea92"
+    },
+    {
+      "amount_usd": 173.85000000000002,
+      "amount_zec": 6.1000000000000005,
+      "block_height": 2800039,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T06:51:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "e6968b3dbaef488fa815086b3247130a"
+    },
+    {
+      "amount_usd": 242.25,
+      "amount_zec": 8.5,
+      "block_height": 2800039,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T06:49:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "ee67ddf293284917bee37516a1fd179c"
+    },
+    {
+      "amount_usd": 126.825,
+      "amount_zec": 4.45,
+      "block_height": 2800039,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T06:47:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "cf4e4f0e907d4a879e7346b7e7250ed2"
+    },
+    {
+      "amount_usd": 14.25,
+      "amount_zec": 0.5,
+      "block_height": 2800040,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T06:45:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "2157d27c870a4974b19d2133e5debedb"
+    },
+    {
+      "amount_usd": 37.050000000000004,
+      "amount_zec": 1.3,
+      "block_height": 2800040,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T06:43:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "01ff8368b1f446e9b7c8174761bc7bab"
+    },
+    {
+      "amount_usd": 171.0,
+      "amount_zec": 6.0,
+      "block_height": 2800040,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T06:41:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "93969a404ad846fdb14749774632306a"
+    },
+    {
+      "amount_usd": 58.425,
+      "amount_zec": 2.05,
+      "block_height": 2800041,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T06:39:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "8e5ac00146ad44348772b2f4f5cbfabd"
+    },
+    {
+      "amount_usd": 105.45,
+      "amount_zec": 3.7,
+      "block_height": 2800041,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T06:37:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "b01b4cd2fd774ce8ba13636f89d954d3"
+    },
+    {
+      "amount_usd": 128.25,
+      "amount_zec": 4.5,
+      "block_height": 2800041,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T06:35:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "90c7cc0dcd3641159b5c6340f4bffc08"
+    },
+    {
+      "amount_usd": 99.75,
+      "amount_zec": 3.5,
+      "block_height": 2800042,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T06:33:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "e4b3204fdd2049c0a553b691decbff37"
+    },
+    {
+      "amount_usd": 126.825,
+      "amount_zec": 4.45,
+      "block_height": 2800042,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T06:31:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "e9fdb1448fb9425895041fd0090916d0"
+    },
+    {
+      "amount_usd": 196.65,
+      "amount_zec": 6.9,
+      "block_height": 2800042,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T06:29:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "42fa3213b1a84784bafe919fee738ef9"
+    },
+    {
+      "amount_usd": 219.45000000000002,
+      "amount_zec": 7.7,
+      "block_height": 2800043,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T06:27:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "cb5163c463fc4670a2117c1bd9a726c5"
+    },
+    {
+      "amount_usd": 28.5,
+      "amount_zec": 1.0,
+      "block_height": 2800043,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T06:25:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "465a2f0cd3004c42a8f3591933441798"
+    },
+    {
+      "amount_usd": 58.425,
+      "amount_zec": 2.05,
+      "block_height": 2800043,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T06:23:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "e2ff653c84ad451d832e6981ab75a831"
+    },
+    {
+      "amount_usd": 59.85,
+      "amount_zec": 2.1,
+      "block_height": 2800044,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T06:21:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "b25b56433a904493b1ff4c4c1c012343"
+    },
+    {
+      "amount_usd": 82.65,
+      "amount_zec": 2.9000000000000004,
+      "block_height": 2800044,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T06:19:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "16ce2ffe3482412082d3d9d60a2fa4ba"
+    },
+    {
+      "amount_usd": 313.5,
+      "amount_zec": 11.0,
+      "block_height": 2800044,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T06:17:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "cc98a221741b4ec2a86426523b859250"
+    },
+    {
+      "amount_usd": 126.825,
+      "amount_zec": 4.45,
+      "block_height": 2800045,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T06:15:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "220d56e08b3c47d9ab4901c28ba5c581"
+    },
+    {
+      "amount_usd": 151.05,
+      "amount_zec": 5.300000000000001,
+      "block_height": 2800045,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T06:13:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "17ec0cc596e1415cb5ef4debbeb90c42"
+    },
+    {
+      "amount_usd": 173.85000000000002,
+      "amount_zec": 6.1000000000000005,
+      "block_height": 2800045,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T06:11:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "f88b8609a8944a40878f0b3a08a0de3f"
+    },
+    {
+      "amount_usd": 242.25,
+      "amount_zec": 8.5,
+      "block_height": 2800046,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T06:09:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "b1e69adc10ae4ad78369ed09de680e7a"
+    },
+    {
+      "amount_usd": 58.425,
+      "amount_zec": 2.05,
+      "block_height": 2800046,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T06:07:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "9347455bb48143f78489490cd1b76f26"
+    },
+    {
+      "amount_usd": 14.25,
+      "amount_zec": 0.5,
+      "block_height": 2800046,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T06:05:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "3445cfbc28ae41bf88335d11fed6dc70"
+    },
+    {
+      "amount_usd": 37.050000000000004,
+      "amount_zec": 1.3,
+      "block_height": 2800047,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T06:03:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "4c3fa3ecfe9f4774b3d5c8aece501d52"
+    },
+    {
+      "amount_usd": 171.0,
+      "amount_zec": 6.0,
+      "block_height": 2800047,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T06:01:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "f9d3c7c0ec914e12904801e18909f1e7"
+    },
+    {
+      "amount_usd": 126.825,
+      "amount_zec": 4.45,
+      "block_height": 2800047,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T05:59:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "f332f2c755ff4d27bb80a92840efa322"
+    },
+    {
+      "amount_usd": 105.45,
+      "amount_zec": 3.7,
+      "block_height": 2800048,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T05:57:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "dd14e94ba2f84a429e9fd410f8d4cb93"
+    },
+    {
+      "amount_usd": 128.25,
+      "amount_zec": 4.5,
+      "block_height": 2800048,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T05:55:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "7a3175dec3504430b9943574da64ccd6"
+    },
+    {
+      "amount_usd": 99.75,
+      "amount_zec": 3.5,
+      "block_height": 2800048,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T05:53:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "83a659b1993a47d09b3cae45404b58ae"
+    },
+    {
+      "amount_usd": 58.425,
+      "amount_zec": 2.05,
+      "block_height": 2800049,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T05:51:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "a8ae9f54a04a4d22bb207f362c3a9c2e"
+    },
+    {
+      "amount_usd": 196.65,
+      "amount_zec": 6.9,
+      "block_height": 2800049,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T05:49:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "87a6ccf0fd6544b49c3c6ebc04bdfb5c"
+    },
+    {
+      "amount_usd": 219.45000000000002,
+      "amount_zec": 7.7,
+      "block_height": 2800049,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T05:47:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "94743ce3b2ea49a5906c78a7b8789a3d"
+    },
+    {
+      "amount_usd": 28.5,
+      "amount_zec": 1.0,
+      "block_height": 2800050,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T05:45:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "43839b8a5eae407aaed8b2b9382f1e7b"
+    },
+    {
+      "amount_usd": 126.825,
+      "amount_zec": 4.45,
+      "block_height": 2800050,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T05:43:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "ccf3ec37ddd04de6a16e4e1ccacb3ee2"
+    },
+    {
+      "amount_usd": 59.85,
+      "amount_zec": 2.1,
+      "block_height": 2800050,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T05:41:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "097552e97af74e55a4e80101a91ef5c6"
+    },
+    {
+      "amount_usd": 82.65,
+      "amount_zec": 2.9000000000000004,
+      "block_height": 2800051,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T05:39:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "0d7529e4451a4fcd9fd0a007a37d0369"
+    },
+    {
+      "amount_usd": 313.5,
+      "amount_zec": 11.0,
+      "block_height": 2800051,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T05:37:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "ed8ad3dbf72949388c9a4dd86bbdd097"
+    },
+    {
+      "amount_usd": 58.425,
+      "amount_zec": 2.05,
+      "block_height": 2800051,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T05:35:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "11bac13d9493425eb810ddf878e3071e"
+    },
+    {
+      "amount_usd": 151.05,
+      "amount_zec": 5.300000000000001,
+      "block_height": 2800052,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T05:33:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "67f280c0530f4bf09537c65e8f2f2370"
+    },
+    {
+      "amount_usd": 173.85000000000002,
+      "amount_zec": 6.1000000000000005,
+      "block_height": 2800052,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T05:31:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "c99ca8d15d21425ca5402a592463d43b"
+    },
+    {
+      "amount_usd": 242.25,
+      "amount_zec": 8.5,
+      "block_height": 2800052,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T05:29:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "871b53033bb24c7b9f2d3f480f4202c6"
+    },
+    {
+      "amount_usd": 126.825,
+      "amount_zec": 4.45,
+      "block_height": 2800053,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T05:27:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "fdf04841c12b4c7eaffabc72309202ef"
+    },
+    {
+      "amount_usd": 14.25,
+      "amount_zec": 0.5,
+      "block_height": 2800053,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T05:25:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "9d4127dd99bc457ba5fbee42efc29b39"
+    },
+    {
+      "amount_usd": 37.050000000000004,
+      "amount_zec": 1.3,
+      "block_height": 2800053,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T05:23:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "9af55074581b4cf5bfc3e57a5a39a890"
+    },
+    {
+      "amount_usd": 171.0,
+      "amount_zec": 6.0,
+      "block_height": 2800054,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T05:21:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "e33777794d1a428298c994bfb2f21460"
+    },
+    {
+      "amount_usd": 58.425,
+      "amount_zec": 2.05,
+      "block_height": 2800054,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T05:19:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "f36d2936a3f14bb69f035b74552cd607"
+    },
+    {
+      "amount_usd": 105.45,
+      "amount_zec": 3.7,
+      "block_height": 2800054,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T05:17:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "2533a4766b93464f87f39f5c65c504ba"
+    },
+    {
+      "amount_usd": 128.25,
+      "amount_zec": 4.5,
+      "block_height": 2800055,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T05:15:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "052c95d7fec6465880413c090848868d"
+    },
+    {
+      "amount_usd": 99.75,
+      "amount_zec": 3.5,
+      "block_height": 2800055,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T05:13:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "fd5451b69ce34a33b5f6f72c78c5e575"
+    },
+    {
+      "amount_usd": 126.825,
+      "amount_zec": 4.45,
+      "block_height": 2800055,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T05:11:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "ca8c6c05c208434a801f0359034580bb"
+    },
+    {
+      "amount_usd": 196.65,
+      "amount_zec": 6.9,
+      "block_height": 2800056,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T05:09:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "fbbc46dcc99d4a4d8d8889546846f08b"
+    },
+    {
+      "amount_usd": 219.45000000000002,
+      "amount_zec": 7.7,
+      "block_height": 2800056,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T05:07:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "d9200e4da8d4495c83ccf41319791251"
+    },
+    {
+      "amount_usd": 28.5,
+      "amount_zec": 1.0,
+      "block_height": 2800056,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T05:05:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "97ed0bb7b6b84f76bf3c520ba157967c"
+    },
+    {
+      "amount_usd": 58.425,
+      "amount_zec": 2.05,
+      "block_height": 2800057,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T05:03:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "dc06f4915ea4400e9e453fba3a260888"
+    },
+    {
+      "amount_usd": 59.85,
+      "amount_zec": 2.1,
+      "block_height": 2800057,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T05:01:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "97b2e5712a1e4c8fa7516bba8104cbcd"
+    },
+    {
+      "amount_usd": 82.65,
+      "amount_zec": 2.9000000000000004,
+      "block_height": 2800057,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T04:59:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "35dc1e47ed5c4063a926180623586087"
+    },
+    {
+      "amount_usd": 313.5,
+      "amount_zec": 11.0,
+      "block_height": 2800058,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T04:57:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "ca84a8694c1b4bc8bbe4c84311f42e3f"
+    },
+    {
+      "amount_usd": 126.825,
+      "amount_zec": 4.45,
+      "block_height": 2800058,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T04:55:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "293ff51a2e424befbe4a8a51a812c3b7"
+    },
+    {
+      "amount_usd": 151.05,
+      "amount_zec": 5.300000000000001,
+      "block_height": 2800058,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T04:53:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "e6ade169bc3a4c7098eb234d64792b7a"
+    },
+    {
+      "amount_usd": 173.85000000000002,
+      "amount_zec": 6.1000000000000005,
+      "block_height": 2800059,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T04:51:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "a05ebe1ed06b471ea28c4e03f4346d63"
+    },
+    {
+      "amount_usd": 242.25,
+      "amount_zec": 8.5,
+      "block_height": 2800059,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T04:49:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "ee8c628cd954408e8dafa7c5806d91f9"
+    },
+    {
+      "amount_usd": 58.425,
+      "amount_zec": 2.05,
+      "block_height": 2800059,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T04:47:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "1c7583a621ad474d85cfa4abdc4af27c"
+    },
+    {
+      "amount_usd": 14.25,
+      "amount_zec": 0.5,
+      "block_height": 2800060,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T04:45:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "73243e7c1675457892782fb6e28d5c78"
+    },
+    {
+      "amount_usd": 37.050000000000004,
+      "amount_zec": 1.3,
+      "block_height": 2800060,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T04:43:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "a72f0c5196954c98b523c4f992e136ec"
+    },
+    {
+      "amount_usd": 171.0,
+      "amount_zec": 6.0,
+      "block_height": 2800060,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T04:41:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "41e180839eeb45d087b055a3ce53b177"
+    },
+    {
+      "amount_usd": 126.825,
+      "amount_zec": 4.45,
+      "block_height": 2800061,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T04:39:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "bc9e9d5bc5484f918e5331f4698561e2"
+    },
+    {
+      "amount_usd": 105.45,
+      "amount_zec": 3.7,
+      "block_height": 2800061,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T04:37:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "61a444b708f3426bbfa1ca2c3ff45d2f"
+    },
+    {
+      "amount_usd": 128.25,
+      "amount_zec": 4.5,
+      "block_height": 2800061,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T04:35:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "89a76b09b8024f798c81182280c77355"
+    },
+    {
+      "amount_usd": 99.75,
+      "amount_zec": 3.5,
+      "block_height": 2800062,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T04:33:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "df3375bcf73b413d81084255745c1381"
+    },
+    {
+      "amount_usd": 58.425,
+      "amount_zec": 2.05,
+      "block_height": 2800062,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T04:31:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "facc72359500444c8719dacee6750d92"
+    },
+    {
+      "amount_usd": 196.65,
+      "amount_zec": 6.9,
+      "block_height": 2800062,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T04:29:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "7b409a7a36e9432ab6e35b0818b9d267"
+    },
+    {
+      "amount_usd": 219.45000000000002,
+      "amount_zec": 7.7,
+      "block_height": 2800063,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T04:27:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "23d412059e3341da8553da68e8460d21"
+    },
+    {
+      "amount_usd": 28.5,
+      "amount_zec": 1.0,
+      "block_height": 2800063,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T04:25:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "a78b7efa344d49ae861b7362b4062231"
+    },
+    {
+      "amount_usd": 126.825,
+      "amount_zec": 4.45,
+      "block_height": 2800063,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T04:23:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "b58ce78295db44bb96eab62aedad54d8"
+    },
+    {
+      "amount_usd": 59.85,
+      "amount_zec": 2.1,
+      "block_height": 2800064,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T04:21:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "47183d6b1bcc411e99a3d8e0ae2146d9"
+    },
+    {
+      "amount_usd": 82.65,
+      "amount_zec": 2.9000000000000004,
+      "block_height": 2800064,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T04:19:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "7af6bab42e7e44e893b3624673685ee7"
+    },
+    {
+      "amount_usd": 313.5,
+      "amount_zec": 11.0,
+      "block_height": 2800064,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T04:17:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "9697249c4ff74913a118ac19773b2a10"
+    },
+    {
+      "amount_usd": 58.425,
+      "amount_zec": 2.05,
+      "block_height": 2800065,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T04:15:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "e4344f0539b74b07aa7d73dba77dde4a"
+    },
+    {
+      "amount_usd": 151.05,
+      "amount_zec": 5.300000000000001,
+      "block_height": 2800065,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T04:13:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "624d2e38b62e4959ad3fe4baa9d3bca3"
+    },
+    {
+      "amount_usd": 173.85000000000002,
+      "amount_zec": 6.1000000000000005,
+      "block_height": 2800065,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T04:11:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "3933afebc90540848ea7f68f75492b9a"
+    },
+    {
+      "amount_usd": 242.25,
+      "amount_zec": 8.5,
+      "block_height": 2800066,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T04:09:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "edac3b18e2d445218003f90f967f2b02"
+    },
+    {
+      "amount_usd": 126.825,
+      "amount_zec": 4.45,
+      "block_height": 2800066,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T04:07:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "e6ce00c6c3fb413eb02627216e5d9bd2"
+    },
+    {
+      "amount_usd": 14.25,
+      "amount_zec": 0.5,
+      "block_height": 2800066,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T04:05:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "8829cb6001d341b1bd26957b50cd1a6a"
+    },
+    {
+      "amount_usd": 37.050000000000004,
+      "amount_zec": 1.3,
+      "block_height": 2800067,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T04:03:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "2cd7f21099984f038fc2b5cbe7e9514f"
+    },
+    {
+      "amount_usd": 171.0,
+      "amount_zec": 6.0,
+      "block_height": 2800067,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T04:01:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "ca05ead699f34da893001ab4c8b52c2e"
+    },
+    {
+      "amount_usd": 58.425,
+      "amount_zec": 2.05,
+      "block_height": 2800067,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T03:59:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "4f1b8b40244441ec9ab6b43dbc6fb474"
+    },
+    {
+      "amount_usd": 105.45,
+      "amount_zec": 3.7,
+      "block_height": 2800068,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T03:57:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "7fa736fd246b4c10bfe5661943b07661"
+    },
+    {
+      "amount_usd": 128.25,
+      "amount_zec": 4.5,
+      "block_height": 2800068,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T03:55:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "dbda92fd89b849e0ad9ccf7de68bab45"
+    },
+    {
+      "amount_usd": 99.75,
+      "amount_zec": 3.5,
+      "block_height": 2800068,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T03:53:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "a4c5819052e94c6289671d6f53dc9315"
+    },
+    {
+      "amount_usd": 126.825,
+      "amount_zec": 4.45,
+      "block_height": 2800069,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T03:51:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "79ae7b07a2754744964de6c05dac7141"
+    },
+    {
+      "amount_usd": 196.65,
+      "amount_zec": 6.9,
+      "block_height": 2800069,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T03:49:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "82ea5725f41a4cc8a1a124cec47abc7e"
+    },
+    {
+      "amount_usd": 219.45000000000002,
+      "amount_zec": 7.7,
+      "block_height": 2800069,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T03:47:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "fcd78390d8f6461398255759ea527c1a"
+    },
+    {
+      "amount_usd": 28.5,
+      "amount_zec": 1.0,
+      "block_height": 2800070,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T03:45:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "9fb1331f6b6944239e94e92b71cf1a2f"
+    },
+    {
+      "amount_usd": 58.425,
+      "amount_zec": 2.05,
+      "block_height": 2800070,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T03:43:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "4c8faae6f34f4307b6c81db40060a66b"
+    },
+    {
+      "amount_usd": 59.85,
+      "amount_zec": 2.1,
+      "block_height": 2800070,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T03:41:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "81eb066eeea847a3a5be5b33c9f02ea1"
+    },
+    {
+      "amount_usd": 82.65,
+      "amount_zec": 2.9000000000000004,
+      "block_height": 2800071,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T03:39:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "6b7a36d030b648bf93940f94a4e9fa30"
+    },
+    {
+      "amount_usd": 313.5,
+      "amount_zec": 11.0,
+      "block_height": 2800071,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T03:37:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "4326726efe864cc2aa69c4b12ec62903"
+    },
+    {
+      "amount_usd": 126.825,
+      "amount_zec": 4.45,
+      "block_height": 2800071,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T03:35:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "aac9f4fd31184118a49b99325df9dc8c"
+    },
+    {
+      "amount_usd": 151.05,
+      "amount_zec": 5.300000000000001,
+      "block_height": 2800072,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T03:33:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "bd1d9113c73a4bd8b2003ddd15f7b3f2"
+    },
+    {
+      "amount_usd": 173.85000000000002,
+      "amount_zec": 6.1000000000000005,
+      "block_height": 2800072,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T03:31:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "d58da5537abe4ea8ae05df61f6a40081"
+    },
+    {
+      "amount_usd": 242.25,
+      "amount_zec": 8.5,
+      "block_height": 2800072,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T03:29:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "1199e44865524f9abda22bf29db380fb"
+    },
+    {
+      "amount_usd": 58.425,
+      "amount_zec": 2.05,
+      "block_height": 2800073,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T03:27:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "900c7e8c48224aef933e7fa4a7fdcf76"
+    },
+    {
+      "amount_usd": 14.25,
+      "amount_zec": 0.5,
+      "block_height": 2800073,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T03:25:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "f1d52f76e27c45959d908a5c8f9c652d"
+    },
+    {
+      "amount_usd": 37.050000000000004,
+      "amount_zec": 1.3,
+      "block_height": 2800073,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T03:23:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "257e32b09ba949428c400ac86be1a971"
+    },
+    {
+      "amount_usd": 171.0,
+      "amount_zec": 6.0,
+      "block_height": 2800074,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T03:21:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "e3ca5aa0acc84179b59a02c4d40f37ac"
+    },
+    {
+      "amount_usd": 126.825,
+      "amount_zec": 4.45,
+      "block_height": 2800074,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T03:19:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "626a690df1f34f99a2f57ca298a782a0"
+    },
+    {
+      "amount_usd": 105.45,
+      "amount_zec": 3.7,
+      "block_height": 2800074,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T03:17:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "645bae555c664ef9ae8b8cfb4be2fd5d"
+    },
+    {
+      "amount_usd": 128.25,
+      "amount_zec": 4.5,
+      "block_height": 2800075,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T03:15:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "a2619850c1d849629afb53a82492113b"
+    },
+    {
+      "amount_usd": 99.75,
+      "amount_zec": 3.5,
+      "block_height": 2800075,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T03:13:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "abfb246a0a9f4dc785c4ce6afc9fe4a5"
+    },
+    {
+      "amount_usd": 58.425,
+      "amount_zec": 2.05,
+      "block_height": 2800075,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T03:11:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "c71ce96a4fba439f921eb683f485d511"
+    },
+    {
+      "amount_usd": 196.65,
+      "amount_zec": 6.9,
+      "block_height": 2800076,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T03:09:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "3ec34c2471b147599b53482b8a5d89ff"
+    },
+    {
+      "amount_usd": 219.45000000000002,
+      "amount_zec": 7.7,
+      "block_height": 2800076,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T03:07:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "f81d4656fff542438250a9576c300665"
+    },
+    {
+      "amount_usd": 28.5,
+      "amount_zec": 1.0,
+      "block_height": 2800076,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T03:05:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "f9792b31ff86477e8f25bdf490d3bd7e"
+    },
+    {
+      "amount_usd": 126.825,
+      "amount_zec": 4.45,
+      "block_height": 2800077,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T03:03:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "5166b19475654656921f86b1cb64473d"
+    },
+    {
+      "amount_usd": 59.85,
+      "amount_zec": 2.1,
+      "block_height": 2800077,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T03:01:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "864443ce13724458825bd12fe3fd6fb1"
+    },
+    {
+      "amount_usd": 82.65,
+      "amount_zec": 2.9000000000000004,
+      "block_height": 2800077,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T02:59:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "12c9de1ee4d74845b812c8992fbc0065"
+    },
+    {
+      "amount_usd": 313.5,
+      "amount_zec": 11.0,
+      "block_height": 2800078,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T02:57:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "f519d3c7ade844fda83bd1301eed15c0"
+    },
+    {
+      "amount_usd": 58.425,
+      "amount_zec": 2.05,
+      "block_height": 2800078,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T02:55:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "99f5e56043e24da6a5af0e9b976c7d65"
+    },
+    {
+      "amount_usd": 151.05,
+      "amount_zec": 5.300000000000001,
+      "block_height": 2800078,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T02:53:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "bcd736a568864497975457418397b8c5"
+    },
+    {
+      "amount_usd": 173.85000000000002,
+      "amount_zec": 6.1000000000000005,
+      "block_height": 2800079,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T02:51:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "40443a8c93f440658a274227ef9a9341"
+    },
+    {
+      "amount_usd": 242.25,
+      "amount_zec": 8.5,
+      "block_height": 2800079,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T02:49:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "4dfe60c307334c2b8254f64cc1e4418c"
+    },
+    {
+      "amount_usd": 126.825,
+      "amount_zec": 4.45,
+      "block_height": 2800079,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T02:47:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "52ad5ac96fb64d46b0f73aabd9827446"
+    },
+    {
+      "amount_usd": 14.25,
+      "amount_zec": 0.5,
+      "block_height": 2800080,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T02:45:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "a32cf32a483b4eeabe944a449278f01d"
+    },
+    {
+      "amount_usd": 37.050000000000004,
+      "amount_zec": 1.3,
+      "block_height": 2800080,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T02:43:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "1491c8f12f3a4ccd8109a8f9768bf75b"
+    },
+    {
+      "amount_usd": 171.0,
+      "amount_zec": 6.0,
+      "block_height": 2800080,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T02:41:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "395e9c970f444f8784c8f017cdef54ab"
+    },
+    {
+      "amount_usd": 58.425,
+      "amount_zec": 2.05,
+      "block_height": 2800081,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T02:39:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "624d149a7a1a40acb98346bde9ededc8"
+    },
+    {
+      "amount_usd": 105.45,
+      "amount_zec": 3.7,
+      "block_height": 2800081,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T02:37:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "3c42913f801d421aa8ee2f1e18d39057"
+    },
+    {
+      "amount_usd": 128.25,
+      "amount_zec": 4.5,
+      "block_height": 2800081,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T02:35:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "3eb4ee00bf564e7780e7bef0acb91021"
+    },
+    {
+      "amount_usd": 99.75,
+      "amount_zec": 3.5,
+      "block_height": 2800082,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T02:33:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "faaac7031d784d6aa3f8de3847a92436"
+    },
+    {
+      "amount_usd": 126.825,
+      "amount_zec": 4.45,
+      "block_height": 2800082,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T02:31:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "10f3cdc507204e519773e35fdf5ac05a"
+    },
+    {
+      "amount_usd": 196.65,
+      "amount_zec": 6.9,
+      "block_height": 2800082,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T02:29:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "9b63f94d3a5745ec8d2be4966173833f"
+    },
+    {
+      "amount_usd": 219.45000000000002,
+      "amount_zec": 7.7,
+      "block_height": 2800083,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T02:27:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "60f57974ce9e49a39ac5abe248e44112"
+    },
+    {
+      "amount_usd": 28.5,
+      "amount_zec": 1.0,
+      "block_height": 2800083,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T02:25:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "348693ec9f6f4b9db1c6cb2f664a54c0"
+    },
+    {
+      "amount_usd": 58.425,
+      "amount_zec": 2.05,
+      "block_height": 2800083,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T02:23:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "20c3a8029eb24d4aa890a8f11cbeb77a"
+    },
+    {
+      "amount_usd": 59.85,
+      "amount_zec": 2.1,
+      "block_height": 2800084,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T02:21:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "e14428d5cbb249ea9324dd0e95ff51cb"
+    },
+    {
+      "amount_usd": 82.65,
+      "amount_zec": 2.9000000000000004,
+      "block_height": 2800084,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T02:19:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "9420eb1e7bdb4aaf81b12b3132c6d889"
+    },
+    {
+      "amount_usd": 313.5,
+      "amount_zec": 11.0,
+      "block_height": 2800084,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T02:17:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "b4dd1a429690422394eccb65751a4dfa"
+    },
+    {
+      "amount_usd": 126.825,
+      "amount_zec": 4.45,
+      "block_height": 2800085,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T02:15:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "2b2ecfd4591b4e70a05b7b87daddcb45"
+    },
+    {
+      "amount_usd": 151.05,
+      "amount_zec": 5.300000000000001,
+      "block_height": 2800085,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T02:13:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "b845c4338616418f912e9a42157c16e2"
+    },
+    {
+      "amount_usd": 173.85000000000002,
+      "amount_zec": 6.1000000000000005,
+      "block_height": 2800085,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T02:11:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "b668578f46e243edbbbcf88edc966f01"
+    },
+    {
+      "amount_usd": 242.25,
+      "amount_zec": 8.5,
+      "block_height": 2800086,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T02:09:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "9ccc2a23f1b641398e00c515a1cc192b"
+    },
+    {
+      "amount_usd": 58.425,
+      "amount_zec": 2.05,
+      "block_height": 2800086,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T02:07:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "ebcecce1c15940d9a3ce77209923dd28"
+    },
+    {
+      "amount_usd": 14.25,
+      "amount_zec": 0.5,
+      "block_height": 2800086,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T02:05:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "907850d07ddf42b791e8fa3fbf2f339c"
+    },
+    {
+      "amount_usd": 37.050000000000004,
+      "amount_zec": 1.3,
+      "block_height": 2800087,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T02:03:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "0e490eaecf99414c9d0beb8a9cb467af"
+    },
+    {
+      "amount_usd": 171.0,
+      "amount_zec": 6.0,
+      "block_height": 2800087,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T02:01:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "335ddd553c7f49fcb38ca2ba63052073"
+    },
+    {
+      "amount_usd": 126.825,
+      "amount_zec": 4.45,
+      "block_height": 2800087,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T01:59:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "4c3475bc0b83457898fb96d23c138898"
+    },
+    {
+      "amount_usd": 105.45,
+      "amount_zec": 3.7,
+      "block_height": 2800088,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T01:57:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "cbb36be4e8f8402cb266220c9a86e9b5"
+    },
+    {
+      "amount_usd": 128.25,
+      "amount_zec": 4.5,
+      "block_height": 2800088,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T01:55:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "0da27e5c9f4e443f91b9700b9ec31665"
+    },
+    {
+      "amount_usd": 99.75,
+      "amount_zec": 3.5,
+      "block_height": 2800088,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T01:53:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "28afa12b04724ddfaf5af7a77cafe948"
+    },
+    {
+      "amount_usd": 58.425,
+      "amount_zec": 2.05,
+      "block_height": 2800089,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T01:51:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "31155d6cf9ec4a2fbf10b26dc6bd87df"
+    },
+    {
+      "amount_usd": 196.65,
+      "amount_zec": 6.9,
+      "block_height": 2800089,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T01:49:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "01cf96471dc64ba495c8ffc4ea3eccf1"
+    },
+    {
+      "amount_usd": 219.45000000000002,
+      "amount_zec": 7.7,
+      "block_height": 2800089,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T01:47:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "897ae8f6c33e4a68b5bf41b5372fe561"
+    },
+    {
+      "amount_usd": 28.5,
+      "amount_zec": 1.0,
+      "block_height": 2800090,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T01:45:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "defc9c7e76e54ba9a7169422a514991b"
+    },
+    {
+      "amount_usd": 126.825,
+      "amount_zec": 4.45,
+      "block_height": 2800090,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T01:43:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "6b92bf2de59c4724aec8dde482ebed3d"
+    },
+    {
+      "amount_usd": 59.85,
+      "amount_zec": 2.1,
+      "block_height": 2800090,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T01:41:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "be1fde7e4ee4435895c934ee20ac2335"
+    },
+    {
+      "amount_usd": 82.65,
+      "amount_zec": 2.9000000000000004,
+      "block_height": 2800091,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T01:39:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "dac255cb59b94a90b45f38c0ee510369"
+    },
+    {
+      "amount_usd": 313.5,
+      "amount_zec": 11.0,
+      "block_height": 2800091,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T01:37:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "24692a8ecc8e43498909e0aebc1d9a4b"
+    },
+    {
+      "amount_usd": 58.425,
+      "amount_zec": 2.05,
+      "block_height": 2800091,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T01:35:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "2af9423e9b174a1fa6b42c1b32cacac4"
+    },
+    {
+      "amount_usd": 151.05,
+      "amount_zec": 5.300000000000001,
+      "block_height": 2800092,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T01:33:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "3903d1137bf8492881c05532bfbb2b31"
+    },
+    {
+      "amount_usd": 173.85000000000002,
+      "amount_zec": 6.1000000000000005,
+      "block_height": 2800092,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T01:31:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "78639e4d3f9349998ae31b0ace16a29e"
+    },
+    {
+      "amount_usd": 242.25,
+      "amount_zec": 8.5,
+      "block_height": 2800092,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T01:29:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "6b149ebd3d434938a51a4ffb0241e11d"
+    },
+    {
+      "amount_usd": 126.825,
+      "amount_zec": 4.45,
+      "block_height": 2800093,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T01:27:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "18dcb313cca2486f9a21ca558411f63b"
+    },
+    {
+      "amount_usd": 14.25,
+      "amount_zec": 0.5,
+      "block_height": 2800093,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T01:25:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "99a9de3f04714b8281f3c48837a76902"
+    },
+    {
+      "amount_usd": 37.050000000000004,
+      "amount_zec": 1.3,
+      "block_height": 2800093,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T01:23:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "004a210a711b4d1e83a0af186a5ab8a9"
+    },
+    {
+      "amount_usd": 171.0,
+      "amount_zec": 6.0,
+      "block_height": 2800094,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T01:21:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "0410f4f0786a454a90e261af01bd20f9"
+    },
+    {
+      "amount_usd": 58.425,
+      "amount_zec": 2.05,
+      "block_height": 2800094,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T01:19:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "156a29b39f874faeb420b29a437ab73f"
+    },
+    {
+      "amount_usd": 105.45,
+      "amount_zec": 3.7,
+      "block_height": 2800094,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T01:17:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "c7a94267fb2b4da1b0073190d8841afd"
+    },
+    {
+      "amount_usd": 128.25,
+      "amount_zec": 4.5,
+      "block_height": 2800095,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T01:15:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "77827d6c2598495e886f9c90b2a9f73f"
+    },
+    {
+      "amount_usd": 99.75,
+      "amount_zec": 3.5,
+      "block_height": 2800095,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T01:13:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "0ee1cb724f3c4c7cb4b1a0a680bd160a"
+    },
+    {
+      "amount_usd": 126.825,
+      "amount_zec": 4.45,
+      "block_height": 2800095,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T01:11:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "4fa5f858c4ae4457a132e8d75d6927f2"
+    },
+    {
+      "amount_usd": 196.65,
+      "amount_zec": 6.9,
+      "block_height": 2800096,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T01:09:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "c643b9362b824998b5d287e0f874a104"
+    },
+    {
+      "amount_usd": 219.45000000000002,
+      "amount_zec": 7.7,
+      "block_height": 2800096,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T01:07:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "bb8f43ebd8c041d9a92e70aab7f3fcd8"
+    },
+    {
+      "amount_usd": 28.5,
+      "amount_zec": 1.0,
+      "block_height": 2800096,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T01:05:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "550e35086f254c3d9c6173e3a88aee48"
+    },
+    {
+      "amount_usd": 58.425,
+      "amount_zec": 2.05,
+      "block_height": 2800097,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T01:03:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "1e6b5d0cd9d24fa0aa71c5066ee9659f"
+    },
+    {
+      "amount_usd": 59.85,
+      "amount_zec": 2.1,
+      "block_height": 2800097,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T01:01:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "8ada745219ad41eeb593e20a9e6e7154"
+    },
+    {
+      "amount_usd": 82.65,
+      "amount_zec": 2.9000000000000004,
+      "block_height": 2800097,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T00:59:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "4bcc7079369b47ff939e6ba94d066828"
+    },
+    {
+      "amount_usd": 313.5,
+      "amount_zec": 11.0,
+      "block_height": 2800098,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T00:57:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "9cc5abf6bed74fa98275294902429536"
+    },
+    {
+      "amount_usd": 126.825,
+      "amount_zec": 4.45,
+      "block_height": 2800098,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T00:55:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "3d50ea6790f4471588e7d39d2e655107"
+    },
+    {
+      "amount_usd": 151.05,
+      "amount_zec": 5.300000000000001,
+      "block_height": 2800098,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T00:53:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "2e1c9552e20648f28b8c27c6ad04f1d6"
+    },
+    {
+      "amount_usd": 173.85000000000002,
+      "amount_zec": 6.1000000000000005,
+      "block_height": 2800099,
+      "fee_zec": 0.0001,
+      "memo": "ZecLedger",
+      "timestamp": "2026-05-22T00:51:15.475111209Z",
+      "tx_type": "Shielded",
+      "txid": "76ceae8a27b043129eb982a13d3861b6"
+    },
+    {
+      "amount_usd": 242.25,
+      "amount_zec": 8.5,
+      "block_height": 2800099,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T00:49:15.475111209Z",
+      "tx_type": "Transparent",
+      "txid": "7171cdd2888842bfb181f340e3634428"
+    },
+    {
+      "amount_usd": 58.425,
+      "amount_zec": 2.05,
+      "block_height": 2800099,
+      "fee_zec": 0.0001,
+      "memo": null,
+      "timestamp": "2026-05-22T00:47:15.475111209Z",
+      "tx_type": "Mixed",
+      "txid": "dd1432512a76412184bd28b3cda75ecf"
+    }
+  ]
+}
