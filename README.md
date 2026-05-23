@@ -31,18 +31,26 @@ Built in Rust. Powered by Claude AI.
 - Powered by Claude AI with real-time blockchain context
 - Research-grade answers with follow-up question suggestions
 
-## Quick Start
+## Setup & Installation
 
-### Prerequisites
-- Rust (install at rustup.rs)
-- Anthropic API key (console.anthropic.com)
+### Step 1 — Install Rust
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
-### Install and Build
-    git clone https://github.com/vancube2/zecledger.git
-    cd zecledger
-    cargo build --release
-    export ANTHROPIC_API_KEY=sk-ant-your-key-here
+### Step 2 — Install and run Zebra node
+cargo install --locked zebrad
+zebrad generate -o ~/.config/zebrad.toml
+sed -i '/^\[rpc\]/a listen_addr = "127.0.0.1:8232"' ~/.config/zebrad.toml
+sed -i 's/enable_cookie_auth = true/enable_cookie_auth = false/' ~/.config/zebrad.toml
+nohup zebrad start > /tmp/zebra.log 2>&1 &
 
+### Step 3 — Clone and build ZecLedger
+git clone https://github.com/vancube2/zecledger.git
+cd zecledger
+cargo build --release
+
+### Step 4 — Set API key and run
+export ANTHROPIC_API_KEY=your_key_here
+./target/release/zecledger --help
 ## Usage
 
 ### Ask the AI Copilot
