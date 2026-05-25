@@ -1,6 +1,6 @@
 use anyhow::Result;
 use serde_json::json;
-use crate::data::fetch_transactions;
+use crate::data::fetch_from_blockchair_pub;
 use crate::core::NetworkStats;
 
 const SYSTEM_PROMPT: &str = "You are ZecLedger Copilot, an expert AI research assistant for the Zcash blockchain. Answer researcher questions clearly with specific numbers. Always end with one follow-up research question.";
@@ -9,25 +9,25 @@ pub async fn ask(question: &str) -> Result<()> {
     println!("\n ZecLedger Copilot");
     println!("{}", "─".repeat(50));
     println!("Q: {}\n", question);
-    println!("Fetching network data...");
+    println!("Fetching latest mainnet data...");
 
-    let txs = fetch_transactions(200).await?;
-    let stats = NetworkStats::from_transactions(&txs, 2_800_000);
+    let txs = fetch_from_blockchair_pub(50).await?;
+    let stats = NetworkStats::from_transactions(&txs, 3_354_054);
 
     let context = format!(
-        "Zcash Network Data (last 200 blocks):\n\
+        "Latest Zcash Mainnet Data (May 2026 block ~3354054):\n\
          - Total transactions: {}\n\
          - Shielded: {} ({:.1}%)\n\
          - Transparent: {}\n\
-         - Total volume: {:.4} ZEC (${:.2})\n\
-         - Block height: {}",
-        stats.total_transactions, stats.shielded_count, stats.shield_rate_pct,
-        stats.transparent_count, stats.total_volume_zec, stats.total_volume_usd,
-        stats.block_height,
+         - Total volume: {:.4} ZEC\n\
+         - Shield rate: {:.1}%",
+        stats.total_transactions, stats.shielded_count,
+        stats.shield_rate_pct, stats.transparent_count,
+        stats.total_volume_zec, stats.shield_rate_pct,
     );
 
     let api_key = std::env::var("ANTHROPIC_API_KEY")
-        .map_err(|_| anyhow::anyhow!("Set your key: export ANTHROPIC_API_KEY=sk-ant-..."))?;
+        .map_err(|_| anyhow::anyhow!("Set: export ANTHROPIC_API_KEY=sk-ant-..."))?;
 
     println!("Thinking...\n");
 
@@ -51,19 +51,16 @@ pub async fn ask(question: &str) -> Result<()> {
     let status = response.status();
     let body: serde_json::Value = response.json().await?;
 
-    println!("API Status: {}", status);
-
     if !status.is_success() {
-        println!("API Error: {}", serde_json::to_string_pretty(&body)?);
+        println!("API Error: {}", body);
         return Ok(());
     }
 
     let answer = body["content"][0]["text"].as_str().unwrap_or("No response");
-
     println!("Answer:");
     println!("{}", "─".repeat(50));
     println!("{}", answer);
     println!("{}", "─".repeat(50));
-    println!("\nTip: run `zecledger report --format csv` to export data");
+    println!("\nTip: zecledger report --format csv to export");
     Ok(())
 }

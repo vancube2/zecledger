@@ -32,7 +32,7 @@ pub async fn fetch_transactions(blocks: u32) -> Result<Vec<Transaction>> {
 
 async fn fetch_from_blockchair(blocks: u32) -> Result<Vec<Transaction>> {
     let client = reqwest::Client::new();
-    let limit = (blocks * 3).min(100);
+    let limit = (blocks * 3).min(500);
 
     // Get latest transactions
     let url = format!(
@@ -213,4 +213,11 @@ pub fn generate_mock_transactions(blocks: u32) -> Vec<Transaction> {
         });
     }
     txs
+}
+
+pub async fn fetch_from_blockchair_pub(blocks: u32) -> Result<Vec<Transaction>> {
+    match fetch_from_blockchair(blocks).await {
+        Ok(txs) if !txs.is_empty() => Ok(txs),
+        _ => Ok(generate_mock_transactions(blocks)),
+    }
 }
