@@ -1,1 +1,21 @@
 /target
+# Environment & secrets
+.env
+.env.local
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+*.seed
+*.mnemonic
+wallet.json
+keystore/
+
+# Node (if ever added)
+node_modules/
+dist/
+
+# OS files
+.DS_Store
+Thumbs.db
