@@ -1,3 +1,8 @@
+> ⚠️ OFFICIAL REPO ONLY: github.com/vancube2/zecledger
+> ZecLedger has NO token. We will NEVER ask for ZEC, wallet access, or seed phrases. Report scams in ZecHub Discord.
+
+---
+
 > ⚠️ **OFFICIAL REPO ONLY**: github.com/vancube2/zecledger
 > ZecLedger has **NO token**. We will **NEVER** ask for ZEC,
 > wallet access, or seed phrases. Report scams in ZecHub Discord.
