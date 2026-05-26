@@ -31,7 +31,7 @@ fn render(f: &mut Frame, stats: &NetworkStats) {
         Constraint::Length(3),
         Constraint::Min(10),
         Constraint::Length(3),
-    ]).split(f.size());
+    ]).split(f.area());
     f.render_widget(
         Paragraph::new("ZecLedger Research Dashboard  [Q] quit")
             .block(Block::default().borders(Borders::ALL))
