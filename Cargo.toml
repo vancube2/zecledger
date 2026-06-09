@@ -26,3 +26,12 @@ tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 toml = "0.8"
 dirs = "5"
 uuid = { version = "1", features = ["v4"] }
+
+# --- Zcash light-client stack (Phase 1: shielded accounting) ---
+zcash_client_backend = { version = "0.23", features = ["sync", "orchard", "transparent-inputs", "lightwalletd-tonic-transport"] }
+zcash_client_sqlite = { version = "0.21", features = ["orchard", "transparent-inputs"] }
+zcash_keys = { version = "0.14", features = ["orchard"] }
+zcash_protocol = "0.9"
+zcash_address = "0.12"
+tonic = "0.13"
+prost = "0.13"
