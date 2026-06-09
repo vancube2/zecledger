@@ -4633,6 +4633,7 @@ dependencies = [
  "dirs",
  "printpdf",
  "prost 0.13.5",
+ "rand 0.8.6",
  "ratatui",
  "reqwest",
  "serde",

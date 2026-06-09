@@ -1,4 +1,5 @@
 // src/wallet/mod.rs
+pub mod db;
 //
 // The local, private side of ZecLedger: shielded accounting from a viewing key.
 // Read-only by design. This module never holds or handles a spending key.
@@ -78,6 +79,8 @@ pub async fn show_balance() -> Result<()> {
 pub async fn sync() -> Result<()> {
     let session = prompt_for_session()?;
     println!("Got a valid viewing key, birthday height {}.", session.birthday);
-    println!("Wallet sync is not implemented yet (Phase 1, Step 3).");
+    let config = crate::core::config::load()?;
+    db::open_and_init(&config.data_dir)?;
+    println!("Step 3a done: wallet database ready.");
     Ok(())
 }
