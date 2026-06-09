@@ -2,14 +2,12 @@
 //
 // The local, private side of ZecLedger: shielded accounting from a viewing key.
 // Read-only by design. This module never holds or handles a spending key.
-//
-// Build order:
-//   Step 1 (now)  - scaffolding: commands exist, print "not yet implemented"
-//   Step 2        - viewing-key input (memory only, with reminder)
-//   Step 3        - sync engine (zcash_client_sqlite + backend sync) against zec.rocks
-//   Step 4        - balance readout per pool (Sapling, Orchard, transparent)
 
-use anyhow::Result;
+use anyhow::{anyhow, Context, Result};
+use std::io::{self, Write};
+
+use zcash_keys::keys::UnifiedFullViewingKey;
+use zcash_protocol::consensus::MainNetwork;
 
 /// A per-pool shielded balance snapshot. Filled in for real at Step 4.
 #[derive(Debug, Clone, Default)]
@@ -25,6 +23,13 @@ impl ShieldedBalance {
     }
 }
 
+/// Everything we hold in memory for one session. Never written to disk.
+pub struct WalletSession {
+    pub ufvk: UnifiedFullViewingKey,
+    pub ufvk_str: String,
+    pub birthday: u32,
+}
+
 /// The security reminder shown every session before a viewing key is requested.
 pub fn print_key_safety_reminder() {
     println!();
@@ -35,18 +40,44 @@ pub fn print_key_safety_reminder() {
     println!();
 }
 
-/// `zecledger balance` - Step 4 will compute and print the real per-pool balance.
-pub async fn show_balance() -> Result<()> {
+/// Prompt for UFVK and birthday, validate the key, return an in-memory session.
+pub fn prompt_for_session() -> Result<WalletSession> {
     print_key_safety_reminder();
+
+    print!("Paste your Unified Full Viewing Key (starts with 'uview'): ");
+    io::stdout().flush().ok();
+    let mut ufvk_str = String::new();
+    io::stdin().read_line(&mut ufvk_str).context("failed to read viewing key")?;
+    let ufvk_str = ufvk_str.trim().to_string();
+    if ufvk_str.is_empty() {
+        return Err(anyhow!("no viewing key entered"));
+    }
+
+    let ufvk = UnifiedFullViewingKey::decode(&MainNetwork, &ufvk_str)
+        .map_err(|e| anyhow!("that does not look like a valid Unified Full Viewing Key: {e}"))?;
+    println!("  Viewing key looks valid.");
+
+    print!("Enter your wallet birthday block height (e.g. 2700000): ");
+    io::stdout().flush().ok();
+    let mut bday = String::new();
+    io::stdin().read_line(&mut bday).context("failed to read birthday height")?;
+    let birthday: u32 = bday.trim().parse().context("birthday must be a whole number block height")?;
+
+    println!("  Session ready. Key held in memory only.");
+    println!();
+    Ok(WalletSession { ufvk, ufvk_str, birthday })
+}
+
+pub async fn show_balance() -> Result<()> {
+    let session = prompt_for_session()?;
+    println!("Got a valid viewing key, birthday height {}.", session.birthday);
     println!("Shielded balance is not implemented yet (Phase 1, Step 4).");
-    println!("Coming: Sapling + Orchard + transparent totals from your viewing key.");
     Ok(())
 }
 
-/// `zecledger sync` - Step 3 will run the light-client sync against zec.rocks.
 pub async fn sync() -> Result<()> {
-    print_key_safety_reminder();
+    let session = prompt_for_session()?;
+    println!("Got a valid viewing key, birthday height {}.", session.birthday);
     println!("Wallet sync is not implemented yet (Phase 1, Step 3).");
-    println!("Coming: download compact blocks from zec.rocks and decrypt locally.");
     Ok(())
 }
