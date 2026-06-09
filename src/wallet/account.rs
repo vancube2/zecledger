@@ -56,3 +56,35 @@ pub async fn import_view_only(
     println!("  Account imported (view-only).");
     Ok(())
 }
+
+/// Step 3c/3d: scan blocks from the birthday forward, decrypting locally.
+pub async fn sync_blocks(data_dir: &Path, endpoint: &str) -> Result<()> {
+    use zcash_client_sqlite::FsBlockDb;
+    use zcash_client_sqlite::chain::init::init_blockmeta_db;
+
+    println!("  Connecting to {endpoint} for sync ...");
+    let mut client = CompactTxStreamerClient::connect(endpoint.to_string())
+        .await
+        .with_context(|| format!("could not connect to {endpoint}"))?;
+
+    let blocks_dir = data_dir.join("blocks");
+    std::fs::create_dir_all(&blocks_dir).context("could not create blocks dir")?;
+    let mut fs_cache = FsBlockDb::for_path(&blocks_dir)
+        .map_err(|e| anyhow!("failed to open block cache: {e:?}"))?;
+    init_blockmeta_db(&mut fs_cache)
+        .map_err(|e| anyhow!("failed to init block cache: {e:?}"))?;
+    let inner_blocks = blocks_dir.join("blocks");
+    let block_cache = super::cache::ZecLedgerCache::new(fs_cache, inner_blocks);
+
+    let db_path = wallet_db_path(data_dir);
+    let mut db = WalletDb::for_path(&db_path, MainNetwork, SystemClock, OsRng)
+        .context("failed to open wallet database")?;
+
+    println!("  Scanning blocks (this may take a moment) ...");
+    zcash_client_backend::sync::run(&mut client, &MainNetwork, &block_cache, &mut db, 1000)
+        .await
+        .map_err(|e| anyhow!("sync failed: {e:?}"))?;
+
+    println!("  Sync complete.");
+    Ok(())
+}

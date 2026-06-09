@@ -1,6 +1,7 @@
 // src/wallet/mod.rs
 pub mod db;
 pub mod account;
+pub mod cache;
 //
 // The local, private side of ZecLedger: shielded accounting from a viewing key.
 // Read-only by design. This module never holds or handles a spending key.
@@ -88,6 +89,7 @@ pub async fn sync() -> Result<()> {
         format!("https://{}", config.lightwalletd_url)
     };
     account::import_view_only(&config.data_dir, &endpoint, &session.ufvk, session.birthday as u64).await?;
-    println!("Step 3b done: account imported. Block sync comes next.");
+    account::sync_blocks(&config.data_dir, &endpoint).await?;
+    println!("Step 3 done: wallet synced.");
     Ok(())
 }

@@ -4381,6 +4381,7 @@ dependencies = [
  "blake2b_simd",
  "bls12_381",
  "bs58",
+ "byteorder",
  "corez",
  "document-features",
  "group",
@@ -4512,12 +4513,14 @@ name = "zecledger"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "async-trait",
  "chrono",
  "clap",
  "crossterm",
  "csv",
  "dirs",
  "printpdf",
+ "prost",
  "rand 0.8.6",
  "ratatui",
  "reqwest",
@@ -4533,6 +4536,7 @@ dependencies = [
  "zcash_client_backend",
  "zcash_client_sqlite",
  "zcash_keys",
+ "zcash_primitives",
  "zcash_protocol",
 ]
 
