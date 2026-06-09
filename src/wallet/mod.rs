@@ -1,5 +1,6 @@
 // src/wallet/mod.rs
 pub mod db;
+pub mod account;
 //
 // The local, private side of ZecLedger: shielded accounting from a viewing key.
 // Read-only by design. This module never holds or handles a spending key.
@@ -81,6 +82,12 @@ pub async fn sync() -> Result<()> {
     println!("Got a valid viewing key, birthday height {}.", session.birthday);
     let config = crate::core::config::load()?;
     db::open_and_init(&config.data_dir)?;
-    println!("Step 3a done: wallet database ready.");
+    let endpoint = if config.lightwalletd_url.starts_with("http") {
+        config.lightwalletd_url.clone()
+    } else {
+        format!("https://{}", config.lightwalletd_url)
+    };
+    account::import_view_only(&config.data_dir, &endpoint, &session.ufvk, session.birthday as u64).await?;
+    println!("Step 3b done: account imported. Block sync comes next.");
     Ok(())
 }

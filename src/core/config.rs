@@ -13,7 +13,7 @@ pub struct Config {
 impl Default for Config {
     fn default() -> Self {
         Config {
-            lightwalletd_url: "https://mainnet.lightwalletd.com:9067".to_string(),
+            lightwalletd_url: "https://zec.rocks:443".to_string(),
             claude_api_key: std::env::var("ANTHROPIC_API_KEY").ok(),
             data_dir: dirs::cache_dir()
                 .unwrap_or_else(|| PathBuf::from("/tmp"))
