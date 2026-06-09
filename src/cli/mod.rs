@@ -46,6 +46,10 @@ pub enum Commands {
     },
     /// Launch interactive terminal dashboard
     Dashboard,
+    /// Show your shielded balance per pool (Sapling, Orchard, transparent)
+    Balance,
+    /// Sync your wallet from a lightwalletd server (reads your viewing key)
+    Sync,
     /// Manage configuration
     Config {
         #[arg(short, long)]

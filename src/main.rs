@@ -6,6 +6,7 @@ mod copilot;
 mod accounting;
 mod payments;
 mod reporting;
+mod wallet;
 
 use anyhow::Result;
 use clap::Parser;
@@ -67,6 +68,12 @@ async fn main() -> Result<()> {
         }
         Commands::Dashboard => {
             output::tui::run().await?;
+        }
+        Commands::Balance => {
+            wallet::show_balance().await?;
+        }
+        Commands::Sync => {
+            wallet::sync().await?;
         }
         Commands::Config { show } => {
             if show { core::config::show()?; }
