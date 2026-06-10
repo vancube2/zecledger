@@ -75,6 +75,9 @@ async fn main() -> Result<()> {
         Commands::Sync => {
             wallet::sync().await?;
         }
+        Commands::WalletReport { output } => {
+            wallet::generate_report(output).await?;
+        }
         Commands::History => {
             wallet::show_history().await?;
         }

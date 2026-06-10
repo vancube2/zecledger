@@ -50,6 +50,11 @@ pub enum Commands {
     Balance,
     /// Sync your wallet from a lightwalletd server (reads your viewing key)
     Sync,
+    /// Generate a wallet accounting report (monthly summary + full ledger)
+    WalletReport {
+        #[arg(short, long)]
+        output: Option<String>,
+    },
     /// Show transaction history from the synced wallet
     History,
     /// Manage configuration

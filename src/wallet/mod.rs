@@ -3,6 +3,7 @@ pub mod db;
 pub mod account;
 pub mod cache;
 pub mod history;
+pub mod report;
 //
 // The local, private side of ZecLedger: shielded accounting from a viewing key.
 // Read-only by design. This module never holds or handles a spending key.
@@ -145,5 +146,15 @@ pub async fn show_history() -> Result<()> {
     let config = crate::core::config::load()?;
     let rows = history::read_history(&config.data_dir)?;
     history::print_history(&rows);
+    Ok(())
+}
+
+/// `zecledger report` - monthly summary on screen, full ledger to CSV + JSON.
+pub async fn generate_report(output: Option<String>) -> Result<()> {
+    let config = crate::core::config::load()?;
+    let out_base = output.unwrap_or_else(|| {
+        format!("zecledger_ledger_{}", chrono::Utc::now().format("%Y%m%d_%H%M%S"))
+    });
+    report::generate_report(&config.data_dir, &out_base)?;
     Ok(())
 }
