@@ -2,6 +2,7 @@
 pub mod db;
 pub mod account;
 pub mod cache;
+pub mod history;
 //
 // The local, private side of ZecLedger: shielded accounting from a viewing key.
 // Read-only by design. This module never holds or handles a spending key.
@@ -136,5 +137,13 @@ pub async fn sync() -> Result<()> {
     account::import_view_only(&config.data_dir, &endpoint, &session.ufvk, session.birthday as u64).await?;
     account::sync_blocks(&config.data_dir, &endpoint).await?;
     println!("Step 3 done: wallet synced.");
+    Ok(())
+}
+
+/// `zecledger history` - show transaction history from the synced wallet.
+pub async fn show_history() -> Result<()> {
+    let config = crate::core::config::load()?;
+    let rows = history::read_history(&config.data_dir)?;
+    history::print_history(&rows);
     Ok(())
 }

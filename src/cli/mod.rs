@@ -50,6 +50,8 @@ pub enum Commands {
     Balance,
     /// Sync your wallet from a lightwalletd server (reads your viewing key)
     Sync,
+    /// Show transaction history from the synced wallet
+    History,
     /// Manage configuration
     Config {
         #[arg(short, long)]

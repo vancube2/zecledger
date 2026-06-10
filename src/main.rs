@@ -75,6 +75,9 @@ async fn main() -> Result<()> {
         Commands::Sync => {
             wallet::sync().await?;
         }
+        Commands::History => {
+            wallet::show_history().await?;
+        }
         Commands::Config { show } => {
             if show { core::config::show()?; }
         }
