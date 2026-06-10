@@ -72,9 +72,54 @@ pub fn prompt_for_session() -> Result<WalletSession> {
 }
 
 pub async fn show_balance() -> Result<()> {
-    let session = prompt_for_session()?;
-    println!("Got a valid viewing key, birthday height {}.", session.birthday);
-    println!("Shielded balance is not implemented yet (Phase 1, Step 4).");
+    use rand::rngs::OsRng;
+    use zcash_client_backend::data_api::WalletRead;
+    use zcash_client_backend::data_api::wallet::ConfirmationsPolicy;
+    use zcash_client_sqlite::util::SystemClock;
+    use zcash_client_sqlite::WalletDb;
+    use zcash_protocol::consensus::MainNetwork;
+
+    let _session = prompt_for_session()?;
+    let config = crate::core::config::load()?;
+    let db_path = db::wallet_db_path(&config.data_dir);
+    let db = WalletDb::for_path(&db_path, MainNetwork, SystemClock, OsRng)
+        .map_err(|e| anyhow::anyhow!("could not open wallet database: {e}"))?;
+
+    let summary = db
+        .get_wallet_summary(ConfirmationsPolicy::MIN)
+        .map_err(|e| anyhow::anyhow!("could not read wallet summary: {e}"))?;
+
+    let zec = |z: zcash_protocol::value::Zatoshis| -> f64 { z.into_u64() as f64 / 1e8 };
+
+    match summary {
+        None => {
+            println!();
+            println!("  No wallet summary yet. Run `zecledger sync` first.");
+        }
+        Some(summary) => {
+            let balances = summary.account_balances();
+            if balances.is_empty() {
+                println!();
+                println!("  No accounts found. Run `zecledger sync` first.");
+            }
+            println!();
+            println!("  Shielded balance");
+            println!("  ----------------");
+            for (_id, b) in balances.iter() {
+                let sapling = zec(b.sapling_balance().total());
+                let orchard = zec(b.orchard_balance().total());
+                let transparent = zec(b.unshielded());
+                let total = zec(b.total());
+                println!("  Sapling:      {sapling:>14.8} ZEC", sapling = sapling);
+                println!("  Orchard:      {orchard:>14.8} ZEC", orchard = orchard);
+                println!("  Transparent:  {transparent:>14.8} ZEC", transparent = transparent);
+                println!("  ----------------");
+                println!("  Total:        {total:>14.8} ZEC", total = total);
+            }
+            println!();
+            println!("  Scanned to height {}.", summary.fully_scanned_height());
+        }
+    }
     Ok(())
 }
 
