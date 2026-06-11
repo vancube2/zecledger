@@ -158,3 +158,108 @@ pub async fn generate_report(output: Option<String>) -> Result<()> {
     report::generate_report(&config.data_dir, &out_base)?;
     Ok(())
 }
+
+/// `zecledger wallet-ask` - answer a question about YOUR wallet.
+/// Reads only local data, shows exactly what would be sent, and requires
+/// explicit confirmation before anything leaves the machine.
+pub async fn wallet_ask(question: &str) -> Result<()> {
+    use std::io::{self, Write};
+
+    let config = crate::core::config::load()?;
+    let rows = history::read_history(&config.data_dir)?;
+
+    let mut received = 0i64;
+    let mut sent = 0i64;
+    let mut lines = String::new();
+    for r in &rows {
+        if r.balance_delta >= 0 {
+            received += r.balance_delta;
+        } else {
+            sent += -r.balance_delta;
+        }
+        let date = r
+            .time
+            .and_then(|t| chrono::DateTime::from_timestamp(t, 0))
+            .map(|dt| dt.format("%Y-%m-%d").to_string())
+            .unwrap_or_else(|| "pending".to_string());
+        let kind = if r.is_shielding {
+            "shielding"
+        } else if r.balance_delta >= 0 {
+            "received"
+        } else {
+            "sent"
+        };
+        lines.push_str(&format!(
+            "  {date}  {:+.8} ZEC  {kind}\n",
+            r.balance_delta as f64 / 1e8
+        ));
+    }
+
+    let context = format!(
+        "Wallet summary (local, no addresses or memos):\n\
+         - Transactions: {}\n\
+         - Total received: {:.8} ZEC\n\
+         - Total sent: {:.8} ZEC\n\
+         - Net: {:.8} ZEC\n\
+         Transaction list (date, amount, type):\n{}",
+        rows.len(),
+        received as f64 / 1e8,
+        sent as f64 / 1e8,
+        (received - sent) as f64 / 1e8,
+        if lines.is_empty() { "  (none)\n".to_string() } else { lines },
+    );
+
+    println!();
+    println!("  The copilot needs to send this data to answer your question:");
+    println!("  {:-<60}", "");
+    for line in context.lines() {
+        println!("  {line}");
+    }
+    println!("  {:-<60}", "");
+    println!("  This goes to the Anthropic API. No addresses or memos are included.");
+    print!("  Send this and get an answer? [y/N]: ");
+    io::stdout().flush().ok();
+    let mut confirm = String::new();
+    io::stdin().read_line(&mut confirm)?;
+    if confirm.trim().to_lowercase() != "y" {
+        println!("  Cancelled. Nothing was sent.");
+        return Ok(());
+    }
+
+    let api_key = std::env::var("ANTHROPIC_API_KEY")
+        .map_err(|_| anyhow::anyhow!("Set: export ANTHROPIC_API_KEY=sk-ant-..."))?;
+
+    println!("  Sending...");
+    let client = reqwest::Client::new();
+    let response = client
+        .post("https://api.anthropic.com/v1/messages")
+        .header("x-api-key", &api_key)
+        .header("anthropic-version", "2023-06-01")
+        .header("content-type", "application/json")
+        .json(&serde_json::json!({
+            "model": "claude-sonnet-4-20250514",
+            "max_tokens": 1024,
+            "system": "You are ZecLedger Copilot. Answer the user's question about THEIR OWN Zcash wallet using only the data provided. Be precise with numbers. Do not speculate beyond the data.",
+            "messages": [{
+                "role": "user",
+                "content": format!("{}\n\nQuestion: {}", context, question)
+            }]
+        }))
+        .send().await?;
+
+    let status = response.status();
+    let body: serde_json::Value = response.json().await?;
+    if !status.is_success() {
+        println!("  API Error: {}", body);
+        return Ok(());
+    }
+    let answer = body["content"][0]["text"].as_str().unwrap_or("No response");
+    println!();
+    println!("  Answer:");
+    println!("  {:-<60}", "");
+    for line in answer.lines() {
+        println!("  {line}");
+    }
+    println!("  {:-<60}", "");
+    Ok(())
+}

@@ -78,6 +78,9 @@ async fn main() -> Result<()> {
         Commands::WalletReport { output } => {
             wallet::generate_report(output).await?;
         }
+        Commands::WalletAsk { question } => {
+            wallet::wallet_ask(&question).await?;
+        }
         Commands::History => {
             wallet::show_history().await?;
         }

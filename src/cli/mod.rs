@@ -55,6 +55,8 @@ pub enum Commands {
         #[arg(short, long)]
         output: Option<String>,
     },
+    /// Ask the copilot about YOUR wallet (shows data and confirms before sending)
+    WalletAsk { question: String },
     /// Show transaction history from the synced wallet
     History,
     /// Manage configuration
