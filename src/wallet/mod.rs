@@ -14,24 +14,10 @@ use std::io::{self, Write};
 use zcash_keys::keys::UnifiedFullViewingKey;
 use zcash_protocol::consensus::MainNetwork;
 
-/// A per-pool shielded balance snapshot. Filled in for real at Step 4.
-#[derive(Debug, Clone, Default)]
-pub struct ShieldedBalance {
-    pub sapling_zec: f64,
-    pub orchard_zec: f64,
-    pub transparent_zec: f64,
-}
-
-impl ShieldedBalance {
-    pub fn total_zec(&self) -> f64 {
-        self.sapling_zec + self.orchard_zec + self.transparent_zec
-    }
-}
 
 /// Everything we hold in memory for one session. Never written to disk.
 pub struct WalletSession {
     pub ufvk: UnifiedFullViewingKey,
-    pub ufvk_str: String,
     pub birthday: u32,
 }
 
@@ -70,7 +56,7 @@ pub fn prompt_for_session() -> Result<WalletSession> {
 
     println!("  Session ready. Key held in memory only.");
     println!();
-    Ok(WalletSession { ufvk, ufvk_str, birthday })
+    Ok(WalletSession { ufvk, birthday })
 }
 
 pub async fn show_balance() -> Result<()> {
@@ -110,7 +96,7 @@ pub async fn show_balance() -> Result<()> {
             for (_id, b) in balances.iter() {
                 let sapling = zec(b.sapling_balance().total());
                 let orchard = zec(b.orchard_balance().total());
-                let transparent = zec(b.unshielded());
+                let transparent = zec(b.unshielded_balance().total());
                 let total = zec(b.total());
                 println!("  Sapling:      {sapling:>14.8} ZEC", sapling = sapling);
                 println!("  Orchard:      {orchard:>14.8} ZEC", orchard = orchard);

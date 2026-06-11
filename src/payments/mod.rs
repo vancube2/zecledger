@@ -1,4 +1,4 @@
-use crate::core::{Transaction, TxType};
+use crate::core::Transaction;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 

@@ -5,6 +5,7 @@ use anyhow::Result;
 use chrono::{DateTime, Utc};
 use serde_json::json;
 
+#[allow(dead_code)]
 pub struct ReportFilter {
     pub from: Option<DateTime<Utc>>,
     pub to: Option<DateTime<Utc>>,
@@ -12,12 +13,14 @@ pub struct ReportFilter {
     pub min_amount: Option<f64>,
 }
 
+#[allow(dead_code)]
 impl ReportFilter {
     pub fn new() -> Self {
         ReportFilter { from: None, to: None, tx_type: None, min_amount: None }
     }
 }
 
+#[allow(dead_code)]
 pub fn filter_transactions<'a>(txs: &'a [Transaction], filter: &ReportFilter) -> Vec<&'a Transaction> {
     txs.iter().filter(|tx| {
         if let Some(from) = filter.from { if tx.timestamp < from { return false; } }
