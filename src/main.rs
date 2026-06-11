@@ -19,6 +19,7 @@ async fn main() -> Result<()> {
         .with_env_filter("zecledger=info")
         .init();
     let cli = Cli::parse();
+    let (network, endpoint) = core::config::resolve_network(cli.testnet, cli.mainnet);
     match cli.command {
         Commands::Ask { question } => {
             copilot::ask(&question).await?;
@@ -70,10 +71,10 @@ async fn main() -> Result<()> {
             output::tui::run().await?;
         }
         Commands::Balance => {
-            wallet::show_balance().await?;
+            wallet::show_balance(network).await?;
         }
         Commands::Sync => {
-            wallet::sync().await?;
+            wallet::sync(network, endpoint).await?;
         }
         Commands::WalletReport { output } => {
             wallet::generate_report(output).await?;

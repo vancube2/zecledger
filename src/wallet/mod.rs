@@ -12,7 +12,7 @@ use anyhow::{anyhow, Context, Result};
 use std::io::{self, Write};
 
 use zcash_keys::keys::UnifiedFullViewingKey;
-use zcash_protocol::consensus::MainNetwork;
+use zcash_protocol::consensus::Network;
 
 
 /// Everything we hold in memory for one session. Never written to disk.
@@ -32,7 +32,7 @@ pub fn print_key_safety_reminder() {
 }
 
 /// Prompt for UFVK and birthday, validate the key, return an in-memory session.
-pub fn prompt_for_session() -> Result<WalletSession> {
+pub fn prompt_for_session(network: Network) -> Result<WalletSession> {
     print_key_safety_reminder();
 
     print!("Paste your Unified Full Viewing Key (starts with 'uview'): ");
@@ -44,7 +44,7 @@ pub fn prompt_for_session() -> Result<WalletSession> {
         return Err(anyhow!("no viewing key entered"));
     }
 
-    let ufvk = UnifiedFullViewingKey::decode(&MainNetwork, &ufvk_str)
+    let ufvk = UnifiedFullViewingKey::decode(&network, &ufvk_str)
         .map_err(|e| anyhow!("that does not look like a valid Unified Full Viewing Key: {e}"))?;
     println!("  Viewing key looks valid.");
 
@@ -59,18 +59,17 @@ pub fn prompt_for_session() -> Result<WalletSession> {
     Ok(WalletSession { ufvk, birthday })
 }
 
-pub async fn show_balance() -> Result<()> {
+pub async fn show_balance(network: Network) -> Result<()> {
     use rand::rngs::OsRng;
     use zcash_client_backend::data_api::WalletRead;
     use zcash_client_backend::data_api::wallet::ConfirmationsPolicy;
     use zcash_client_sqlite::util::SystemClock;
     use zcash_client_sqlite::WalletDb;
-    use zcash_protocol::consensus::MainNetwork;
 
-    let _session = prompt_for_session()?;
+    let _session = prompt_for_session(network)?;
     let config = crate::core::config::load()?;
     let db_path = db::wallet_db_path(&config.data_dir);
-    let db = WalletDb::for_path(&db_path, MainNetwork, SystemClock, OsRng)
+    let db = WalletDb::for_path(&db_path, network, SystemClock, OsRng)
         .map_err(|e| anyhow::anyhow!("could not open wallet database: {e}"))?;
 
     let summary = db
@@ -111,18 +110,13 @@ pub async fn show_balance() -> Result<()> {
     Ok(())
 }
 
-pub async fn sync() -> Result<()> {
-    let session = prompt_for_session()?;
+pub async fn sync(network: Network, endpoint: String) -> Result<()> {
+    let session = prompt_for_session(network)?;
     println!("Got a valid viewing key, birthday height {}.", session.birthday);
     let config = crate::core::config::load()?;
-    db::open_and_init(&config.data_dir)?;
-    let endpoint = if config.lightwalletd_url.starts_with("http") {
-        config.lightwalletd_url.clone()
-    } else {
-        format!("https://{}", config.lightwalletd_url)
-    };
-    account::import_view_only(&config.data_dir, &endpoint, &session.ufvk, session.birthday as u64).await?;
-    account::sync_blocks(&config.data_dir, &endpoint).await?;
+    db::open_and_init(&config.data_dir, network)?;
+    account::import_view_only(&config.data_dir, &endpoint, &session.ufvk, session.birthday as u64, network).await?;
+    account::sync_blocks(&config.data_dir, &endpoint, network).await?;
     println!("Step 3 done: wallet synced.");
     Ok(())
 }

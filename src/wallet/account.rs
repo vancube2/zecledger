@@ -14,7 +14,7 @@ use zcash_client_backend::proto::service::{
 use zcash_client_sqlite::util::SystemClock;
 use zcash_client_sqlite::WalletDb;
 use zcash_keys::keys::UnifiedFullViewingKey;
-use zcash_protocol::consensus::MainNetwork;
+use zcash_protocol::consensus::Network;
 
 use super::db::wallet_db_path;
 
@@ -24,6 +24,7 @@ pub async fn import_view_only(
     endpoint: &str,
     ufvk: &UnifiedFullViewingKey,
     birthday_height: u64,
+    network: Network,
 ) -> Result<()> {
     // 1. Connect to lightwalletd (zec.rocks).
     println!("  Connecting to {endpoint} ...");
@@ -47,7 +48,7 @@ pub async fn import_view_only(
 
     // 4. Open the wallet DB and import the UFVK as a view-only account.
     let db_path = wallet_db_path(data_dir);
-    let mut db = WalletDb::for_path(&db_path, MainNetwork, SystemClock, OsRng)
+    let mut db = WalletDb::for_path(&db_path, network, SystemClock, OsRng)
         .context("failed to open wallet database")?;
 
     db.import_account_ufvk("main", ufvk, &birthday, AccountPurpose::ViewOnly, None)
@@ -58,7 +59,7 @@ pub async fn import_view_only(
 }
 
 /// Step 3c/3d: scan blocks from the birthday forward, decrypting locally.
-pub async fn sync_blocks(data_dir: &Path, endpoint: &str) -> Result<()> {
+pub async fn sync_blocks(data_dir: &Path, endpoint: &str, network: Network) -> Result<()> {
     use zcash_client_sqlite::FsBlockDb;
     use zcash_client_sqlite::chain::init::init_blockmeta_db;
 
@@ -77,11 +78,11 @@ pub async fn sync_blocks(data_dir: &Path, endpoint: &str) -> Result<()> {
     let block_cache = super::cache::ZecLedgerCache::new(fs_cache, inner_blocks);
 
     let db_path = wallet_db_path(data_dir);
-    let mut db = WalletDb::for_path(&db_path, MainNetwork, SystemClock, OsRng)
+    let mut db = WalletDb::for_path(&db_path, network, SystemClock, OsRng)
         .context("failed to open wallet database")?;
 
     println!("  Scanning blocks (this may take a moment) ...");
-    zcash_client_backend::sync::run(&mut client, &MainNetwork, &block_cache, &mut db, 1000)
+    zcash_client_backend::sync::run(&mut client, &network, &block_cache, &mut db, 1000)
         .await
         .map_err(|e| anyhow!("sync failed: {e:?}"))?;
 

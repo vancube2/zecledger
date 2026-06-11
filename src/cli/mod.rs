@@ -5,6 +5,14 @@ use clap::{Parser, Subcommand};
 pub struct Cli {
     #[command(subcommand)]
     pub command: Commands,
+
+    /// Use Zcash testnet instead of mainnet
+    #[arg(long, global = true)]
+    pub testnet: bool,
+
+    /// Force mainnet even if config sets testnet
+    #[arg(long, global = true)]
+    pub mainnet: bool,
 }
 
 #[derive(Subcommand)]
