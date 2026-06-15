@@ -7,6 +7,7 @@ use anyhow::{Context, Result};
 use std::path::Path;
 
 use super::db::wallet_db_path;
+use zcash_protocol::consensus::Network;
 
 /// One row of transaction history, ready to display.
 pub struct HistoryRow {
@@ -23,8 +24,8 @@ fn zats_to_zec(z: i64) -> f64 {
 }
 
 /// Read all transactions for the wallet, most recent first.
-pub fn read_history(data_dir: &Path) -> Result<Vec<HistoryRow>> {
-    let db_path = wallet_db_path(data_dir);
+pub fn read_history(data_dir: &Path, network: Network) -> Result<Vec<HistoryRow>> {
+    let db_path = wallet_db_path(data_dir, network);
     let conn = rusqlite::Connection::open(&db_path)
         .context("could not open wallet database for history")?;
 

@@ -77,13 +77,13 @@ async fn main() -> Result<()> {
             wallet::sync(network, endpoint).await?;
         }
         Commands::WalletReport { output } => {
-            wallet::generate_report(output).await?;
+            wallet::generate_report(output, network).await?;
         }
         Commands::WalletAsk { question } => {
-            wallet::wallet_ask(&question).await?;
+            wallet::wallet_ask(&question, network).await?;
         }
         Commands::History => {
-            wallet::show_history().await?;
+            wallet::show_history(network).await?;
         }
         Commands::Config { show } => {
             if show { core::config::show()?; }

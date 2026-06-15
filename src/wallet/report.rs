@@ -9,6 +9,7 @@ use std::collections::BTreeMap;
 use std::path::Path;
 
 use super::history::{read_history, HistoryRow};
+use zcash_protocol::consensus::Network;
 
 fn zats_to_zec(z: i64) -> f64 {
     z as f64 / 1e8
@@ -67,8 +68,8 @@ fn month_key(r: &HistoryRow) -> String {
         .unwrap_or_else(|| "pending".to_string())
 }
 
-pub fn generate_report(data_dir: &Path, out_base: &str) -> Result<()> {
-    let rows = read_history(data_dir)?;
+pub fn generate_report(data_dir: &Path, out_base: &str, network: Network) -> Result<()> {
+    let rows = read_history(data_dir, network)?;
 
     if rows.is_empty() {
         println!();

@@ -68,7 +68,7 @@ pub async fn show_balance(network: Network) -> Result<()> {
 
     let _session = prompt_for_session(network)?;
     let config = crate::core::config::load()?;
-    let db_path = db::wallet_db_path(&config.data_dir);
+    let db_path = db::wallet_db_path(&config.data_dir, network);
     let db = WalletDb::for_path(&db_path, network, SystemClock, OsRng)
         .map_err(|e| anyhow::anyhow!("could not open wallet database: {e}"))?;
 
@@ -122,31 +122,31 @@ pub async fn sync(network: Network, endpoint: String) -> Result<()> {
 }
 
 /// `zecledger history` - show transaction history from the synced wallet.
-pub async fn show_history() -> Result<()> {
+pub async fn show_history(network: Network) -> Result<()> {
     let config = crate::core::config::load()?;
-    let rows = history::read_history(&config.data_dir)?;
+    let rows = history::read_history(&config.data_dir, network)?;
     history::print_history(&rows);
     Ok(())
 }
 
 /// `zecledger report` - monthly summary on screen, full ledger to CSV + JSON.
-pub async fn generate_report(output: Option<String>) -> Result<()> {
+pub async fn generate_report(output: Option<String>, network: Network) -> Result<()> {
     let config = crate::core::config::load()?;
     let out_base = output.unwrap_or_else(|| {
         format!("zecledger_ledger_{}", chrono::Utc::now().format("%Y%m%d_%H%M%S"))
     });
-    report::generate_report(&config.data_dir, &out_base)?;
+    report::generate_report(&config.data_dir, &out_base, network)?;
     Ok(())
 }
 
 /// `zecledger wallet-ask` - answer a question about YOUR wallet.
 /// Reads only local data, shows exactly what would be sent, and requires
 /// explicit confirmation before anything leaves the machine.
-pub async fn wallet_ask(question: &str) -> Result<()> {
+pub async fn wallet_ask(question: &str, network: Network) -> Result<()> {
     use std::io::{self, Write};
 
     let config = crate::core::config::load()?;
-    let rows = history::read_history(&config.data_dir)?;
+    let rows = history::read_history(&config.data_dir, network)?;
 
     let mut received = 0i64;
     let mut sent = 0i64;

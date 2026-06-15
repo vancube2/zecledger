@@ -47,7 +47,7 @@ pub async fn import_view_only(
         .map_err(|_| anyhow!("could not build account birthday from treestate"))?;
 
     // 4. Open the wallet DB and import the UFVK as a view-only account.
-    let db_path = wallet_db_path(data_dir);
+    let db_path = wallet_db_path(data_dir, network);
     let mut db = WalletDb::for_path(&db_path, network, SystemClock, OsRng)
         .context("failed to open wallet database")?;
 
@@ -77,7 +77,7 @@ pub async fn sync_blocks(data_dir: &Path, endpoint: &str, network: Network) -> R
     let inner_blocks = blocks_dir.join("blocks");
     let block_cache = super::cache::ZecLedgerCache::new(fs_cache, inner_blocks);
 
-    let db_path = wallet_db_path(data_dir);
+    let db_path = wallet_db_path(data_dir, network);
     let mut db = WalletDb::for_path(&db_path, network, SystemClock, OsRng)
         .context("failed to open wallet database")?;
 
