@@ -35,7 +35,11 @@ pub fn print_key_safety_reminder() {
 pub fn prompt_for_session(network: Network) -> Result<WalletSession> {
     print_key_safety_reminder();
 
-    print!("Paste your Unified Full Viewing Key (starts with 'uview'): ");
+    let key_prefix = match network {
+        Network::TestNetwork => "uviewtest",
+        _ => "uview",
+    };
+    print!("Paste your Unified Full Viewing Key (starts with '{key_prefix}'): ");
     io::stdout().flush().ok();
     let mut ufvk_str = String::new();
     io::stdin().read_line(&mut ufvk_str).context("failed to read viewing key")?;
