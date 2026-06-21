@@ -1,21 +1,7 @@
 /target
-# Environment & secrets
-.env
-.env.local
-.env.*
-*.pem
-*.key
-*.p12
-*.pfx
-*.seed
-*.mnemonic
-wallet.json
-keystore/
-
-# Node (if ever added)
-node_modules/
-dist/
-
-# OS files
-.DS_Store
-Thumbs.db
+zecledger_ledger_*.csv
+zecledger_ledger_*.json
+zecledger_full_*.csv
+zecledger_full_*.json
+*.sqlite
+*.sqlite.bak
