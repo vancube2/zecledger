@@ -31,6 +31,15 @@ async fn main() -> Result<()> {
         Commands::History => {
             wallet::show_history(network).await?;
         }
+        Commands::Expect { amount, reference, from } => {
+            wallet::expect_payment(amount, &reference, &from, network)?;
+        }
+        Commands::Reconcile => {
+            wallet::reconcile_payments(network)?;
+        }
+        Commands::Expected => {
+            wallet::list_expected(network)?;
+        }
         Commands::Config { show } => {
             if show { core::config::show()?; }
         }

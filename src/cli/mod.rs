@@ -30,6 +30,19 @@ pub enum Commands {
     },
     /// Ask the copilot about YOUR wallet (shows data and confirms before sending)
     WalletAsk { question: String },
+    /// Record a payment you are expecting to receive
+    Expect {
+        #[arg(short, long)]
+        amount: f64,
+        #[arg(short, long)]
+        reference: String,
+        #[arg(long)]
+        from: String,
+    },
+    /// Check expected payments against your received history
+    Reconcile,
+    /// List the payments you are expecting
+    Expected,
     /// Manage configuration
     Config {
         #[arg(short, long)]

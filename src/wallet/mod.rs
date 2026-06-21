@@ -4,6 +4,7 @@ pub mod account;
 pub mod cache;
 pub mod history;
 pub mod report;
+pub mod reconcile;
 //
 // The local, private side of ZecLedger: shielded accounting from a viewing key.
 // Read-only by design. This module never holds or handles a spending key.
@@ -246,4 +247,23 @@ pub async fn wallet_ask(question: &str, network: Network) -> Result<()> {
     }
     println!("  {:-<60}", "");
     Ok(())
+}
+
+
+/// Record an expected payment (Phase 3a).
+pub fn expect_payment(amount: f64, reference: &str, from: &str, network: Network) -> Result<()> {
+    let config = crate::core::config::load()?;
+    reconcile::add_expected(&config.data_dir, network, amount, reference, from)
+}
+
+/// Reconcile expected payments against received history (Phase 3a).
+pub fn reconcile_payments(network: Network) -> Result<()> {
+    let config = crate::core::config::load()?;
+    reconcile::reconcile(&config.data_dir, network)
+}
+
+/// List expected payments (Phase 3a).
+pub fn list_expected(network: Network) -> Result<()> {
+    let config = crate::core::config::load()?;
+    reconcile::list_expected(&config.data_dir, network)
 }
