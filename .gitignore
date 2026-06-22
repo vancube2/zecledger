@@ -6,3 +6,5 @@ zecledger_full_*.json
 *.sqlite
 *.sqlite.bak
 expected_payments*.json
+prices.cache*.json
+prices.manual*.json
