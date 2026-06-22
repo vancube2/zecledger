@@ -43,6 +43,19 @@ pub enum Commands {
     Reconcile,
     /// List the payments you are expecting
     Expected,
+    /// Generate a ZIP-321 payment request URI to send to a payer
+    Request {
+        #[arg(short, long)]
+        address: String,
+        #[arg(short = 'n', long)]
+        amount: f64,
+        #[arg(short, long)]
+        memo: Option<String>,
+        #[arg(short, long)]
+        label: Option<String>,
+        #[arg(long)]
+        message: Option<String>,
+    },
     /// Manage configuration
     Config {
         #[arg(short, long)]

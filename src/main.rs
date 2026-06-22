@@ -40,6 +40,15 @@ async fn main() -> Result<()> {
         Commands::Expected => {
             wallet::list_expected(network)?;
         }
+        Commands::Request { address, amount, memo, label, message } => {
+            wallet::make_payment_request(
+                &address,
+                amount,
+                memo.as_deref(),
+                label.as_deref(),
+                message.as_deref(),
+            )?;
+        }
         Commands::Config { show } => {
             if show { core::config::show()?; }
         }

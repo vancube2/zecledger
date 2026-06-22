@@ -33,6 +33,7 @@ zcash_client_sqlite = { version = "0.21", features = ["orchard", "transparent-in
 zcash_keys = { version = "0.14", features = ["orchard"] }
 zcash_protocol = "0.9"
 zcash_address = "0.12"
+zip321 = "0.8"
 rand = "0.8"
 async-trait = "0.1"
 prost = "0.14"

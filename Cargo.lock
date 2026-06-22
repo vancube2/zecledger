@@ -4539,6 +4539,7 @@ dependencies = [
  "zcash_keys",
  "zcash_primitives",
  "zcash_protocol",
+ "zip321",
 ]
 
 [[package]]

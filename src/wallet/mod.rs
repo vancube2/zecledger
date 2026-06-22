@@ -5,6 +5,7 @@ pub mod cache;
 pub mod history;
 pub mod report;
 pub mod reconcile;
+pub mod request;
 //
 // The local, private side of ZecLedger: shielded accounting from a viewing key.
 // Read-only by design. This module never holds or handles a spending key.
@@ -266,4 +267,16 @@ pub fn reconcile_payments(network: Network) -> Result<()> {
 pub fn list_expected(network: Network) -> Result<()> {
     let config = crate::core::config::load()?;
     reconcile::list_expected(&config.data_dir, network)
+}
+
+
+/// Generate a ZIP-321 payment request URI (Phase 3b).
+pub fn make_payment_request(
+    address: &str,
+    amount: f64,
+    memo: Option<&str>,
+    label: Option<&str>,
+    message: Option<&str>,
+) -> Result<()> {
+    request::make_request(address, amount, memo, label, message)
 }
