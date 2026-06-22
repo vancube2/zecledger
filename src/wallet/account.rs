@@ -51,10 +51,15 @@ pub async fn import_view_only(
     let mut db = WalletDb::for_path(&db_path, network, SystemClock, OsRng)
         .context("failed to open wallet database")?;
 
-    db.import_account_ufvk("main", ufvk, &birthday, AccountPurpose::ViewOnly, None)
-        .map_err(|e| anyhow!("failed to import account: {e:?}"))?;
-
-    println!("  Account imported (view-only).");
+    use zcash_client_backend::data_api::WalletRead;
+    let existing = db.get_account_ids().unwrap_or_default();
+    if existing.is_empty() {
+        db.import_account_ufvk("main", ufvk, &birthday, AccountPurpose::ViewOnly, None)
+            .map_err(|e| anyhow!("failed to import account: {e:?}"))?;
+        println!("  Account imported (view-only).");
+    } else {
+        println!("  Account already present, syncing existing wallet.");
+    }
     Ok(())
 }
 
