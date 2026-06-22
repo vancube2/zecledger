@@ -56,6 +56,13 @@ pub enum Commands {
         #[arg(long)]
         message: Option<String>,
     },
+    /// Cost-basis and gain/loss report (fifo, lifo, or average)
+    CostBasis {
+        #[arg(short, long, default_value = "fifo")]
+        method: String,
+        #[arg(long)]
+        fetch_prices: bool,
+    },
     /// Manage configuration
     Config {
         #[arg(short, long)]

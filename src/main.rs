@@ -49,6 +49,9 @@ async fn main() -> Result<()> {
                 message.as_deref(),
             )?;
         }
+        Commands::CostBasis { method, fetch_prices } => {
+            wallet::cost_basis_report(&method, fetch_prices, network).await?;
+        }
         Commands::Config { show } => {
             if show { core::config::show()?; }
         }
