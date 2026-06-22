@@ -63,6 +63,8 @@ pub enum Commands {
         #[arg(long)]
         fetch_prices: bool,
     },
+    /// Privacy-hygiene report: analyzes pool usage and amounts for privacy risks
+    PrivacyCheck,
     /// Manage configuration
     Config {
         #[arg(short, long)]

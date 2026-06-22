@@ -7,6 +7,7 @@ pub mod report;
 pub mod reconcile;
 pub mod request;
 pub mod costbasis;
+pub mod privacy;
 //
 // The local, private side of ZecLedger: shielded accounting from a viewing key.
 // Read-only by design. This module never holds or handles a spending key.
@@ -288,4 +289,11 @@ pub async fn cost_basis_report(method: &str, fetch: bool, network: Network) -> R
     let config = crate::core::config::load()?;
     let m: costbasis::Method = method.parse()?;
     costbasis::report(&config.data_dir, network, m, fetch).await
+}
+
+
+/// Generate a privacy-hygiene report (creative feature).
+pub fn privacy_report(network: Network) -> Result<()> {
+    let config = crate::core::config::load()?;
+    privacy::report(&config.data_dir, network)
 }

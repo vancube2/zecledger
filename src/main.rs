@@ -52,6 +52,9 @@ async fn main() -> Result<()> {
         Commands::CostBasis { method, fetch_prices } => {
             wallet::cost_basis_report(&method, fetch_prices, network).await?;
         }
+        Commands::PrivacyCheck => {
+            wallet::privacy_report(network)?;
+        }
         Commands::Config { show } => {
             if show { core::config::show()?; }
         }
