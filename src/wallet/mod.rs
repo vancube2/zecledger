@@ -225,7 +225,7 @@ pub async fn wallet_ask(question: &str, network: Network) -> Result<()> {
         .header("anthropic-version", "2023-06-01")
         .header("content-type", "application/json")
         .json(&serde_json::json!({
-            "model": "claude-sonnet-4-20250514",
+            "model": "claude-sonnet-4-6",
             "max_tokens": 1024,
             "system": "You are ZecLedger Copilot. Answer the user's question about THEIR OWN Zcash wallet using only the data provided. Be precise with numbers. Do not speculate beyond the data.",
             "messages": [{
