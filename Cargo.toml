@@ -2,7 +2,7 @@
 name = "zecledger"
 version = "0.1.0"
 edition = "2021"
-description = "AI-powered Zcash research copilot"
+description = "Read-only Zcash shielded accounting from your viewing key"
 
 [[bin]]
 name = "zecledger"
@@ -16,9 +16,6 @@ serde_json = "1.0"
 reqwest = { version = "0.12.15", features = ["json", "rustls-tls"], default-features = false }
 chrono = { version = "0.4.40", features = ["serde"] }
 csv = "1"
-printpdf = "0.7"
-ratatui = "0.29"
-crossterm = "0.28"
 anyhow = "1.0"
 thiserror = "1"
 tracing = "0.1"

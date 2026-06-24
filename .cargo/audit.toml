@@ -1,0 +1,8 @@
+[advisories]
+ignore = [
+    # time 0.3.37 DoS-via-stack-exhaustion. Transitively pinned by
+    # zcash_client_backend 0.23 (time-core =0.1.2), so it cannot be
+    # upgraded from this project until the upstream zcash crates bump it.
+    # Not reachable here: ZecLedger never parses untrusted date input.
+    "RUSTSEC-2026-0009",
+]
