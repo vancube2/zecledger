@@ -1,99 +1,96 @@
-> ⚠️ OFFICIAL REPO ONLY: github.com/vancube2/zecledger
-> ZecLedger has NO token. We will NEVER ask for ZEC, wallet access, or seed phrases. Report scams in ZecHub Discord.
+> ⚠️ **OFFICIAL REPO ONLY**: github.com/vancube2/zecledger
+> ZecLedger has **NO token**. We will **NEVER** ask for ZEC, wallet access, or seed phrases. Report scams in the ZecHub Discord.
 
 ---
 
-> ⚠️ **OFFICIAL REPO ONLY**: github.com/vancube2/zecledger
-> ZecLedger has **NO token**. We will **NEVER** ask for ZEC,
-> wallet access, or seed phrases. Report scams in ZecHub Discord.
-
 # ZecLedger
 
-> AI-powered Zcash accounting, reporting and payment management copilot.
+**Read-only Zcash shielded accounting from your viewing key.**
 
-ZecLedger is the first AI research and accounting tool built specifically for the Zcash ecosystem. Query the network in plain English, generate professional accounting reports, and manage ZEC payment workflows — all from your terminal.
+ZecLedger is an open-source command-line tool for doing real accounting on shielded Zcash funds. It works entirely from a viewing key, never a spending key, so it can read your shielded transaction history and produce books, reconciliations, cost-basis reports, and privacy checks, while remaining completely unable to move your money.
 
-Built in Rust. Powered by Claude AI.
+Most blockchains make every payment public forever. Zcash fixes that with shielded transactions, but that privacy creates a new problem: if your transactions are encrypted, how do you keep accounts? ZecLedger is built to answer that.
 
-## Features
+**Demo video:** https://youtu.be/7emZKHAH7TQ
 
-### Accounting
-- Full income and expense tracking across shielded and transparent transactions
-- ZEC to USD conversion at time of transaction
-- Net position calculation with fee breakdown
-- Privacy breakdown — shielded vs transparent volume
+## Why it is different
 
-### Reporting
-- Generate reports in CSV and JSON formats
-- Full ledger export with running balance
-- Network-wide shield rate and adoption metrics
-- Research-grade analysis powered by AI
+- **Read-only by design.** The viewing key is held in memory only. It is never written to disk and never sent to any server. When the program exits, the key is gone and you re-enter it next session.
+- **Cost-basis for shielded ZEC.** Computes realised gains and losses using FIFO, LIFO, or average cost, with the holding period in days. Because shielded transactions keep price data off-chain, ZecLedger lets you capture it (manually or via an optional price fetch).
+- **Honest reconciliation.** When matching expected payments against received history, it flags partial matches for review instead of pretending they are confirmed.
+- **Privacy by consent.** The optional copilot shows you exactly what aggregate data will leave your machine and waits for your explicit confirmation before sending anything.
+- **Payments by handoff.** Generates standard ZIP-321 payment request URIs without ever touching a spending key.
 
-### Payment Management
-- Complete payment log with confirmation status
-- Pending payment tracker with block confirmations
-- Payment statistics — volume, fees, largest, smallest, average
-- Multi-type support — shielded, transparent, and mixed transactions
+## Commands
 
-### AI Research Copilot
-- Ask any question about the Zcash network in plain English
-- Powered by Claude AI with real-time blockchain context
-- Research-grade answers with follow-up question suggestions
+| Command | What it does |
+| --- | --- |
+| `sync` | Sync your wallet from a lightwalletd server (reads your viewing key) |
+| `balance` | Show your shielded balance per pool (Sapling, Orchard, transparent) |
+| `history` | Show transaction history, including decoded memos |
+| `wallet-report` | Generate an accounting report (monthly summary plus full ledger, CSV/JSON) |
+| `expect` / `reconcile` / `expected` | Record expected payments and reconcile them against received history |
+| `request` | Generate a ZIP-321 payment request URI to send to a payer |
+| `cost-basis` | Cost-basis and gain/loss report (`--method fifo\|lifo\|average`, optional `--fetch-prices`) |
+| `privacy-check` | Analyse pool usage and amounts for privacy risks |
+| `wallet-ask` | Ask a copilot about your wallet (shows the data and confirms before sending) |
+| `config` | Manage configuration |
 
-## Setup & Installation
+Global flags: `--testnet` and `--mainnet`.
 
-### Step 1 — Install Rust
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+## Install
 
-### Step 2 — Install and run Zebra node
-cargo install --locked zebrad
-zebrad generate -o ~/.config/zebrad.toml
-sed -i '/^\[rpc\]/a listen_addr = "127.0.0.1:8232"' ~/.config/zebrad.toml
-sed -i 's/enable_cookie_auth = true/enable_cookie_auth = false/' ~/.config/zebrad.toml
-nohup zebrad start > /tmp/zebra.log 2>&1 &
+Requirements: a recent Rust toolchain and `protoc` (Protocol Buffers compiler).
 
-### Step 3 — Clone and build ZecLedger
-git clone https://github.com/vancube2/zecledger.git
+```bash
+git clone https://github.com/vancube2/zecledger
 cd zecledger
 cargo build --release
+cargo install --path .
+```
 
-### Step 4 — Set API key and run
-export ANTHROPIC_API_KEY=your_key_here
-./target/release/zecledger --help
-## Usage
+This installs a `zecledger` command on your PATH.
 
-### Ask the AI Copilot
-    ./target/release/zecledger ask "What does the current shield rate tell us about Zcash privacy adoption?"
+## Quick start
 
-### Accounting Summary
-    ./target/release/zecledger accounting --blocks 100
+```bash
+# 1. Sync your wallet (you will be prompted for your viewing key and birthday height)
+zecledger sync
 
-### Payment Management
-    ./target/release/zecledger payments --mode log --limit 20
-    ./target/release/zecledger payments --mode pending
-    ./target/release/zecledger payments --mode stats
+# 2. See your shielded balance
+zecledger balance
 
-### Generate Reports
-    ./target/release/zecledger report --format csv --output report.csv
-    ./target/release/zecledger report --format json --output report.json
-    ./target/release/zecledger full-report --format json --output full_report.json
+# 3. Review your transaction history with memos
+zecledger history
 
-### Terminal Dashboard
-    ./target/release/zecledger dashboard
+# 4. Produce a cost-basis report
+zecledger cost-basis --method fifo --fetch-prices
+```
 
-## Roadmap
-- Live lightwalletd gRPC integration
-- PDF report generation
-- Multi-wallet and team address tracking
-- Scheduled payment automation
-- Web dashboard UI
-- Pay-per-report in ZEC
+On first run ZecLedger asks for your Unified Full Viewing Key and your wallet birthday (the block height the wallet was created at). The key is used for that session only and is never stored.
 
-## Built For
+The copilot (`wallet-ask`) is optional and requires an `ANTHROPIC_API_KEY` in your environment. It only ever sends aggregate totals, never addresses or memos, and only after you confirm.
 
-ZecHub Hackathon 2026 — Accounting Track
-Reporting, workflows for teams handling ZEC, payment management system.
+## Design principles
+
+- The core is strictly read-only. ZecLedger uses viewing keys and never spending keys, so it cannot send funds.
+- Payments happen by handoff. ZecLedger produces a ZIP-321 request; your own wallet performs any actual send.
+- The viewing key lives in memory only and leaves no trace on disk.
+- Anything that sends data off the machine (the optional copilot) is opt-in and shown to you first.
+
+See [DESIGN.md](DESIGN.md) for the architecture and [SECURITY.md](SECURITY.md) for the security model.
+
+## Honest limitations
+
+- Cost-basis output is an estimate to discuss with a professional, not a filed tax figure. Tax rules vary by country; ZecLedger reports the holding period in days and makes no jurisdiction assumptions.
+- The average-cost method uses a running-average interpretation, and the holding period for a multi-lot disposal uses the earliest consumed lot.
+- The privacy check only inspects pool usage and amounts. It cannot see address reuse or timing patterns, so a clean report is not a guarantee.
+- Reconciliation matches on memo and amount; a clean confirmation needs the reference to appear in a memo.
+
+## Built for
+
+The ZecHub Hackathon 2026, Accounting track: practical accounting workflows for people and teams handling ZEC.
 
 ## License
 
-MIT
+MIT. See [LICENSE](LICENSE).

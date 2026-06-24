@@ -8,3 +8,8 @@ zecledger_full_*.json
 expected_payments*.json
 prices.cache*.json
 prices.manual*.json
+research_data*.json
+full_report*.json
+mainnet_report*.json
+my_first_report*.csv
+report.json
