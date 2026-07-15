@@ -1,0 +1,164 @@
+name: Release
+
+# Builds verifiable, downloadable binaries so nobody has to install a Rust
+# toolchain to use ZecLedger. Triggered by pushing a version tag, e.g. v0.1.0.
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+jobs:
+  build:
+    name: build ${{ matrix.target }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: x86_64-unknown-linux-gnu
+            os: ubuntu-22.04
+          - target: aarch64-apple-darwin
+            os: macos-14
+          - target: x86_64-apple-darwin
+            os: macos-13
+          - target: x86_64-pc-windows-msvc
+            os: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # protoc is a real build requirement: the lightwalletd gRPC client is
+      # generated at build time by prost/tonic. Installed from each platform's
+      # own package manager rather than a third-party action.
+      - name: Install protoc (Linux)
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y protobuf-compiler
+
+      - name: Install protoc (macOS)
+        if: runner.os == 'macOS'
+        run: brew install protobuf
+
+      - name: Install protoc (Windows)
+        if: runner.os == 'Windows'
+        run: choco install protoc -y
+
+      # rustup ships preinstalled on GitHub runners, so no extra action needed.
+      - name: Set up Rust
+        run: |
+          rustup toolchain install stable --profile minimal
+          rustup default stable
+          rustup target add ${{ matrix.target }}
+
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ matrix.target }}-cargo-${{ hashFiles('Cargo.lock') }}
+
+      - name: Build
+        run: cargo build --release --locked --target ${{ matrix.target }}
+
+      - name: Package
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="${GITHUB_REF_NAME#v}"
+          NAME="zecledger-${VERSION}-${{ matrix.target }}"
+          mkdir -p "dist/${NAME}"
+          if [ "${{ runner.os }}" = "Windows" ]; then
+            cp "target/${{ matrix.target }}/release/zecledger.exe" "dist/${NAME}/"
+          else
+            cp "target/${{ matrix.target }}/release/zecledger" "dist/${NAME}/"
+          fi
+          cp README.md LICENSE SECURITY.md "dist/${NAME}/"
+          cd dist
+          if [ "${{ runner.os }}" = "Windows" ]; then
+            7z a "${NAME}.zip" "${NAME}" >/dev/null
+          else
+            tar czf "${NAME}.tar.gz" "${NAME}"
+          fi
+          ls -la
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.target }}
+          path: |
+            dist/*.tar.gz
+            dist/*.zip
+          if-no-files-found: error
+
+  release:
+    name: publish release
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+
+      - name: Checksums
+        run: |
+          set -euo pipefail
+          cd artifacts
+          sha256sum * > SHA256SUMS
+          echo "--- SHA256SUMS ---"
+          cat SHA256SUMS
+
+      # Cryptographic build provenance: proves these binaries were built from
+      # this repo by this workflow. Verify with:  gh attestation verify <file> -R vancube2/zecledger
+      - name: Attest build provenance
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: "artifacts/*.tar.gz, artifacts/*.zip"
+
+      - name: Publish
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            artifacts/*.tar.gz
+            artifacts/*.zip
+            artifacts/SHA256SUMS
+          generate_release_notes: true
+          draft: true
+          body: |
+            ## ZecLedger ${{ github.ref_name }}
+
+            Read-only Zcash shielded accounting from your viewing key.
+
+            **ZecLedger never asks for a seed phrase or spending key, and cannot move funds.**
+
+            ### Install
+            Download the archive for your platform below, extract it, and run `zecledger`.
+
+            | Platform | File |
+            |---|---|
+            | macOS (Apple Silicon) | `aarch64-apple-darwin` |
+            | macOS (Intel) | `x86_64-apple-darwin` |
+            | Linux (x86_64) | `x86_64-unknown-linux-gnu` |
+            | Windows (x86_64) | `x86_64-pc-windows-msvc` |
+
+            ### Verify what you downloaded
+            Checksums:
+            ```
+            sha256sum -c SHA256SUMS
+            ```
+            Build provenance (proves it was built from this repo, not swapped):
+            ```
+            gh attestation verify <file> -R vancube2/zecledger
+            ```
+
+            Only ever download ZecLedger from this repository. Anything else claiming to be ZecLedger is fake.

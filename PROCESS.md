@@ -1,118 +1,118 @@
-cat > PROCESS.md << 'EOF'
-# ZecLedger — Process Documentation
+# ZecLedger, Process Documentation
 
-## What We Built
-ZecLedger is an AI-powered Zcash accounting, reporting and payment management copilot. It connects to the Zcash mainnet via a Zebra full node, analyzes real blockchain data, and lets researchers and teams query it in plain English using Claude AI.
+How this tool was built, including the pivot that defines it.
 
-## System Architecture
-User (CLI)
-↓
-ZecLedger Rust Application
-↓
-┌─────────────────────────────────────┐
-│           Core Modules              │
-│  accounting · payments · reporting  │
-│  copilot · output · data            │
-└─────────────────────────────────────┘
-↓                    ↓
-Zebra Full Node      Claude AI API
-(Zcash Mainnet)      (Research Copilot)
-↓
-Real Transaction Data
-## How It Works
+## The short version
 
-### 1. Data Layer
-ZecLedger connects to a locally running Zebra full node via JSON-RPC. It fetches real blocks and transactions directly from Zcash mainnet, detecting transaction types (shielded, transparent, mixed) from on-chain data.
+ZecLedger started as one thing and became another. It began as a research tool that
+read the public Zcash chain and reasoned about it. Partway through, it became clear
+that this was an explorer wrapper solving a problem nobody urgently had, while the
+real unsolved problem sat next to it untouched: a person or team holding shielded ZEC
+genuinely cannot do their own books, because the chain data is encrypted to everyone,
+including them.
 
-### 2. Accounting Engine
-Raw transactions are processed into:
-- Income vs expense tracking
-- Running balance ledger
-- Fee analysis
-- Privacy breakdown (shielded vs transparent volume)
-- Net position in ZEC and USD
+That is the problem privacy creates. ZecLedger was rebuilt around it.
 
-### 3. Payment Management
-Every transaction is tracked as a payment with:
-- Confirmation status (confirmed vs pending)
-- Block confirmation count
-- Payment ID for team reference
-- Full audit trail exportable to CSV/JSON
+## Version 1, May 22 to early June 2026
 
-### 4. AI Research Copilot
-Real network data is sent as context to Claude AI. Researchers ask questions in plain English and receive research-grade answers with specific numbers, pattern analysis, and follow-up research suggestions.
+The first commit was a Zcash network research copilot. It connected to a locally
+running Zebra full node over JSON-RPC, pulled real blocks and transactions from
+mainnet, classified them as shielded, transparent, or mixed, and ran an accounting
+engine over that public data. It had payment tracking, CSV and JSON audit trails, a
+terminal dashboard, and a copilot that answered plain-English questions with real
+network data as context. It shipped with verified raw research data across several
+time windows.
 
-### 5. Reporting
-Clean exports in CSV and JSON for:
-- Individual transaction ledgers
-- Network summary statistics
-- Full combined reports (accounting + payments + network)
+That version worked. It also had a conceptual ceiling.
 
-## Development Process
+## The realisation
 
-### Day 1
-- Scaffolded full Rust project with 5 core modules
-- Built mock data layer for development without waiting for node sync
-- Integrated Claude AI copilot with Zcash network context
-- CSV and JSON report generation working end to end
+Analysing public network data is, at bottom, an explorer with a language model on
+top. It is useful, but it does not solve anything that only Zcash has, and it does
+not touch the actual gap: your own encrypted books.
 
-### Day 2
-- Built accounting module with full P&L summary
-- Built payment management with confirmation tracking
-- Built reporting module with full combined reports
-- Enabled Zebra RPC and connected to live mainnet
-- Switched from mock data to real mainnet transactions
+## The pivot, June 8 2026
 
-### Day 3
-- Mainnet integration tested and verified
-- 634 real Zcash transactions analyzed
-- AI Copilot providing research-grade analysis on real data
-- GitHub repo published and documented
+DESIGN.md was written on June 8. Commit 9a90096, "Add design doc for local shielded
+accounting tool", is the hinge of the whole project. From that point the centre of
+gravity moved:
 
-## Tech Stack
-- **Language:** Rust
-- **Blockchain:** Zcash mainnet via Zebra full node (v4.4.1)
-- **RPC:** Zebra JSON-RPC on port 8232
-- **AI:** Claude Sonnet (Anthropic API)
-- **Exports:** CSV, JSON
-- **UI:** Terminal CLI + TUI dashboard
+From reading the public chain and reasoning about the network.
+To reading your own shielded wallet with a viewing key, locally, and doing real
+accounting on it.
 
-## Running ZecLedger
+The fake-data and public-analysis scaffolding was later stripped out entirely
+(commit 36b04b7, "Remove fake-data scaffolding commands, keep only real wallet
+pipeline"), and the README was rewritten for the tool that actually exists
+(commit be3e847).
 
-### Requirements
-- Rust (rustup.rs)
-- Zebra node running locally
-- Anthropic API key
+## The split the pivot produced
 
-### Commands
-```bash
-# Accounting
-zecledger accounting --blocks 100
+The pivot also produced the two-part architecture that defines ZecLedger today,
+stated directly in DESIGN.md:
 
-# Payment management
-zecledger payments --mode log
-zecledger payments --mode pending
-zecledger payments --mode stats
+- **ZecLedger Local (the CLI)** handles anything that touches your keys. Viewing key
+  in, shielded accounting out, everything computed on your own machine.
+- **ZecLedger Web** is the public, no-keys dashboard. Public network data and
+  transparent addresses only. It never asks for or handles any key.
 
-# AI Copilot
-zecledger ask "What is the Zcash shield rate trend?"
+The version 1 network-analysis work did not die. It became the web app. That is why
+zecledger-web does shield-rate sampling, network and fee statistics, and transparent
+address lookup. It is the public-data half, correctly separated from the private half.
 
-# Reports
-zecledger report --format csv
-zecledger full-report --format json
+## How it was built
 
-# Dashboard
-zecledger dashboard
-```
+43 commits, May 22 to June 24 2026.
 
-## What Makes ZecLedger Unique
-1. First AI copilot purpose-built for Zcash network research
-2. Real mainnet data — not an explorer wrapper
-3. Full accounting suite designed for teams handling ZEC
-4. Privacy-aware — tracks shielded vs transparent volume separately
-5. Pay-per-report model planned for sustainability
+**Design before code.** DESIGN.md was written first and treated as the agreed scope:
+core principles, what the tool will and will not do, the architecture, the privacy
+model in plain terms, exact key handling, and an explicit out-of-scope list. The code
+followed the plan.
 
-## Hackathon Track
-ZecHub Hackathon 2026 — Accounting Track
-Reporting, workflows for teams handling ZEC, payment management system.
-EOF
+**Hardest thing first, in phases.** DESIGN.md named Phase 1, shielded balance, as the
+centerpiece and the hardest single step, and predicted the rest would move quickly
+once the decryption layer worked. That is what happened, and the commits are labelled
+by phase and step:
+
+- Phase 1: light-client dependencies, wallet scaffolding, viewing-key input with
+  validation and birthday height, wallet database, lightwalletd connection and
+  view-only account import, block sync via a custom BlockCache wrapper, and finally
+  shielded balance per pool.
+- Phase 2: transaction history from the v_transactions view, accounting reports with
+  monthly summary and CSV/JSON export, and a wallet copilot with explicit send consent.
+- Phase 3: expected-payment reconciliation on memo and amount, and ZIP-321 payment
+  request generation.
+- Then the value-add reports: cost basis and gain/loss with FIFO, LIFO and average,
+  and a privacy-hygiene report over pool usage and amount patterns.
+
+**One step, one commit.** Every commit is a single working step with a plain-English
+message. Build one thing, test it against real data, commit, move on.
+
+**Security from the start, not bolted on.** Security and scam-defence commits appear
+early and repeatedly, before the pivot: a security policy and scam warning, a
+hardened .gitignore, tightly pinned dependencies, and dependency vulnerability fixes.
+
+**Honesty passes.** Several commits exist purely to remove things that should not be
+there or to stop misleading the user: removing accidentally committed output files,
+removing the fake-data scaffolding, clearing dead code, and rewriting the README for
+the current tool.
+
+## What the tool is now
+
+Viewing-key shielded accounting over lightwalletd, in Rust, built on the same
+light-client crates the ecosystem maintains (zcash_client_backend, zcash_client_sqlite,
+zcash_keys). The key is entered per session, held in memory only, and never written to
+disk. The tool is structurally unable to spend: it takes a Unified Full Viewing Key,
+never a spending key, and payments are handed off as ZIP-321 requests to the user's own
+audited wallet.
+
+Current commands: `sync`, `balance`, `history`, `wallet-report`, `expect` / `reconcile`
+/ `expected`, `request`, `cost-basis`, `privacy-check`, `wallet-ask`, `config`, with
+`--testnet` and `--mainnet` flags.
+
+## Submission
+
+Built for the ZecHub Hackathon 2026, Accounting track: reporting and workflows for
+teams handling ZEC, and payment management.
+
+Companion work in the same ecosystem push: the ZecHub wiki cost-basis PR #1774.

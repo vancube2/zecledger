@@ -40,7 +40,50 @@ Global flags: `--testnet` and `--mainnet`.
 
 ## Install
 
-Requirements: a recent Rust toolchain and `protoc` (Protocol Buffers compiler).
+### Download a binary (recommended)
+
+No toolchain, no compiler. Grab the archive for your platform from the
+[latest release](https://github.com/vancube2/zecledger/releases/latest):
+
+| Platform | Archive |
+|---|---|
+| macOS (Apple Silicon) | `zecledger-<version>-aarch64-apple-darwin.tar.gz` |
+| macOS (Intel) | `zecledger-<version>-x86_64-apple-darwin.tar.gz` |
+| Linux (x86_64) | `zecledger-<version>-x86_64-unknown-linux-gnu.tar.gz` |
+| Windows (x86_64) | `zecledger-<version>-x86_64-pc-windows-msvc.zip` |
+
+```bash
+tar xzf zecledger-<version>-<target>.tar.gz
+cd zecledger-<version>-<target>
+./zecledger --help
+```
+
+Optionally move it onto your PATH, for example `sudo mv zecledger /usr/local/bin/`.
+
+### Verify what you downloaded
+
+This tool reads your viewing key, so please check you got the real thing rather
+than taking our word for it. Download `SHA256SUMS` from the same release, then:
+
+```bash
+sha256sum -c SHA256SUMS
+```
+
+Every release is also built by a public GitHub Actions workflow with
+cryptographic build provenance, which proves the binary came from this repository
+and this source. If you have the GitHub CLI:
+
+```bash
+gh attestation verify zecledger-<version>-<target>.tar.gz -R vancube2/zecledger
+```
+
+Only ever download ZecLedger from this repository. Anything else claiming to be
+ZecLedger is fake.
+
+### Build from source
+
+If you would rather compile it yourself, you need a recent Rust toolchain and
+`protoc` (the Protocol Buffers compiler, used to generate the lightwalletd client).
 
 ```bash
 git clone https://github.com/vancube2/zecledger
