@@ -18,9 +18,9 @@ that touches your keys.
 - **Read-only.** The tool uses viewing keys only. It never holds a spending key
   and can never move a coin. Sending is handed off to an audited wallet.
 - **Keys never leave the machine.** The viewing key is never sent to any server.
-  It is stored locally in the wallet database, because that is how the underlying
-  light-client crates scan for your notes. Encrypting that database at rest is
-  the next planned change.
+  It is stored in the local wallet database, because that is how the underlying
+  light-client crates scan for your notes, and that database is encrypted at rest
+  with SQLCipher using a passphrase that ZecLedger never stores.
 - **The server learns nothing.** Block data is fetched from a public lightwalletd
   endpoint and decrypted locally. The endpoint never sees the key, the balance,
   or which wallet is being synced (beyond IP and requested block ranges).
@@ -39,7 +39,7 @@ store any key on disk. Payments are completed in a separate audited wallet.
 ## Architecture
 
 ```
-You (viewing key, entered on first sync, stored in the local wallet db)
+You (viewing key, entered once, stored in the encrypted wallet db)
         |
    ZecLedger Local (Rust)
         |  trial-decrypts blocks locally
@@ -56,9 +56,8 @@ foundations used by production wallets such as Zashi.
 A local database stores the synced block and note metadata needed to compute
 balances and history, and also the viewing key itself, which `zcash_client_sqlite`
 requires in order to trial-decrypt blocks on every sync. The database never leaves
-the machine. It is currently unencrypted, so anyone who can read that file can see
-the wallet's transaction history. It cannot be used to spend. Encrypting the
-database at rest is the next planned change.
+the machine, and it is encrypted at rest with SQLCipher. You choose the passphrase
+on first sync and ZecLedger never stores it, so without it the file is unreadable.
 
 ## Privacy model in plain terms
 
@@ -83,13 +82,16 @@ database at rest is the next planned change.
 
 ## Key handling, exactly
 
-1. On first sync, the tool asks for a Unified Full Viewing Key (UFVK).
+1. On first sync, the tool asks for a passphrase and a Unified Full Viewing Key.
 2. The key is imported into the local wallet database by `zcash_client_sqlite`,
    which stores it so it can trial-decrypt blocks on this and every later sync.
+   That database is encrypted with the passphrase using SQLCipher.
 3. The key is used to trial-decrypt blocks locally. It is never sent anywhere.
-4. Because the key is on disk, anyone who can read the wallet database can see
-   this wallet's transaction history. It cannot be used to spend. Encrypting the
-   database at rest is the next planned change.
+4. On later runs only the passphrase is needed. The key is already in the database,
+   so there is nothing to paste again.
+5. ZecLedger never stores the passphrase and cannot recover it. Forgetting it means
+   deleting the database and syncing again from the viewing key and birthday. No
+   funds are at risk either way, because ZecLedger never holds any.
 
 A Unified Full Viewing Key is used (not an incoming-only key) so the tool can see
 both received and spent notes, which accounting requires. It still cannot spend.

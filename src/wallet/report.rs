@@ -68,8 +68,13 @@ fn month_key(r: &HistoryRow) -> String {
         .unwrap_or_else(|| "pending".to_string())
 }
 
-pub fn generate_report(data_dir: &Path, out_base: &str, network: Network) -> Result<()> {
-    let rows = read_history(data_dir, network)?;
+pub fn generate_report(
+    data_dir: &Path,
+    out_base: &str,
+    network: Network,
+    passphrase: &str,
+) -> Result<()> {
+    let rows = read_history(data_dir, network, passphrase)?;
 
     if rows.is_empty() {
         println!();

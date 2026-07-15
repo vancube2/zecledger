@@ -4,6 +4,7 @@ pub mod cache;
 pub mod costbasis;
 pub mod db;
 pub mod history;
+pub mod passphrase;
 pub mod privacy;
 pub mod reconcile;
 pub mod report;
@@ -76,17 +77,12 @@ pub fn prompt_for_session(network: Network) -> Result<WalletSession> {
 }
 
 pub async fn show_balance(network: Network) -> Result<()> {
-    use rand::rngs::OsRng;
     use zcash_client_backend::data_api::wallet::ConfirmationsPolicy;
     use zcash_client_backend::data_api::WalletRead;
-    use zcash_client_sqlite::util::SystemClock;
-    use zcash_client_sqlite::WalletDb;
 
-    let _session = prompt_for_session(network)?;
     let config = crate::core::config::load()?;
-    let db_path = db::wallet_db_path(&config.data_dir, network);
-    let db = WalletDb::for_path(&db_path, network, SystemClock, OsRng)
-        .map_err(|e| anyhow::anyhow!("could not open wallet database: {e}"))?;
+    let pass = passphrase::prompt_existing()?;
+    let db = db::open_wallet_db(&config.data_dir, network, &pass)?;
 
     let summary = db
         .get_wallet_summary(ConfirmationsPolicy::MIN)
@@ -130,30 +126,73 @@ pub async fn show_balance(network: Network) -> Result<()> {
 }
 
 pub async fn sync(network: Network, endpoint: String) -> Result<()> {
-    let session = prompt_for_session(network)?;
-    println!(
-        "Got a valid viewing key, birthday height {}.",
-        session.birthday
-    );
     let config = crate::core::config::load()?;
-    db::open_and_init(&config.data_dir, network)?;
-    account::import_view_only(
-        &config.data_dir,
-        &endpoint,
-        &session.ufvk,
-        session.birthday as u64,
-        network,
-    )
-    .await?;
-    account::sync_blocks(&config.data_dir, &endpoint, network).await?;
-    println!("Step 3 done: wallet synced.");
+    let db_path = db::wallet_db_path(&config.data_dir, network);
+
+    // An older database from before encryption. Say so plainly, then fix it.
+    if db::is_plaintext(&db_path) {
+        println!();
+        println!("  This wallet database was created before ZecLedger encrypted its");
+        println!("  data, so your viewing key and history are currently sitting in it");
+        println!("  unencrypted. ZecLedger will encrypt it now.");
+        let pass = passphrase::prompt_new()?;
+        let backup = db::encrypt_in_place(&db_path, &pass)?;
+        println!();
+        println!("  Encrypted. The old unencrypted file is still on disk at:");
+        println!("    {}", backup.display());
+        println!("  Delete it once you are happy, because it still holds your key.");
+        println!();
+        return finish_sync(&config.data_dir, &endpoint, network, &pass).await;
+    }
+
+    let is_new = !db_path.exists();
+    let pass = if is_new {
+        passphrase::prompt_new()?
+    } else {
+        passphrase::prompt_existing()?
+    };
+
+    db::open_and_init(&config.data_dir, network, &pass)?;
+
+    // The key only needs pasting once. After that it is already in the database.
+    if db::has_account(&config.data_dir, network, &pass)? {
+        println!("  Using the viewing key already in your wallet database.");
+    } else {
+        let session = prompt_for_session(network)?;
+        println!(
+            "Got a valid viewing key, birthday height {}.",
+            session.birthday
+        );
+        account::import_view_only(
+            &config.data_dir,
+            &endpoint,
+            &session.ufvk,
+            session.birthday as u64,
+            network,
+            &pass,
+        )
+        .await?;
+    }
+
+    finish_sync(&config.data_dir, &endpoint, network, &pass).await
+}
+
+async fn finish_sync(
+    data_dir: &std::path::Path,
+    endpoint: &str,
+    network: Network,
+    pass: &str,
+) -> Result<()> {
+    account::sync_blocks(data_dir, endpoint, network, pass).await?;
+    println!("Wallet synced.");
     Ok(())
 }
 
 /// `zecledger history` - show transaction history from the synced wallet.
 pub async fn show_history(network: Network) -> Result<()> {
     let config = crate::core::config::load()?;
-    let rows = history::read_history(&config.data_dir, network)?;
+    let pass = passphrase::prompt_existing()?;
+    let rows = history::read_history(&config.data_dir, network, &pass)?;
     history::print_history(&rows);
     Ok(())
 }
@@ -167,7 +206,8 @@ pub async fn generate_report(output: Option<String>, network: Network) -> Result
             chrono::Utc::now().format("%Y%m%d_%H%M%S")
         )
     });
-    report::generate_report(&config.data_dir, &out_base, network)?;
+    let pass = passphrase::prompt_existing()?;
+    report::generate_report(&config.data_dir, &out_base, network, &pass)?;
     Ok(())
 }
 
@@ -178,7 +218,8 @@ pub async fn wallet_ask(question: &str, network: Network) -> Result<()> {
     use std::io::{self, Write};
 
     let config = crate::core::config::load()?;
-    let rows = history::read_history(&config.data_dir, network)?;
+    let pass = passphrase::prompt_existing()?;
+    let rows = history::read_history(&config.data_dir, network, &pass)?;
 
     let mut received = 0i64;
     let mut sent = 0i64;
@@ -289,7 +330,8 @@ pub fn expect_payment(amount: f64, reference: &str, from: &str, network: Network
 /// Reconcile expected payments against received history (Phase 3a).
 pub fn reconcile_payments(network: Network) -> Result<()> {
     let config = crate::core::config::load()?;
-    reconcile::reconcile(&config.data_dir, network)
+    let pass = passphrase::prompt_existing()?;
+    reconcile::reconcile(&config.data_dir, network, &pass)
 }
 
 /// List expected payments (Phase 3a).
@@ -313,11 +355,13 @@ pub fn make_payment_request(
 pub async fn cost_basis_report(method: &str, fetch: bool, network: Network) -> Result<()> {
     let config = crate::core::config::load()?;
     let m: costbasis::Method = method.parse()?;
-    costbasis::report(&config.data_dir, network, m, fetch).await
+    let pass = passphrase::prompt_existing()?;
+    costbasis::report(&config.data_dir, network, m, fetch, &pass).await
 }
 
 /// Generate a privacy-hygiene report (creative feature).
 pub fn privacy_report(network: Network) -> Result<()> {
     let config = crate::core::config::load()?;
-    privacy::report(&config.data_dir, network)
+    let pass = passphrase::prompt_existing()?;
+    privacy::report(&config.data_dir, network, &pass)
 }

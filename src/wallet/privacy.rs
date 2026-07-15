@@ -38,10 +38,9 @@ fn is_round_amount(zec: f64) -> bool {
 }
 
 /// Run the privacy-hygiene report.
-pub fn report(data_dir: &Path, network: Network) -> Result<()> {
+pub fn report(data_dir: &Path, network: Network, passphrase: &str) -> Result<()> {
     let db_path = wallet_db_path(data_dir, network);
-    let conn = rusqlite::Connection::open(&db_path)
-        .context("could not open wallet database for privacy report")?;
+    let conn = super::db::open_conn(&db_path, passphrase)?;
 
     let mut stmt = conn
         .prepare("SELECT pool, value FROM v_received_outputs")

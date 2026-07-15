@@ -96,10 +96,13 @@ fn read_memos(conn: &rusqlite::Connection) -> Result<HashMap<Vec<u8>, String>> {
 }
 
 /// Read all transactions for the wallet, most recent first.
-pub fn read_history(data_dir: &Path, network: Network) -> Result<Vec<HistoryRow>> {
+pub fn read_history(
+    data_dir: &Path,
+    network: Network,
+    passphrase: &str,
+) -> Result<Vec<HistoryRow>> {
     let db_path = wallet_db_path(data_dir, network);
-    let conn = rusqlite::Connection::open(&db_path)
-        .context("could not open wallet database for history")?;
+    let conn = super::db::open_conn(&db_path, passphrase)?;
 
     let mut stmt = conn
         .prepare(

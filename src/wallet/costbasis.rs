@@ -159,8 +159,14 @@ fn days_between(acq_ymd: &str, disp_ymd: &str) -> Option<i64> {
 }
 
 /// Generate and print the cost-basis report.
-pub async fn report(data_dir: &Path, network: Network, method: Method, fetch: bool) -> Result<()> {
-    let rows = read_history(data_dir, network)?;
+pub async fn report(
+    data_dir: &Path,
+    network: Network,
+    method: Method,
+    fetch: bool,
+    passphrase: &str,
+) -> Result<()> {
+    let rows = read_history(data_dir, network, passphrase)?;
 
     let manual = load_prices(&prices_path(data_dir, network, true));
     let cache_path = prices_path(data_dir, network, false);

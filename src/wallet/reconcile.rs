@@ -154,7 +154,7 @@ fn classify(expected: &Expected, rows: &[HistoryRow]) -> MatchStatus {
 }
 
 /// Reconcile all expected payments against the wallet's received history.
-pub fn reconcile(data_dir: &Path, network: Network) -> Result<()> {
+pub fn reconcile(data_dir: &Path, network: Network, passphrase: &str) -> Result<()> {
     let list = load_expected(data_dir, network)?;
     if list.is_empty() {
         println!();
@@ -162,7 +162,7 @@ pub fn reconcile(data_dir: &Path, network: Network) -> Result<()> {
         println!("  Use `expect --amount <zec> --ref <reference> --from <who>` to add one.");
         return Ok(());
     }
-    let rows = read_history(data_dir, network)?;
+    let rows = read_history(data_dir, network, passphrase)?;
 
     println!();
     println!("  Reconciliation");

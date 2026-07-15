@@ -6,17 +6,12 @@
 use anyhow::{anyhow, Context, Result};
 use std::path::Path;
 
-use rand::rngs::OsRng;
 use zcash_client_backend::data_api::{AccountBirthday, AccountPurpose, WalletWrite};
 use zcash_client_backend::proto::service::{
     compact_tx_streamer_client::CompactTxStreamerClient, BlockId,
 };
-use zcash_client_sqlite::util::SystemClock;
-use zcash_client_sqlite::WalletDb;
 use zcash_keys::keys::UnifiedFullViewingKey;
 use zcash_protocol::consensus::Network;
-
-use super::db::wallet_db_path;
 
 /// Connect to lightwalletd, build the birthday, import the UFVK as view-only.
 pub async fn import_view_only(
@@ -25,6 +20,7 @@ pub async fn import_view_only(
     ufvk: &UnifiedFullViewingKey,
     birthday_height: u64,
     network: Network,
+    passphrase: &str,
 ) -> Result<()> {
     // 1. Connect to lightwalletd (zec.rocks).
     println!("  Connecting to {endpoint} ...");
@@ -49,10 +45,8 @@ pub async fn import_view_only(
     let birthday = AccountBirthday::from_treestate(treestate, None)
         .map_err(|_| anyhow!("could not build account birthday from treestate"))?;
 
-    // 4. Open the wallet DB and import the UFVK as a view-only account.
-    let db_path = wallet_db_path(data_dir, network);
-    let mut db = WalletDb::for_path(&db_path, network, SystemClock, OsRng)
-        .context("failed to open wallet database")?;
+    // 4. Open the encrypted wallet DB and import the UFVK as a view-only account.
+    let mut db = super::db::open_wallet_db(data_dir, network, passphrase)?;
 
     use zcash_client_backend::data_api::WalletRead;
     let existing = db.get_account_ids().unwrap_or_default();
@@ -67,7 +61,12 @@ pub async fn import_view_only(
 }
 
 /// Step 3c/3d: scan blocks from the birthday forward, decrypting locally.
-pub async fn sync_blocks(data_dir: &Path, endpoint: &str, network: Network) -> Result<()> {
+pub async fn sync_blocks(
+    data_dir: &Path,
+    endpoint: &str,
+    network: Network,
+    passphrase: &str,
+) -> Result<()> {
     use zcash_client_sqlite::chain::init::init_blockmeta_db;
     use zcash_client_sqlite::FsBlockDb;
 
@@ -84,9 +83,7 @@ pub async fn sync_blocks(data_dir: &Path, endpoint: &str, network: Network) -> R
     let inner_blocks = blocks_dir.join("blocks");
     let block_cache = super::cache::ZecLedgerCache::new(fs_cache, inner_blocks);
 
-    let db_path = wallet_db_path(data_dir, network);
-    let mut db = WalletDb::for_path(&db_path, network, SystemClock, OsRng)
-        .context("failed to open wallet database")?;
+    let mut db = super::db::open_wallet_db(data_dir, network, passphrase)?;
 
     println!("  Scanning blocks (this may take a moment) ...");
     zcash_client_backend::sync::run(&mut client, &network, &block_cache, &mut db, 1000)

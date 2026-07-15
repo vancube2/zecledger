@@ -36,3 +36,4 @@ async-trait = "0.1"
 prost = "0.14"
 zcash_primitives = "0.28"
 rusqlite = { version = "0.37", features = ["bundled-sqlcipher-vendored-openssl"] }
+rpassword = "7.5"
