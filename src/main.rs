@@ -31,7 +31,11 @@ async fn main() -> Result<()> {
         Commands::History => {
             wallet::show_history(network).await?;
         }
-        Commands::Expect { amount, reference, from } => {
+        Commands::Expect {
+            amount,
+            reference,
+            from,
+        } => {
             wallet::expect_payment(amount, &reference, &from, network)?;
         }
         Commands::Reconcile => {
@@ -40,7 +44,13 @@ async fn main() -> Result<()> {
         Commands::Expected => {
             wallet::list_expected(network)?;
         }
-        Commands::Request { address, amount, memo, label, message } => {
+        Commands::Request {
+            address,
+            amount,
+            memo,
+            label,
+            message,
+        } => {
             wallet::make_payment_request(
                 &address,
                 amount,
@@ -49,14 +59,19 @@ async fn main() -> Result<()> {
                 message.as_deref(),
             )?;
         }
-        Commands::CostBasis { method, fetch_prices } => {
+        Commands::CostBasis {
+            method,
+            fetch_prices,
+        } => {
             wallet::cost_basis_report(&method, fetch_prices, network).await?;
         }
         Commands::PrivacyCheck => {
             wallet::privacy_report(network)?;
         }
         Commands::Config { show } => {
-            if show { core::config::show()?; }
+            if show {
+                core::config::show()?;
+            }
         }
     }
     Ok(())

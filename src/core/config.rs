@@ -25,7 +25,9 @@ impl Default for Config {
     }
 }
 
-pub fn load() -> Result<Config> { Ok(Config::default()) }
+pub fn load() -> Result<Config> {
+    Ok(Config::default())
+}
 
 pub fn show() -> Result<()> {
     let config = load()?;
@@ -50,7 +52,10 @@ pub fn resolve_network(testnet_flag: bool, mainnet_flag: bool) -> (Network, Stri
     };
 
     if use_testnet {
-        (Network::TestNetwork, "https://testnet.zec.rocks:443".to_string())
+        (
+            Network::TestNetwork,
+            "https://testnet.zec.rocks:443".to_string(),
+        )
     } else {
         (Network::MainNetwork, "https://zec.rocks:443".to_string())
     }

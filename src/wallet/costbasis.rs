@@ -34,7 +34,9 @@ impl std::str::FromStr for Method {
             "fifo" => Ok(Method::Fifo),
             "lifo" => Ok(Method::Lifo),
             "average" | "avg" => Ok(Method::Average),
-            other => Err(anyhow!("unknown method '{other}' (use fifo, lifo, or average)")),
+            other => Err(anyhow!(
+                "unknown method '{other}' (use fifo, lifo, or average)"
+            )),
         }
     }
 }
@@ -157,12 +159,7 @@ fn days_between(acq_ymd: &str, disp_ymd: &str) -> Option<i64> {
 }
 
 /// Generate and print the cost-basis report.
-pub async fn report(
-    data_dir: &Path,
-    network: Network,
-    method: Method,
-    fetch: bool,
-) -> Result<()> {
+pub async fn report(data_dir: &Path, network: Network, method: Method, fetch: bool) -> Result<()> {
     let rows = read_history(data_dir, network)?;
 
     let manual = load_prices(&prices_path(data_dir, network, true));
@@ -221,7 +218,11 @@ pub async fn report(
                     .iter()
                     .filter_map(|l| l.unit_cost_usd.map(|c| c * l.remaining_zec))
                     .sum();
-                let avg_unit = if total_rem > 0.0 { total_cost / total_rem } else { 0.0 };
+                let avg_unit = if total_rem > 0.0 {
+                    total_cost / total_rem
+                } else {
+                    0.0
+                };
                 // consume proportionally
                 let mut remaining = to_dispose;
                 for l in lots.iter_mut() {
@@ -275,11 +276,14 @@ pub async fn report(
 
     // Print report.
     println!();
-    println!("  Cost-basis report ({})", match method {
-        Method::Fifo => "FIFO",
-        Method::Lifo => "LIFO",
-        Method::Average => "average cost",
-    });
+    println!(
+        "  Cost-basis report ({})",
+        match method {
+            Method::Fifo => "FIFO",
+            Method::Lifo => "LIFO",
+            Method::Average => "average cost",
+        }
+    );
     println!("  {:-<78}", "");
     if disposals.is_empty() {
         println!("  No disposals (sent transactions) found, so there are no realized gains yet.");
@@ -337,7 +341,9 @@ pub async fn report(
         println!("  Prices come from your local override file. Use --fetch-prices to fetch missing ones.");
     }
     if missing_price {
-        println!("  Some dates had no price. Add them to the manual prices file or use --fetch-prices.");
+        println!(
+            "  Some dates had no price. Add them to the manual prices file or use --fetch-prices."
+        );
     }
     Ok(())
 }

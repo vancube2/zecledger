@@ -113,7 +113,9 @@ pub fn report(data_dir: &Path, network: Network) -> Result<()> {
             transparent_count,
             zats_to_zec(transparent_value)
         );
-        println!("              Tip: receive into a shielded (Orchard) address to keep amounts private.");
+        println!(
+            "              Tip: receive into a shielded (Orchard) address to keep amounts private."
+        );
     }
 
     if round_count > 0 {
@@ -134,6 +136,8 @@ pub fn report(data_dir: &Path, network: Network) -> Result<()> {
 
     println!("  {:-<70}", "");
     println!("  Note: this checks only what your wallet data can show (pool usage and amounts).");
-    println!("  It cannot see address reuse or timing patterns, so a clean report is not a guarantee.");
+    println!(
+        "  It cannot see address reuse or timing patterns, so a clean report is not a guarantee."
+    );
     Ok(())
 }

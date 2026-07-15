@@ -94,7 +94,10 @@ pub fn list_expected(data_dir: &Path, network: Network) -> Result<()> {
     println!();
     println!("  Expected payments ({})", list.len());
     println!("  {:-<60}", "");
-    println!("  {:<16}  {:>14}  {:<24}", "Reference", "Amount (ZEC)", "From");
+    println!(
+        "  {:<16}  {:>14}  {:<24}",
+        "Reference", "Amount (ZEC)", "From"
+    );
     println!("  {:-<60}", "");
     for e in &list {
         println!(
@@ -108,7 +111,7 @@ pub fn list_expected(data_dir: &Path, network: Network) -> Result<()> {
 
 /// Confidence level of a match.
 enum MatchStatus {
-    Confirmed(String),  // memo + amount both matched; holds the date
+    Confirmed(String),         // memo + amount both matched; holds the date
     PossibleMemo(String, f64), // memo matched, amount differs; date + actual amount
     PossibleAmount(String),    // amount matched, no memo confirmation; date
     Pending,

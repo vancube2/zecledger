@@ -36,7 +36,10 @@ pub async fn import_view_only(
     // 2. Fetch the treestate for the block just before the birthday height.
     let request_height = birthday_height.saturating_sub(1);
     let treestate = client
-        .get_tree_state(BlockId { height: request_height, hash: vec![] })
+        .get_tree_state(BlockId {
+            height: request_height,
+            hash: vec![],
+        })
         .await
         .context("failed to fetch treestate from lightwalletd")?
         .into_inner();
@@ -65,8 +68,8 @@ pub async fn import_view_only(
 
 /// Step 3c/3d: scan blocks from the birthday forward, decrypting locally.
 pub async fn sync_blocks(data_dir: &Path, endpoint: &str, network: Network) -> Result<()> {
-    use zcash_client_sqlite::FsBlockDb;
     use zcash_client_sqlite::chain::init::init_blockmeta_db;
+    use zcash_client_sqlite::FsBlockDb;
 
     println!("  Connecting to {endpoint} for sync ...");
     let mut client = CompactTxStreamerClient::connect(endpoint.to_string())
@@ -77,8 +80,7 @@ pub async fn sync_blocks(data_dir: &Path, endpoint: &str, network: Network) -> R
     std::fs::create_dir_all(&blocks_dir).context("could not create blocks dir")?;
     let mut fs_cache = FsBlockDb::for_path(&blocks_dir)
         .map_err(|e| anyhow!("failed to open block cache: {e:?}"))?;
-    init_blockmeta_db(&mut fs_cache)
-        .map_err(|e| anyhow!("failed to init block cache: {e:?}"))?;
+    init_blockmeta_db(&mut fs_cache).map_err(|e| anyhow!("failed to init block cache: {e:?}"))?;
     let inner_blocks = blocks_dir.join("blocks");
     let block_cache = super::cache::ZecLedgerCache::new(fs_cache, inner_blocks);
 

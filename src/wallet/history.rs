@@ -4,8 +4,8 @@
 // view. All SQL lives here, isolated, so a schema change touches one file.
 
 use anyhow::{Context, Result};
-use std::path::Path;
 use std::collections::HashMap;
+use std::path::Path;
 
 use super::db::wallet_db_path;
 use zcash_protocol::consensus::Network;
@@ -38,12 +38,20 @@ fn decode_memo(blob: &[u8]) -> Option<String> {
         _ => {}
     }
     // Strip trailing zero padding, then decode as UTF-8.
-    let end = blob.iter().rposition(|&b| b != 0).map(|i| i + 1).unwrap_or(0);
+    let end = blob
+        .iter()
+        .rposition(|&b| b != 0)
+        .map(|i| i + 1)
+        .unwrap_or(0);
     let trimmed = &blob[..end];
     match std::str::from_utf8(trimmed) {
         Ok(text) => {
             let t = text.trim();
-            if t.is_empty() { None } else { Some(t.to_string()) }
+            if t.is_empty() {
+                None
+            } else {
+                Some(t.to_string())
+            }
         }
         Err(_) => Some("(non-text memo)".to_string()),
     }

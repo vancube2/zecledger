@@ -1,7 +1,11 @@
 use clap::{Parser, Subcommand};
 
 #[derive(Parser)]
-#[command(name = "zecledger", about = "Read-only Zcash shielded accounting from your viewing key", version = "0.1.0")]
+#[command(
+    name = "zecledger",
+    about = "Read-only Zcash shielded accounting from your viewing key",
+    version = "0.1.0"
+)]
 pub struct Cli {
     #[command(subcommand)]
     pub command: Commands,
