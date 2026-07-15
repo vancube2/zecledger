@@ -1,0 +1,65 @@
+name: SQLCipher spike
+
+# Temporary. Answers one question: does rusqlite's bundled-sqlcipher-vendored-openssl
+# compile on all four release targets? Delete this workflow once we know.
+
+on:
+  push:
+    branches: [sqlcipher-spike]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: spike ${{ matrix.target }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: x86_64-unknown-linux-gnu
+            os: ubuntu-22.04
+          - target: aarch64-apple-darwin
+            os: macos-15
+          - target: x86_64-apple-darwin
+            os: macos-15-intel
+          - target: x86_64-pc-windows-msvc
+            os: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install protoc (Linux)
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y protobuf-compiler
+
+      - name: Install protoc (macOS)
+        if: runner.os == 'macOS'
+        run: brew install protobuf
+
+      - name: Install protoc (Windows)
+        if: runner.os == 'Windows'
+        run: choco install protoc -y
+
+      - name: Set up Rust
+        run: |
+          rustup toolchain install stable --profile minimal
+          rustup default stable
+          rustup target add ${{ matrix.target }}
+
+      - name: Show toolchain (perl/nasm matter for vendored openssl)
+        shell: bash
+        run: |
+          perl --version | head -2 || echo "NO PERL"
+          nasm --version || echo "no nasm (may be fine)"
+
+      - name: Build with SQLCipher
+        run: cargo build --release --locked --target ${{ matrix.target }}
+
+      - name: Confirm the binary runs
+        shell: bash
+        run: |
+          if [ "${{ runner.os }}" = "Windows" ]; then
+            ./target/${{ matrix.target }}/release/zecledger.exe --version
+          else
+            ./target/${{ matrix.target }}/release/zecledger --version
+          fi
