@@ -41,7 +41,10 @@ pub struct ZecLedgerCache {
 
 impl ZecLedgerCache {
     pub fn new(inner: FsBlockDb, blocks_dir: PathBuf) -> Self {
-        Self { inner: Mutex::new(inner), blocks_dir }
+        Self {
+            inner: Mutex::new(inner),
+            blocks_dir,
+        }
     }
 }
 
@@ -57,12 +60,13 @@ impl BlockSource for ZecLedgerCache {
     where
         F: FnMut(CompactBlock) -> Result<(), error::Error<WalletErrT, Self::Error>>,
     {
-        let guard = self.inner.lock().map_err(|_| {
-            error::Error::BlockSource(CacheError::Lock)
-        })?;
+        let guard = self
+            .inner
+            .lock()
+            .map_err(|_| error::Error::BlockSource(CacheError::Lock))?;
         let mut callback_err: Option<error::Error<WalletErrT, Self::Error>> = None;
-        let result = guard.with_blocks::<_, WalletErrT>(from_height, limit, |cb| {
-            match with_block(cb) {
+        let result =
+            guard.with_blocks::<_, WalletErrT>(from_height, limit, |cb| match with_block(cb) {
                 Ok(()) => Ok(()),
                 Err(e) => {
                     callback_err = Some(e);
@@ -70,8 +74,7 @@ impl BlockSource for ZecLedgerCache {
                         "callback halted".to_string(),
                     )))
                 }
-            }
-        });
+            });
         if let Some(e) = callback_err {
             return Err(e);
         }
@@ -96,7 +99,7 @@ impl BlockCache for ZecLedgerCache {
 
     async fn read(&self, range: &ScanRange) -> Result<Vec<CompactBlock>, Self::Error> {
         let start = range.block_range().start;
-        let limit = u32::from(range.block_range().end - start) as usize;
+        let limit = (range.block_range().end - start) as usize;
         let mut blocks = Vec::new();
         {
             let guard = self.inner.lock().map_err(|_| CacheError::Lock)?;
@@ -133,7 +136,11 @@ impl BlockCache for ZecLedgerCache {
 
     async fn delete(&self, range: ScanRange) -> Result<(), Self::Error> {
         let start = range.block_range().start;
-        let target = if u32::from(start) == 0 { start } else { start - 1 };
+        let target = if u32::from(start) == 0 {
+            start
+        } else {
+            start - 1
+        };
         let guard = self.inner.lock().map_err(|_| CacheError::Lock)?;
         guard.truncate_to_height(target)?;
         Ok(())

@@ -1,13 +1,13 @@
 // src/wallet/mod.rs
-pub mod db;
 pub mod account;
 pub mod cache;
-pub mod history;
-pub mod report;
-pub mod reconcile;
-pub mod request;
 pub mod costbasis;
+pub mod db;
+pub mod history;
 pub mod privacy;
+pub mod reconcile;
+pub mod report;
+pub mod request;
 //
 // The local, private side of ZecLedger: shielded accounting from a viewing key.
 // Read-only by design. This module never holds or handles a spending key.
@@ -17,7 +17,6 @@ use std::io::{self, Write};
 
 use zcash_keys::keys::UnifiedFullViewingKey;
 use zcash_protocol::consensus::Network;
-
 
 /// Everything we hold in memory for one session. Never written to disk.
 pub struct WalletSession {
@@ -46,7 +45,9 @@ pub fn prompt_for_session(network: Network) -> Result<WalletSession> {
     print!("Paste your Unified Full Viewing Key (starts with '{key_prefix}'): ");
     io::stdout().flush().ok();
     let mut ufvk_str = String::new();
-    io::stdin().read_line(&mut ufvk_str).context("failed to read viewing key")?;
+    io::stdin()
+        .read_line(&mut ufvk_str)
+        .context("failed to read viewing key")?;
     let ufvk_str = ufvk_str.trim().to_string();
     if ufvk_str.is_empty() {
         return Err(anyhow!("no viewing key entered"));
@@ -59,8 +60,13 @@ pub fn prompt_for_session(network: Network) -> Result<WalletSession> {
     print!("Enter your wallet birthday block height (e.g. 2700000): ");
     io::stdout().flush().ok();
     let mut bday = String::new();
-    io::stdin().read_line(&mut bday).context("failed to read birthday height")?;
-    let birthday: u32 = bday.trim().parse().context("birthday must be a whole number block height")?;
+    io::stdin()
+        .read_line(&mut bday)
+        .context("failed to read birthday height")?;
+    let birthday: u32 = bday
+        .trim()
+        .parse()
+        .context("birthday must be a whole number block height")?;
 
     println!("  Session ready. Key held in memory only.");
     println!();
@@ -69,8 +75,8 @@ pub fn prompt_for_session(network: Network) -> Result<WalletSession> {
 
 pub async fn show_balance(network: Network) -> Result<()> {
     use rand::rngs::OsRng;
-    use zcash_client_backend::data_api::WalletRead;
     use zcash_client_backend::data_api::wallet::ConfirmationsPolicy;
+    use zcash_client_backend::data_api::WalletRead;
     use zcash_client_sqlite::util::SystemClock;
     use zcash_client_sqlite::WalletDb;
 
@@ -100,14 +106,17 @@ pub async fn show_balance(network: Network) -> Result<()> {
             println!();
             println!("  Shielded balance");
             println!("  ----------------");
-            for (_id, b) in balances.iter() {
+            for b in balances.values() {
                 let sapling = zec(b.sapling_balance().total());
                 let orchard = zec(b.orchard_balance().total());
                 let transparent = zec(b.unshielded_balance().total());
                 let total = zec(b.total());
                 println!("  Sapling:      {sapling:>14.8} ZEC", sapling = sapling);
                 println!("  Orchard:      {orchard:>14.8} ZEC", orchard = orchard);
-                println!("  Transparent:  {transparent:>14.8} ZEC", transparent = transparent);
+                println!(
+                    "  Transparent:  {transparent:>14.8} ZEC",
+                    transparent = transparent
+                );
                 println!("  ----------------");
                 println!("  Total:        {total:>14.8} ZEC", total = total);
             }
@@ -120,10 +129,20 @@ pub async fn show_balance(network: Network) -> Result<()> {
 
 pub async fn sync(network: Network, endpoint: String) -> Result<()> {
     let session = prompt_for_session(network)?;
-    println!("Got a valid viewing key, birthday height {}.", session.birthday);
+    println!(
+        "Got a valid viewing key, birthday height {}.",
+        session.birthday
+    );
     let config = crate::core::config::load()?;
     db::open_and_init(&config.data_dir, network)?;
-    account::import_view_only(&config.data_dir, &endpoint, &session.ufvk, session.birthday as u64, network).await?;
+    account::import_view_only(
+        &config.data_dir,
+        &endpoint,
+        &session.ufvk,
+        session.birthday as u64,
+        network,
+    )
+    .await?;
     account::sync_blocks(&config.data_dir, &endpoint, network).await?;
     println!("Step 3 done: wallet synced.");
     Ok(())
@@ -141,7 +160,10 @@ pub async fn show_history(network: Network) -> Result<()> {
 pub async fn generate_report(output: Option<String>, network: Network) -> Result<()> {
     let config = crate::core::config::load()?;
     let out_base = output.unwrap_or_else(|| {
-        format!("zecledger_ledger_{}", chrono::Utc::now().format("%Y%m%d_%H%M%S"))
+        format!(
+            "zecledger_ledger_{}",
+            chrono::Utc::now().format("%Y%m%d_%H%M%S")
+        )
     });
     report::generate_report(&config.data_dir, &out_base, network)?;
     Ok(())
@@ -194,7 +216,11 @@ pub async fn wallet_ask(question: &str, network: Network) -> Result<()> {
         received as f64 / 1e8,
         sent as f64 / 1e8,
         (received - sent) as f64 / 1e8,
-        if lines.is_empty() { "  (none)\n".to_string() } else { lines },
+        if lines.is_empty() {
+            "  (none)\n".to_string()
+        } else {
+            lines
+        },
     );
 
     println!();
@@ -252,7 +278,6 @@ pub async fn wallet_ask(question: &str, network: Network) -> Result<()> {
     Ok(())
 }
 
-
 /// Record an expected payment (Phase 3a).
 pub fn expect_payment(amount: f64, reference: &str, from: &str, network: Network) -> Result<()> {
     let config = crate::core::config::load()?;
@@ -271,7 +296,6 @@ pub fn list_expected(network: Network) -> Result<()> {
     reconcile::list_expected(&config.data_dir, network)
 }
 
-
 /// Generate a ZIP-321 payment request URI (Phase 3b).
 pub fn make_payment_request(
     address: &str,
@@ -283,14 +307,12 @@ pub fn make_payment_request(
     request::make_request(address, amount, memo, label, message)
 }
 
-
 /// Generate a cost-basis / gain-loss report (creative feature).
 pub async fn cost_basis_report(method: &str, fetch: bool, network: Network) -> Result<()> {
     let config = crate::core::config::load()?;
     let m: costbasis::Method = method.parse()?;
     costbasis::report(&config.data_dir, network, m, fetch).await
 }
-
 
 /// Generate a privacy-hygiene report (creative feature).
 pub fn privacy_report(network: Network) -> Result<()> {
