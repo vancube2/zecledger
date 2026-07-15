@@ -17,9 +17,10 @@ that touches your keys.
 
 - **Read-only.** The tool uses viewing keys only. It never holds a spending key
   and can never move a coin. Sending is handed off to an audited wallet.
-- **Keys never leave the machine.** The viewing key is entered per session, held
-  in memory only, and never written to disk. The user is reminded of this every
-  session.
+- **Keys never leave the machine.** The viewing key is never sent to any server.
+  It is stored locally in the wallet database, because that is how the underlying
+  light-client crates scan for your notes. Encrypting that database at rest is
+  the next planned change.
 - **The server learns nothing.** Block data is fetched from a public lightwalletd
   endpoint and decrypted locally. The endpoint never sees the key, the balance,
   or which wallet is being synced (beyond IP and requested block ranges).
@@ -38,7 +39,7 @@ store any key on disk. Payments are completed in a separate audited wallet.
 ## Architecture
 
 ```
-You (viewing key, entered per session, in memory only)
+You (viewing key, entered on first sync, stored in the local wallet db)
         |
    ZecLedger Local (Rust)
         |  trial-decrypts blocks locally
@@ -52,9 +53,12 @@ Built on the Rust light-client crates: `zcash_client_backend`,
 `zcash_client_sqlite`, `zcash_keys`, `zcash_protocol`. These are the same
 foundations used by production wallets such as Zashi.
 
-A local database stores only non-sensitive synced block and note metadata needed
-to compute balances and history. The viewing key itself is never persisted. On a
-new session the user re-enters the key and the view is re-established.
+A local database stores the synced block and note metadata needed to compute
+balances and history, and also the viewing key itself, which `zcash_client_sqlite`
+requires in order to trial-decrypt blocks on every sync. The database never leaves
+the machine. It is currently unencrypted, so anyone who can read that file can see
+the wallet's transaction history. It cannot be used to spend. Encrypting the
+database at rest is the next planned change.
 
 ## Privacy model in plain terms
 
@@ -79,11 +83,13 @@ new session the user re-enters the key and the view is re-established.
 
 ## Key handling, exactly
 
-1. On launch, the tool asks for a Unified Full Viewing Key (UFVK).
-2. It reminds the user: the key is held in memory only, never written to disk,
-   and the session ends when the tool closes.
-3. The key is used to trial-decrypt blocks during sync.
-4. On exit, the key is gone. Next session, re-enter it.
+1. On first sync, the tool asks for a Unified Full Viewing Key (UFVK).
+2. The key is imported into the local wallet database by `zcash_client_sqlite`,
+   which stores it so it can trial-decrypt blocks on this and every later sync.
+3. The key is used to trial-decrypt blocks locally. It is never sent anywhere.
+4. Because the key is on disk, anyone who can read the wallet database can see
+   this wallet's transaction history. It cannot be used to spend. Encrypting the
+   database at rest is the next planned change.
 
 A Unified Full Viewing Key is used (not an incoming-only key) so the tool can see
 both received and spent notes, which accounting requires. It still cannot spend.

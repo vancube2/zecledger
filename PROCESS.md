@@ -101,8 +101,10 @@ the current tool.
 
 Viewing-key shielded accounting over lightwalletd, in Rust, built on the same
 light-client crates the ecosystem maintains (zcash_client_backend, zcash_client_sqlite,
-zcash_keys). The key is entered per session, held in memory only, and never written to
-disk. The tool is structurally unable to spend: it takes a Unified Full Viewing Key,
+zcash_keys). The key is stored in the local wallet database, because those crates need
+it to trial-decrypt blocks on every sync, and it never leaves the machine. Encrypting
+that database at rest is the next planned change. The tool is structurally unable to
+spend: it takes a Unified Full Viewing Key,
 never a spending key, and payments are handed off as ZIP-321 requests to the user's own
 audited wallet.
 

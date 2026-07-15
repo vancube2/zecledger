@@ -18,7 +18,7 @@ use std::io::{self, Write};
 use zcash_keys::keys::UnifiedFullViewingKey;
 use zcash_protocol::consensus::Network;
 
-/// Everything we hold in memory for one session. Never written to disk.
+/// Everything we hold for one session. The key is imported into the wallet db on sync.
 pub struct WalletSession {
     pub ufvk: UnifiedFullViewingKey,
     pub birthday: u32,
@@ -27,10 +27,12 @@ pub struct WalletSession {
 /// The security reminder shown every session before a viewing key is requested.
 pub fn print_key_safety_reminder() {
     println!();
-    println!("  ZecLedger is read-only. It uses a viewing key, never a spending key.");
-    println!("  Your viewing key is held in memory only, for this session.");
-    println!("  It is never written to disk and never sent to any server.");
-    println!("  When this program exits, the key is gone. You re-enter it next time.");
+    println!("  ZecLedger is read-only. It uses a viewing key, never a spending key,");
+    println!("  so it cannot move your funds.");
+    println!("  Your key is never sent to any server. It stays on this machine.");
+    println!("  It is stored in your local wallet database so ZecLedger can scan the");
+    println!("  chain for your notes. Anyone who can read that file can see your");
+    println!("  transaction history, so keep it protected.");
     println!();
 }
 
@@ -68,7 +70,7 @@ pub fn prompt_for_session(network: Network) -> Result<WalletSession> {
         .parse()
         .context("birthday must be a whole number block height")?;
 
-    println!("  Session ready. Key held in memory only.");
+    println!("  Viewing key accepted for this session.");
     println!();
     Ok(WalletSession { ufvk, birthday })
 }

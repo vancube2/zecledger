@@ -15,7 +15,7 @@ Most blockchains make every payment public forever. Zcash fixes that with shield
 
 ## Why it is different
 
-- **Read-only by design.** The viewing key is held in memory only. It is never written to disk and never sent to any server. When the program exits, the key is gone and you re-enter it next session.
+- **Read-only by design.** ZecLedger takes a Unified Full Viewing Key, never a spending key, so it structurally cannot move your funds. Your key stays on your machine and is never sent to any server. It is stored in your local wallet database so ZecLedger can scan the chain for your notes, which means that file deserves the same care as any wallet file. See [SECURITY.md](SECURITY.md).
 - **Cost-basis for shielded ZEC.** Computes realised gains and losses using FIFO, LIFO, or average cost, with the holding period in days. Because shielded transactions keep price data off-chain, ZecLedger lets you capture it (manually or via an optional price fetch).
 - **Honest reconciliation.** When matching expected payments against received history, it flags partial matches for review instead of pretending they are confirmed.
 - **Privacy by consent.** The optional copilot shows you exactly what aggregate data will leave your machine and waits for your explicit confirmation before sending anything.
@@ -118,7 +118,7 @@ The copilot (`wallet-ask`) is optional and requires an `ANTHROPIC_API_KEY` in yo
 
 - The core is strictly read-only. ZecLedger uses viewing keys and never spending keys, so it cannot send funds.
 - Payments happen by handoff. ZecLedger produces a ZIP-321 request; your own wallet performs any actual send.
-- The viewing key lives in memory only and leaves no trace on disk.
+- Your viewing key never leaves your machine and is never sent to any server. It is stored locally in the wallet database so ZecLedger can scan for your notes, so protect that file. Encrypting it at rest is the next planned change.
 - Anything that sends data off the machine (the optional copilot) is opt-in and shown to you first.
 
 See [DESIGN.md](DESIGN.md) for the architecture and [SECURITY.md](SECURITY.md) for the security model.
