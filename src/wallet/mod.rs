@@ -215,7 +215,7 @@ pub async fn wallet_ask(question: &str, network: Network) -> Result<()> {
     }
 
     let api_key = std::env::var("ANTHROPIC_API_KEY")
-        .map_err(|_| anyhow::anyhow!("Set: export ANTHROPIC_API_KEY=-..."))?;
+        .map_err(|_| anyhow::anyhow!("Set: export ANTHROPIC_API_KEY=sk-ant-..."))?;
 
     println!("  Sending...");
     let client = reqwest::Client::new();
