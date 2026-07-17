@@ -25,15 +25,15 @@ dirs = "5"
 uuid = { version = "1", features = ["v4"] }
 
 # --- Zcash light-client stack (Phase 1: shielded accounting) ---
-zcash_client_backend = { version = "0.23", features = ["sync", "orchard", "transparent-inputs", "lightwalletd-tonic-transport", "lightwalletd-tonic-tls-webpki-roots", "unstable"] }
-zcash_client_sqlite = { version = "0.21", features = ["orchard", "transparent-inputs", "unstable"] }
-zcash_keys = { version = "0.14", features = ["orchard"] }
-zcash_protocol = "0.9"
-zcash_address = "0.12"
-zip321 = "0.8"
+zcash_client_backend = { version = "0.24.0-rc.1", features = ["sync", "orchard", "transparent-inputs", "lightwalletd-tonic-transport", "lightwalletd-tonic-tls-webpki-roots", "unstable"] }
+zcash_client_sqlite = { version = "0.22.0-rc.1", features = ["orchard", "transparent-inputs", "unstable"] }
+zcash_keys = { version = "0.15", features = ["orchard"] }
+zcash_protocol = "0.10"
+zcash_address = "0.13"
+zip321 = "0.9.0-rc.1"
 rand = "0.8"
 async-trait = "0.1"
 prost = "0.14"
-zcash_primitives = "0.28"
+zcash_primitives = "0.29"
 rusqlite = { version = "0.37", features = ["bundled-sqlcipher-vendored-openssl"] }
 rpassword = "7.5"

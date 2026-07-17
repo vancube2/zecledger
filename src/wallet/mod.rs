@@ -107,10 +107,12 @@ pub async fn show_balance(network: Network) -> Result<()> {
             for b in balances.values() {
                 let sapling = zec(b.sapling_balance().total());
                 let orchard = zec(b.orchard_balance().total());
+                let ironwood = zec(b.ironwood_balance().total());
                 let transparent = zec(b.unshielded_balance().total());
                 let total = zec(b.total());
                 println!("  Sapling:      {sapling:>14.8} ZEC", sapling = sapling);
                 println!("  Orchard:      {orchard:>14.8} ZEC", orchard = orchard);
+                println!("  Ironwood:     {ironwood:>14.8} ZEC", ironwood = ironwood);
                 println!(
                     "  Transparent:  {transparent:>14.8} ZEC",
                     transparent = transparent
@@ -129,29 +131,35 @@ pub async fn sync(network: Network, endpoint: String) -> Result<()> {
     let config = crate::core::config::load()?;
     let db_path = db::wallet_db_path(&config.data_dir, network);
 
-    // An older database from before encryption. Say so plainly, then fix it.
-    if db::is_plaintext(&db_path) {
+    let migrating = db::is_plaintext(&db_path);
+    let is_new = !db_path.exists();
+
+    // An older database from before encryption. Say so plainly before asking.
+    if migrating {
         println!();
         println!("  This wallet database was created before ZecLedger encrypted its");
         println!("  data, so your viewing key and history are currently sitting in it");
         println!("  unencrypted. ZecLedger will encrypt it now.");
-        let pass = passphrase::prompt_new()?;
+    }
+
+    let pass = if migrating || is_new {
+        passphrase::prompt_new()?
+    } else {
+        passphrase::prompt_existing()?
+    };
+
+    if migrating {
         let backup = db::encrypt_in_place(&db_path, &pass)?;
         println!();
         println!("  Encrypted. The old unencrypted file is still on disk at:");
         println!("    {}", backup.display());
         println!("  Delete it once you are happy, because it still holds your key.");
         println!();
-        return finish_sync(&config.data_dir, &endpoint, network, &pass).await;
     }
 
-    let is_new = !db_path.exists();
-    let pass = if is_new {
-        passphrase::prompt_new()?
-    } else {
-        passphrase::prompt_existing()?
-    };
-
+    // Always run this, on every path. It applies any pending schema migrations,
+    // which is how a database created by an older ZecLedger gains the tables a
+    // newer network upgrade needs. Skipping it on the migration path was a bug.
     db::open_and_init(&config.data_dir, network, &pass)?;
 
     // The key only needs pasting once. After that it is already in the database.
