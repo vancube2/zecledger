@@ -65,9 +65,36 @@ Global flags: `--testnet` and `--mainnet`.
 
 ## Install
 
-### Download a binary (recommended)
+### Linux and macOS, one line
 
-No toolchain, no compiler. Grab the archive for your platform from the
+```bash
+curl -fsSL https://raw.githubusercontent.com/vancube2/zecledger/master/install.sh | sh
+```
+
+That works out your platform, downloads the matching release, checks it against
+the published SHA256SUMS, verifies build provenance if you have the GitHub CLI,
+and puts `zecledger` on your PATH. Then:
+
+```bash
+zecledger
+```
+
+With no arguments it tells you what it is and, if you have no wallet yet, offers
+to set one up. You do not need to memorise any commands to start.
+
+Piping a script from the internet into a shell is a reasonable thing to be wary
+of, especially for software that will read your viewing key. Read it first if you
+would rather:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/vancube2/zecledger/master/install.sh -o install.sh
+less install.sh
+sh install.sh
+```
+
+### Windows, or doing it by hand
+
+Grab the archive for your platform from the
 [latest release](https://github.com/vancube2/zecledger/releases/latest):
 
 | Platform | Archive |
@@ -84,6 +111,15 @@ cd zecledger-<version>-<target>
 ```
 
 Optionally move it onto your PATH, for example `sudo mv zecledger /usr/local/bin/`.
+
+On macOS, a binary you downloaded and extracted through Finder is quarantined,
+and Gatekeeper will refuse to run it because ZecLedger is not signed by a paid
+Apple developer account. The install script above clears that flag for you. By
+hand, either extract with `tar` in a terminal, or run:
+
+```bash
+xattr -d com.apple.quarantine zecledger
+```
 
 ### Verify what you downloaded
 

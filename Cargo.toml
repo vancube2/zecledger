@@ -37,3 +37,8 @@ prost = "0.14"
 zcash_primitives = "0.29"
 rusqlite = { version = "0.37", features = ["bundled-sqlcipher-vendored-openssl"] }
 rpassword = "7.5"
+
+# Only needed to detect a double-clicked console on Windows, so the welcome
+# message can hold the window open instead of vanishing.
+[target.'cfg(windows)'.dependencies]
+windows-sys = { version = "0.59", features = ["Win32_System_Console"] }

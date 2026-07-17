@@ -12,6 +12,14 @@ async fn main() -> Result<()> {
         .with_env_filter("zecledger=info")
         .init();
 
+    // Someone who runs ZecLedger with no arguments is almost always someone who
+    // just downloaded it and wants to know what it is. Clap's usage error is the
+    // wrong answer to that, and on a double-clicked Windows console it is not even
+    // readable before the window closes. Answer the actual question instead.
+    if std::env::args().count() == 1 {
+        return cli::welcome::run().await;
+    }
+
     let cli = Cli::parse();
     let (network, endpoint) = core::config::resolve_network(cli.testnet, cli.mainnet);
 

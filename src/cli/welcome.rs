@@ -1,0 +1,217 @@
+// src/cli/welcome.rs
+//
+// What someone sees when they run ZecLedger with no arguments.
+//
+// This exists because of a real failure. On Windows, double-clicking the program
+// opens a console, clap prints a usage error, and the console closes instantly.
+// The program looks broken when it is working perfectly. Nobody should have to
+// read documentation to discover that a program is a command line program, so
+// this says so, tells them what to type, and waits before the window disappears.
+
+use std::path::PathBuf;
+
+/// True when the program was double-clicked from a file manager rather than run
+/// from a terminal, which means the window will vanish the moment we return.
+///
+/// On Windows a console launched for a double-click has exactly one process
+/// attached: this one. A console the user already had open has at least two,
+/// because the shell is attached too.
+#[cfg(windows)]
+fn launched_by_double_click() -> bool {
+    use windows_sys::Win32::System::Console::GetConsoleProcessList;
+    let mut pids = [0u32; 2];
+    let count = unsafe { GetConsoleProcessList(pids.as_mut_ptr(), 2) };
+    count == 1
+}
+
+/// Elsewhere, double-clicking either does not open a terminal at all or leaves it
+/// open, so there is nothing to work around.
+#[cfg(not(windows))]
+fn launched_by_double_click() -> bool {
+    false
+}
+
+fn exe_dir() -> Option<PathBuf> {
+    std::env::current_exe()
+        .ok()
+        .and_then(|p| p.parent().map(|d| d.to_path_buf()))
+}
+
+/// Is there already a wallet on this machine, on either network?
+///
+/// Checking both matters: someone set up on testnet still has a wallet, and
+/// should not be told they have none.
+fn wallet_exists() -> bool {
+    use zcash_protocol::consensus::Network;
+    let Ok(cfg) = crate::core::config::load() else {
+        return false;
+    };
+    crate::wallet::db::wallet_db_path(&cfg.data_dir, Network::MainNetwork).exists()
+        || crate::wallet::db::wallet_db_path(&cfg.data_dir, Network::TestNetwork).exists()
+}
+
+/// Which network is the viewing key for?
+///
+/// This has to be asked before the key, because a key carries its network in it
+/// and will be rejected against the wrong one. Assuming mainnet and letting a
+/// testnet user hit a confusing error is not a real default.
+fn choose_network() -> bool {
+    use std::io::{IsTerminal, Write};
+    if !std::io::stdin().is_terminal() {
+        return false;
+    }
+    println!();
+    println!("  Which network is your viewing key for?");
+    println!("    1. Mainnet, the real Zcash network. This is almost always the answer.");
+    println!("    2. Testnet, for testing with coins that are not worth anything.");
+    println!();
+    print!("  Choose 1 or 2 (default 1): ");
+    let _ = std::io::stdout().flush();
+    let mut answer = String::new();
+    if std::io::stdin().read_line(&mut answer).is_err() {
+        return false;
+    }
+    // true means testnet
+    answer.trim() == "2"
+}
+
+/// Ask a yes or no question, defaulting to yes on a bare Enter.
+fn confirm(question: &str) -> bool {
+    use std::io::{IsTerminal, Write};
+    // Never prompt when there is nobody there to answer, for example when piped
+    // into another program or run from a script.
+    if !std::io::stdin().is_terminal() {
+        return false;
+    }
+    print!("  {question} (Y/n) ");
+    let _ = std::io::stdout().flush();
+    let mut answer = String::new();
+    if std::io::stdin().read_line(&mut answer).is_err() {
+        return false;
+    }
+    let answer = answer.trim().to_lowercase();
+    answer.is_empty() || answer == "y" || answer == "yes"
+}
+
+/// What happens when ZecLedger is run with no arguments.
+///
+/// Someone in this position has usually just installed it and wants to start, so
+/// offer to start rather than printing a list of commands and leaving them to work
+/// out which one comes first.
+pub async fn run() -> anyhow::Result<()> {
+    banner();
+
+    if wallet_exists() {
+        // They have a wallet, so they know roughly what this is. Show what it can do.
+        commands();
+        pause_if_double_clicked();
+        return Ok(());
+    }
+
+    // No wallet yet. This is someone's first run.
+    println!("  No wallet has been set up on this computer yet.");
+    println!();
+    println!("  Setting one up means pasting a viewing key, choosing a passphrase to");
+    println!("  encrypt the local database, and letting it read the chain. Nothing");
+    println!("  leaves this machine, and a viewing key cannot move funds.");
+    println!();
+
+    if launched_by_double_click() {
+        // A double-clicked window is the wrong place to paste a long key and choose
+        // a passphrase, and it will vanish afterwards. Send them to a real terminal.
+        double_click_help();
+        commands();
+        pause_if_double_clicked();
+        return Ok(());
+    }
+
+    if confirm("Set one up now?") {
+        // Ask the network first, then hand off with a matching endpoint. Getting
+        // this wrong points the sync at the wrong servers as well as the wrong key.
+        let testnet = choose_network();
+        let (network, endpoint) = crate::core::config::resolve_network(testnet, !testnet);
+        println!();
+        return crate::wallet::sync(network, endpoint).await;
+    }
+
+    println!();
+    println!("  No problem. When you are ready, run:");
+    println!("    zecledger sync");
+    println!();
+    commands();
+    Ok(())
+}
+
+fn banner() {
+    let version = env!("CARGO_PKG_VERSION");
+    println!();
+    println!("  ZecLedger {version}");
+    println!("  Read-only Zcash shielded accounting from your viewing key.");
+    println!();
+    println!("  This is a command line program, so it has no window of its own.");
+    println!("  You use it by typing commands in a terminal.");
+    println!();
+}
+
+fn double_click_help() {
+    {
+        println!("  It looks like you opened this by double-clicking it.");
+        println!("  Here is how to run it properly.");
+        println!();
+        println!("    1. Open PowerShell.");
+        println!("       Press the Windows key, type powershell, and press Enter.");
+        println!();
+        println!("    2. Go to this folder by typing this, with the quotes:");
+        match exe_dir() {
+            Some(dir) => println!("         cd \"{}\"", dir.display()),
+            None => println!("         cd \"the folder you extracted ZecLedger into\""),
+        }
+        println!();
+        println!("    3. Then start here:");
+        println!("         .\\zecledger.exe sync");
+        println!();
+    }
+}
+
+fn commands() {
+    println!("  What it can do");
+    println!();
+    println!("    Getting started");
+    println!("      sync              enter your viewing key and synchronise the wallet");
+    println!("      config --show     show where your data is kept");
+    println!();
+    println!("    Your wallet");
+    println!("      balance           shielded balance for each pool");
+    println!("      history           transactions the viewing key can see");
+    println!();
+    println!("    Accounting");
+    println!("      wallet-report     monthly summary and full ledger, CSV and JSON");
+    println!("      cost-basis        gains and losses, using fifo, lifo or average");
+    println!();
+    println!("    Payments");
+    println!("      request           make a payment request to send to a payer");
+    println!("      expect            record a payment you are expecting");
+    println!("      reconcile         match what arrived against what you expected");
+    println!();
+    println!("    Privacy");
+    println!("      privacy-check     what your own wallet data reveals");
+    println!();
+    println!("  For the full list and every option:");
+    println!("    zecledger --help");
+    println!();
+    println!("  ZecLedger never asks for a seed phrase or spending key, and cannot");
+    println!("  move funds. Only ever download it from:");
+    println!("    https://github.com/vancube2/zecledger");
+    println!();
+}
+
+/// Hold the window open when there is no terminal to return to, so the message is
+/// actually readable instead of flashing past.
+pub fn pause_if_double_clicked() {
+    if !launched_by_double_click() {
+        return;
+    }
+    println!("  Press Enter to close this window.");
+    let mut discard = String::new();
+    let _ = std::io::stdin().read_line(&mut discard);
+}

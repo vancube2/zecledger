@@ -142,6 +142,16 @@ pub async fn sync(network: Network, endpoint: String) -> Result<()> {
         println!("  unencrypted. ZecLedger will encrypt it now.");
     }
 
+    // On a brand new wallet, take the viewing key before anything is written to
+    // disk. Validating it first means a mistyped or wrong-network key leaves no
+    // half-made database behind, which would otherwise look like a set-up wallet
+    // on the next run and quietly skip setup.
+    let new_session = if is_new && !migrating {
+        Some(prompt_for_session(network)?)
+    } else {
+        None
+    };
+
     let pass = if migrating || is_new {
         passphrase::prompt_new()?
     } else {
@@ -163,10 +173,16 @@ pub async fn sync(network: Network, endpoint: String) -> Result<()> {
     db::open_and_init(&config.data_dir, network, &pass)?;
 
     // The key only needs pasting once. After that it is already in the database.
-    if db::has_account(&config.data_dir, network, &pass)? {
-        println!("  Using the viewing key already in your wallet database.");
-    } else {
-        let session = prompt_for_session(network)?;
+    let session = match new_session {
+        Some(s) => Some(s),
+        None if db::has_account(&config.data_dir, network, &pass)? => {
+            println!("  Using the viewing key already in your wallet database.");
+            None
+        }
+        None => Some(prompt_for_session(network)?),
+    };
+
+    if let Some(session) = session {
         println!(
             "Got a valid viewing key, birthday height {}.",
             session.birthday
