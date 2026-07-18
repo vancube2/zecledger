@@ -17,7 +17,17 @@ async fn main() -> Result<()> {
     // wrong answer to that, and on a double-clicked Windows console it is not even
     // readable before the window closes. Answer the actual question instead.
     if std::env::args().count() == 1 {
-        return cli::welcome::run().await;
+        let result = cli::welcome::run().await;
+        // Hold a double-clicked window open whatever happened, including on an
+        // error. A window that vanishes on failure is the original bug.
+        if let Err(e) = result {
+            eprintln!();
+            eprintln!("  Error: {e}");
+            cli::welcome::pause_if_double_clicked();
+            std::process::exit(1);
+        }
+        cli::welcome::pause_if_double_clicked();
+        return Ok(());
     }
 
     let cli = Cli::parse();

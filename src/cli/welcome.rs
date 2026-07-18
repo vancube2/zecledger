@@ -102,9 +102,12 @@ pub async fn run() -> anyhow::Result<()> {
     banner();
 
     if wallet_exists() {
-        // They have a wallet, so they know roughly what this is. Show what it can do.
+        // They have a wallet, so they know roughly what this is. Show what it can do,
+        // and if they got here by double-clicking, how to reach a terminal from here.
         commands();
-        pause_if_double_clicked();
+        if launched_by_double_click() {
+            terminal_help();
+        }
         return Ok(());
     }
 
@@ -116,22 +119,30 @@ pub async fn run() -> anyhow::Result<()> {
     println!("  leaves this machine, and a viewing key cannot move funds.");
     println!();
 
-    if launched_by_double_click() {
-        // A double-clicked window is the wrong place to paste a long key and choose
-        // a passphrase, and it will vanish afterwards. Send them to a real terminal.
-        double_click_help();
-        commands();
-        pause_if_double_clicked();
-        return Ok(());
-    }
-
+    // A double-clicked console is a real console. You can paste into it and type
+    // in it, and the window is held open when we are done. There is no reason to
+    // send someone away to a different terminal just to answer three questions.
     if confirm("Set one up now?") {
         // Ask the network first, then hand off with a matching endpoint. Getting
         // this wrong points the sync at the wrong servers as well as the wrong key.
         let testnet = choose_network();
         let (network, endpoint) = crate::core::config::resolve_network(testnet, !testnet);
         println!();
-        return crate::wallet::sync(network, endpoint).await;
+        crate::wallet::sync(network, endpoint).await?;
+
+        // Set up worked. Now, and only now, is the terminal worth mentioning: the
+        // next thing they want is their balance, and that does need a command.
+        println!();
+        println!("  Your wallet is set up and synced.");
+        if launched_by_double_click() {
+            terminal_help();
+        } else {
+            println!();
+            println!("  See it with:");
+            println!("    zecledger balance");
+            println!();
+        }
+        return Ok(());
     }
 
     println!();
@@ -153,10 +164,10 @@ fn banner() {
     println!();
 }
 
-fn double_click_help() {
+/// Where to go next, for the commands that a single window cannot cover.
+fn terminal_help() {
     {
-        println!("  It looks like you opened this by double-clicking it.");
-        println!("  Here is how to run it properly.");
+        println!("  To run any of these, open a terminal:");
         println!();
         println!("    1. Open PowerShell.");
         println!("       Press the Windows key, type powershell, and press Enter.");
@@ -167,8 +178,11 @@ fn double_click_help() {
             None => println!("         cd \"the folder you extracted ZecLedger into\""),
         }
         println!();
-        println!("    3. Then start here:");
-        println!("         .\\zecledger.exe sync");
+        println!("    3. Then run it, for example:");
+        println!("         .\\zecledger.exe balance");
+        println!();
+        println!("  Better still, put it on your PATH so you can just type");
+        println!("  zecledger from anywhere.");
         println!();
     }
 }
