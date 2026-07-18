@@ -1,6 +1,6 @@
 [package]
 name = "zecledger"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 description = "Read-only Zcash shielded accounting from your viewing key"
 

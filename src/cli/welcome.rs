@@ -97,6 +97,23 @@ fn confirm(question: &str) -> bool {
     answer.is_empty() || answer == "y" || answer == "yes"
 }
 
+/// Read one line of free text, trimmed. Returns an empty string when there is no
+/// terminal (piped or scripted) or on read error, so callers can treat empty as
+/// "no answer given" and skip rather than block.
+fn prompt(question: &str) -> String {
+    use std::io::{IsTerminal, Write};
+    if !std::io::stdin().is_terminal() {
+        return String::new();
+    }
+    print!("  {question} ");
+    let _ = std::io::stdout().flush();
+    let mut answer = String::new();
+    if std::io::stdin().read_line(&mut answer).is_err() {
+        return String::new();
+    }
+    answer.trim().to_string()
+}
+
 /// What happens when ZecLedger is run with no arguments.
 ///
 /// Someone in this position has usually just installed it and wants to start, so
@@ -222,6 +239,9 @@ fn commands() {
     println!("    Privacy");
     println!("      privacy-check     what your own wallet data reveals");
     println!();
+    println!("    Copilot");
+    println!("      wallet-ask        ask an AI about your own wallet data");
+    println!();
     println!("  For the full list and every option:");
     println!("    zecledger --help");
     println!();
@@ -264,6 +284,7 @@ async fn menu(network: zcash_protocol::consensus::Network, endpoint: String) -> 
         println!("    5. Privacy check");
         println!("    6. Expected payments, and reconcile them");
         println!("    7. Sync again");
+        println!("    8. Ask the copilot");
         println!("    0. Quit");
         println!();
         print!("  Choose: ");
@@ -280,11 +301,59 @@ async fn menu(network: zcash_protocol::consensus::Network, endpoint: String) -> 
         let outcome: anyhow::Result<()> = match choice {
             "1" => crate::wallet::show_balance(network).await,
             "2" => crate::wallet::show_history(network).await,
-            "3" => crate::wallet::generate_report(None, network).await,
-            "4" => crate::wallet::cost_basis_report("fifo", false, network).await,
+            "3" => {
+                // The output name is optional. Blank keeps the automatic
+                // timestamped name. This does not choose a format: the report is
+                // always written as both CSV and JSON.
+                let name = prompt("Output file name (blank for an automatic name):");
+                let out = if name.is_empty() { None } else { Some(name) };
+                crate::wallet::generate_report(out, network).await
+            }
+            "4" => {
+                // Expose what the cost-basis command already accepts instead of
+                // silently assuming fifo.
+                let method = match prompt("Method - 1) fifo  2) lifo  3) average [fifo]:")
+                    .to_lowercase()
+                    .as_str()
+                {
+                    "2" | "lifo" => "lifo",
+                    "3" | "average" | "avg" => "average",
+                    _ => "fifo",
+                };
+                let fetch = {
+                    let a = prompt("Fetch live market prices? (y/N):").to_lowercase();
+                    a == "y" || a == "yes"
+                };
+                crate::wallet::cost_basis_report(method, fetch, network).await
+            }
             "5" => crate::wallet::privacy_report(network),
             "6" => crate::wallet::reconcile_payments(network),
             "7" => crate::wallet::sync(network, endpoint.clone()).await,
+            "8" => {
+                // The copilot sends a summary of local data to the Anthropic API,
+                // which needs a key. Check for it before prompting, so a new user
+                // is told how to set one up instead of typing a question and only
+                // then hitting an error.
+                if std::env::var("ANTHROPIC_API_KEY").is_err() {
+                    println!();
+                    println!("  The copilot needs an Anthropic API key, which is not set yet.");
+                    println!("  Get one at https://console.anthropic.com, then set it:");
+                    if cfg!(windows) {
+                        println!("    setx ANTHROPIC_API_KEY \"sk-ant-...\"");
+                        println!("  then close and reopen this window so it takes effect.");
+                    } else {
+                        println!("    export ANTHROPIC_API_KEY=sk-ant-...");
+                    }
+                    Ok(())
+                } else {
+                    let q = prompt("Ask about your wallet:");
+                    if q.is_empty() {
+                        Ok(())
+                    } else {
+                        crate::wallet::wallet_ask(&q, network).await
+                    }
+                }
+            }
             "0" | "q" | "quit" | "exit" => return Ok(()),
             "" => continue,
             other => {
