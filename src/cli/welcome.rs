@@ -102,8 +102,11 @@ pub async fn run() -> anyhow::Result<()> {
     banner();
 
     if wallet_exists() {
-        // They have a wallet, so they know roughly what this is. Show what it can do,
-        // and if they got here by double-clicking, how to reach a terminal from here.
+        // They have a wallet already, so hand them the menu rather than a list of
+        // commands to go and type in some other window.
+        let (network, endpoint) = crate::core::config::resolve_network(false, false);
+        menu(network, endpoint).await?;
+        println!();
         commands();
         if launched_by_double_click() {
             terminal_help();
@@ -128,19 +131,20 @@ pub async fn run() -> anyhow::Result<()> {
         let testnet = choose_network();
         let (network, endpoint) = crate::core::config::resolve_network(testnet, !testnet);
         println!();
-        crate::wallet::sync(network, endpoint).await?;
+        crate::wallet::sync(network, endpoint.clone()).await?;
 
-        // Set up worked. Now, and only now, is the terminal worth mentioning: the
-        // next thing they want is their balance, and that does need a command.
         println!();
-        println!("  Your wallet is set up and synced.");
+        println!("  Your wallet is set up and synced. You can use it right here.");
+
+        // Straight into the menu in the same window. They are already sitting in
+        // front of a working ZecLedger; sending them elsewhere to read their own
+        // balance would be silly.
+        menu(network, endpoint).await?;
+
+        println!();
+        commands();
         if launched_by_double_click() {
             terminal_help();
-        } else {
-            println!();
-            println!("  See it with:");
-            println!("    zecledger balance");
-            println!();
         }
         return Ok(());
     }
@@ -228,4 +232,62 @@ pub fn pause_if_double_clicked() {
     println!("  Press Enter to close this window.");
     let mut discard = String::new();
     let _ = std::io::stdin().read_line(&mut discard);
+}
+
+/// A menu for the window you are already in.
+///
+/// The point of this is simple: if ZecLedger is open and your wallet is synced,
+/// you should be able to do your accounting right here. Telling someone to go and
+/// open a different terminal to read their own balance is not an answer.
+async fn menu(network: zcash_protocol::consensus::Network, endpoint: String) -> anyhow::Result<()> {
+    use std::io::{IsTerminal, Write};
+    if !std::io::stdin().is_terminal() {
+        return Ok(());
+    }
+
+    loop {
+        println!();
+        println!("  What would you like to do?");
+        println!();
+        println!("    1. Balance");
+        println!("    2. History");
+        println!("    3. Accounting report, written as CSV and JSON");
+        println!("    4. Cost basis, gains and losses");
+        println!("    5. Privacy check");
+        println!("    6. Expected payments, and reconcile them");
+        println!("    7. Sync again");
+        println!("    0. Quit");
+        println!();
+        print!("  Choose: ");
+        let _ = std::io::stdout().flush();
+
+        let mut choice = String::new();
+        if std::io::stdin().read_line(&mut choice).is_err() {
+            return Ok(());
+        }
+        let choice = choice.trim();
+
+        // A failing command should not throw the user out of the menu. Report it
+        // and let them try something else.
+        let outcome: anyhow::Result<()> = match choice {
+            "1" => crate::wallet::show_balance(network).await,
+            "2" => crate::wallet::show_history(network).await,
+            "3" => crate::wallet::generate_report(None, network).await,
+            "4" => crate::wallet::cost_basis_report("fifo", false, network).await,
+            "5" => crate::wallet::privacy_report(network),
+            "6" => crate::wallet::reconcile_payments(network),
+            "7" => crate::wallet::sync(network, endpoint.clone()).await,
+            "0" | "q" | "quit" | "exit" => return Ok(()),
+            "" => continue,
+            other => {
+                println!("  '{other}' is not one of the choices.");
+                continue;
+            }
+        };
+
+        if let Err(e) = outcome {
+            println!();
+            println!("  That did not work: {e}");
+        }
+    }
 }

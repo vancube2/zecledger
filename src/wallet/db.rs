@@ -27,6 +27,22 @@ pub fn wallet_db_path(data_dir: &Path, network: Network) -> PathBuf {
     }
 }
 
+/// Stop SQLCipher printing its internals straight to stderr.
+///
+/// A wrong passphrase makes SQLCipher log three lines about hmac checks failing
+/// and pages not decrypting. That is exactly right for a developer and useless
+/// and frightening for everyone else: it reads like the wallet is corrupt, when
+/// in fact a character was mistyped. ZecLedger already says so in plain words, so
+/// route these into tracing, where anyone who wants them can ask with RUST_LOG.
+pub fn quiet_sqlite_logging() {
+    // Safe here because it runs once, before any connection is opened.
+    unsafe {
+        let _ = rusqlite::trace::config_log(Some(|code, msg| {
+            tracing::debug!("sqlite {code}: {msg}");
+        }));
+    }
+}
+
 /// Quote a value as a SQL string literal.
 ///
 /// SQLCipher parses the KEY clause of ATTACH before bound parameters are applied,
@@ -62,6 +78,9 @@ fn verify_readable(db_path: &Path, conn: &Connection) -> Result<()> {
             "this wallet database is not encrypted yet. Run 'zecledger sync' to encrypt it."
         ));
     }
+    // Whatever passphrase we just used did not work, so stop holding onto it.
+    // Otherwise an interactive session would keep reusing a wrong one silently.
+    super::passphrase::forget();
     Err(anyhow!(
         "could not read the wallet database. The passphrase is wrong, or this file is not a ZecLedger database."
     ))

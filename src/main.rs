@@ -8,9 +8,21 @@ use cli::{Cli, Commands};
 
 #[tokio::main]
 async fn main() -> Result<()> {
+    // The scan is the slow part of a first sync, and zcash_client_backend reports
+    // its progress through tracing rather than a callback. Filtering that out left
+    // the program printing one line and then sitting silent for many minutes,
+    // which is indistinguishable from being hung. Show it.
     tracing_subscriber::fmt()
-        .with_env_filter("zecledger=info")
+        .with_env_filter(
+            tracing_subscriber::EnvFilter::try_from_default_env().unwrap_or_else(|_| {
+                tracing_subscriber::EnvFilter::new("zecledger=info,zcash_client_backend::sync=info")
+            }),
+        )
+        .with_target(false)
         .init();
+
+    // Must happen before any database is opened.
+    wallet::db::quiet_sqlite_logging();
 
     // Someone who runs ZecLedger with no arguments is almost always someone who
     // just downloaded it and wants to know what it is. Clap's usage error is the

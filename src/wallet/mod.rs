@@ -155,6 +155,9 @@ pub async fn sync(network: Network, endpoint: String) -> Result<()> {
     } else {
         passphrase::prompt_existing()?
     };
+    // Keep it for the rest of this run, so an interactive session does not ask
+    // again for every command.
+    passphrase::remember(&pass);
 
     if migrating {
         let backup = db::encrypt_in_place(&db_path, &pass)?;
