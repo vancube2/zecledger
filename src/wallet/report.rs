@@ -1,18 +1,33 @@
 // src/wallet/report.rs
 //
 // Step 2b: accounting reports. Monthly summary on screen, full ledger to
-// CSV and JSON files. Reads the same v_transactions view as history.
+// files. Reads the same v_transactions view as history.
+//
+// The user chooses a format from the interactive menu; the plain `wallet-report`
+// command keeps its old behaviour of writing both CSV and JSON. After writing,
+// we tell the user exactly where the file landed, including a Windows-openable
+// path when running the Linux build under WSL, because a path like
+// /root/zecledger/report.csv is useless to someone who lives in Explorer.
 
 use anyhow::{Context, Result};
 use serde::Serialize;
 use std::collections::BTreeMap;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 use super::history::{read_history, HistoryRow};
 use zcash_protocol::consensus::Network;
 
 fn zats_to_zec(z: i64) -> f64 {
     z as f64 / 1e8
+}
+
+/// Which files a report should produce.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum ReportFormat {
+    Csv,
+    Json,
+    Both,
+    Markdown,
 }
 
 #[derive(Serialize)]
@@ -68,11 +83,136 @@ fn month_key(r: &HistoryRow) -> String {
         .unwrap_or_else(|| "pending".to_string())
 }
 
-pub fn generate_report(
+fn write_json(out_base: &str, entries: &[LedgerEntry]) -> Result<String> {
+    let json_path = format!("{out_base}.json");
+    let json = serde_json::to_string_pretty(entries).context("failed to serialize JSON")?;
+    std::fs::write(&json_path, json).with_context(|| format!("failed to write {json_path}"))?;
+    Ok(json_path)
+}
+
+fn write_csv(out_base: &str, entries: &[LedgerEntry]) -> Result<String> {
+    let csv_path = format!("{out_base}.csv");
+    let mut wtr =
+        csv::Writer::from_path(&csv_path).with_context(|| format!("failed to create {csv_path}"))?;
+    for e in entries {
+        wtr.serialize(e).context("failed to write CSV row")?;
+    }
+    wtr.flush().context("failed to flush CSV")?;
+    Ok(csv_path)
+}
+
+fn write_markdown(
+    out_base: &str,
+    months: &BTreeMap<String, MonthSummary>,
+    entries: &[LedgerEntry],
+) -> Result<String> {
+    let md_path = format!("{out_base}.md");
+    let mut s = String::new();
+    s.push_str("# ZecLedger accounting report\n\n");
+    s.push_str(&format!(
+        "Generated {}\n\n",
+        chrono::Utc::now().format("%Y-%m-%d %H:%M:%S UTC")
+    ));
+
+    s.push_str("## Monthly summary\n\n");
+    s.push_str("| Month | Received (ZEC) | Sent (ZEC) | Net (ZEC) | Txs |\n");
+    s.push_str("|---|---:|---:|---:|---:|\n");
+    for (month, m) in months {
+        s.push_str(&format!(
+            "| {} | {:.8} | {:.8} | {:.8} | {} |\n",
+            month, m.received_zec, m.sent_zec, m.net_zec, m.tx_count
+        ));
+    }
+
+    s.push_str("\n## Full ledger\n\n");
+    s.push_str("| Date | Type | Amount (ZEC) | Fee (ZEC) | Height | Txid |\n");
+    s.push_str("|---|---|---:|---:|---:|---|\n");
+    for e in entries {
+        s.push_str(&format!(
+            "| {} | {} | {:.8} | {:.8} | {} | {} |\n",
+            e.date.clone().unwrap_or_else(|| "pending".to_string()),
+            e.kind,
+            e.amount_zec,
+            e.fee_zec,
+            e.height
+                .map(|h| h.to_string())
+                .unwrap_or_else(|| "-".to_string()),
+            e.txid
+        ));
+    }
+
+    std::fs::write(&md_path, s).with_context(|| format!("failed to write {md_path}"))?;
+    Ok(md_path)
+}
+
+/// Turn a possibly-relative output name into a full path, without the ugly
+/// `\\?\` verbatim prefix that canonicalize adds on Windows.
+fn absolutize(p: &str) -> PathBuf {
+    let pb = Path::new(p);
+    if pb.is_absolute() {
+        pb.to_path_buf()
+    } else {
+        std::env::current_dir()
+            .map(|d| d.join(pb))
+            .unwrap_or_else(|_| pb.to_path_buf())
+    }
+}
+
+/// When running the Linux build under WSL, give the path in a form Windows
+/// Explorer can open. Returns None on a native OS, where the plain path is
+/// already the right one.
+fn windows_hint(abs: &Path) -> Option<String> {
+    let distro = std::env::var("WSL_DISTRO_NAME").ok()?;
+    let s = abs.to_string_lossy();
+    if let Some(rest) = s.strip_prefix("/mnt/") {
+        // /mnt/c/Users/DELL/x -> C:\Users\DELL\x
+        let mut chars = rest.chars();
+        let drive = chars.next()?.to_ascii_uppercase();
+        let after = chars.as_str().trim_start_matches('/').replace('/', "\\");
+        Some(format!("{drive}:\\{after}"))
+    } else {
+        // A Linux-filesystem path -> \\wsl.localhost\<distro>\...
+        let after = s.trim_start_matches('/').replace('/', "\\");
+        Some(format!("\\\\wsl.localhost\\{distro}\\{after}"))
+    }
+}
+
+fn print_saved_guide(written: &[String]) {
+    println!();
+    if written.len() == 1 {
+        println!("  Your report was saved. File:");
+    } else {
+        println!("  Your report was saved. Files:");
+    }
+    let mut folder_shown = false;
+    for path in written {
+        let abs = absolutize(path);
+        println!("    {}", abs.display());
+        if let Some(win) = windows_hint(&abs) {
+            println!("      in Windows: {win}");
+        }
+        if !folder_shown {
+            if let Some(parent) = abs.parent() {
+                println!();
+                println!("  To open it, go to this folder in your file manager:");
+                println!("    {}", parent.display());
+                if let Some(winparent) = windows_hint(parent) {
+                    println!("    in Windows: {winparent}");
+                }
+                folder_shown = true;
+            }
+        }
+    }
+}
+
+/// Format-aware report generator. Prints the monthly summary on screen, writes
+/// the requested file(s), then tells the user where they are.
+pub fn generate_report_with_format(
     data_dir: &Path,
     out_base: &str,
     network: Network,
     passphrase: &str,
+    format: ReportFormat,
 ) -> Result<()> {
     let rows = read_history(data_dir, network, passphrase)?;
 
@@ -114,21 +254,27 @@ pub fn generate_report(
 
     let entries: Vec<LedgerEntry> = rows.iter().map(row_to_entry).collect();
 
-    let json_path = format!("{out_base}.json");
-    let json = serde_json::to_string_pretty(&entries).context("failed to serialize JSON")?;
-    std::fs::write(&json_path, json).with_context(|| format!("failed to write {json_path}"))?;
-
-    let csv_path = format!("{out_base}.csv");
-    let mut wtr = csv::Writer::from_path(&csv_path)
-        .with_context(|| format!("failed to create {csv_path}"))?;
-    for e in &entries {
-        wtr.serialize(e).context("failed to write CSV row")?;
+    let mut written: Vec<String> = Vec::new();
+    match format {
+        ReportFormat::Csv => written.push(write_csv(out_base, &entries)?),
+        ReportFormat::Json => written.push(write_json(out_base, &entries)?),
+        ReportFormat::Both => {
+            written.push(write_csv(out_base, &entries)?);
+            written.push(write_json(out_base, &entries)?);
+        }
+        ReportFormat::Markdown => written.push(write_markdown(out_base, &months, &entries)?),
     }
-    wtr.flush().context("failed to flush CSV")?;
 
-    println!();
-    println!("  Full ledger written to:");
-    println!("    {csv_path}");
-    println!("    {json_path}");
+    print_saved_guide(&written);
     Ok(())
+}
+
+/// `zecledger report` - keeps its original behaviour: writes both CSV and JSON.
+pub fn generate_report(
+    data_dir: &Path,
+    out_base: &str,
+    network: Network,
+    passphrase: &str,
+) -> Result<()> {
+    generate_report_with_format(data_dir, out_base, network, passphrase, ReportFormat::Both)
 }

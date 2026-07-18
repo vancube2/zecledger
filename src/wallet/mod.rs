@@ -236,6 +236,23 @@ pub async fn generate_report(output: Option<String>, network: Network) -> Result
     Ok(())
 }
 
+/// Interactive-menu report: the user has chosen a format, so write that. The
+/// output name is always automatic here - the menu deliberately does not ask for
+/// a filename, and the saved-file guide tells them where it landed.
+pub async fn generate_report_choice(
+    network: Network,
+    format: report::ReportFormat,
+) -> Result<()> {
+    let config = crate::core::config::load()?;
+    let out_base = format!(
+        "zecledger_ledger_{}",
+        chrono::Utc::now().format("%Y%m%d_%H%M%S")
+    );
+    let pass = passphrase::prompt_existing()?;
+    report::generate_report_with_format(&config.data_dir, &out_base, network, &pass, format)?;
+    Ok(())
+}
+
 /// `zecledger wallet-ask` - answer a question about YOUR wallet.
 /// Reads only local data, shows exactly what would be sent, and requires
 /// explicit confirmation before anything leaves the machine.
@@ -308,8 +325,22 @@ pub async fn wallet_ask(question: &str, network: Network) -> Result<()> {
         return Ok(());
     }
 
+    // Read the key and strip any surrounding whitespace. A trailing space or a
+    // carriage return - common when a key is set with setx on Windows or pasted
+    // into a shell - is an illegal HTTP header character, and reqwest rejects it
+    // as an opaque "builder error" before the request is ever sent. Trimming here
+    // turns that whole class of copy-paste mistake into a non-issue, on every
+    // platform, for every user.
     let api_key = std::env::var("ANTHROPIC_API_KEY")
-        .map_err(|_| anyhow::anyhow!("Set: export ANTHROPIC_API_KEY=sk-ant-..."))?;
+        .map_err(|_| anyhow::anyhow!("Set: export ANTHROPIC_API_KEY=sk-ant-..."))?
+        .trim()
+        .to_string();
+    if api_key.is_empty() {
+        return Err(anyhow::anyhow!(
+            "ANTHROPIC_API_KEY is set but empty after trimming whitespace. \
+             Check that the key was pasted correctly."
+        ));
+    }
 
     println!("  Sending...");
     let client = reqwest::Client::new();
@@ -321,7 +352,7 @@ pub async fn wallet_ask(question: &str, network: Network) -> Result<()> {
         .json(&serde_json::json!({
             "model": "claude-sonnet-4-6",
             "max_tokens": 1024,
-            "system": "You are ZecLedger Copilot. Answer the user's question about THEIR OWN Zcash wallet using only the data provided. Be precise with numbers. Do not speculate beyond the data.",
+            "system": "You are ZecLedger Copilot. Answer the user's question about THEIR OWN Zcash wallet using only the data provided. Be precise with numbers. Do not speculate beyond the data. Reply in plain text suitable for a terminal: do not use Markdown, headings, tables, bullet symbols, backticks, or emoji.",
             "messages": [{
                 "role": "user",
                 "content": format!("{}\n\nQuestion: {}", context, question)

@@ -279,7 +279,7 @@ async fn menu(network: zcash_protocol::consensus::Network, endpoint: String) -> 
         println!();
         println!("    1. Balance");
         println!("    2. History");
-        println!("    3. Accounting report, written as CSV and JSON");
+        println!("    3. Accounting report (choose CSV, JSON, or Markdown)");
         println!("    4. Cost basis, gains and losses");
         println!("    5. Privacy check");
         println!("    6. Expected payments, and reconcile them");
@@ -302,12 +302,20 @@ async fn menu(network: zcash_protocol::consensus::Network, endpoint: String) -> 
             "1" => crate::wallet::show_balance(network).await,
             "2" => crate::wallet::show_history(network).await,
             "3" => {
-                // The output name is optional. Blank keeps the automatic
-                // timestamped name. This does not choose a format: the report is
-                // always written as both CSV and JSON.
-                let name = prompt("Output file name (blank for an automatic name):");
-                let out = if name.is_empty() { None } else { Some(name) };
-                crate::wallet::generate_report(out, network).await
+                // Let them choose which file(s) they want. The report is saved
+                // with an automatic name and the guide tells them where; asking
+                // for a filename would expose plumbing no one cares about.
+                use crate::wallet::report::ReportFormat;
+                let fmt = match prompt("Format - 1) CSV  2) JSON  3) both  4) Markdown [both]:")
+                    .to_lowercase()
+                    .as_str()
+                {
+                    "1" | "csv" => ReportFormat::Csv,
+                    "2" | "json" => ReportFormat::Json,
+                    "4" | "markdown" | "md" => ReportFormat::Markdown,
+                    _ => ReportFormat::Both,
+                };
+                crate::wallet::generate_report_choice(network, fmt).await
             }
             "4" => {
                 // Expose what the cost-basis command already accepts instead of
