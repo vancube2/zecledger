@@ -107,12 +107,10 @@ pub async fn show_balance(network: Network) -> Result<()> {
             for b in balances.values() {
                 let sapling = zec(b.sapling_balance().total());
                 let orchard = zec(b.orchard_balance().total());
-                let ironwood = zec(b.ironwood_balance().total());
                 let transparent = zec(b.unshielded_balance().total());
                 let total = zec(b.total());
                 println!("  Sapling:      {sapling:>14.8} ZEC", sapling = sapling);
                 println!("  Orchard:      {orchard:>14.8} ZEC", orchard = orchard);
-                println!("  Ironwood:     {ironwood:>14.8} ZEC", ironwood = ironwood);
                 println!(
                     "  Transparent:  {transparent:>14.8} ZEC",
                     transparent = transparent

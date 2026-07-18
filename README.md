@@ -13,16 +13,16 @@ Most blockchains make every payment public forever. Zcash fixes that with shield
 
 **Demo video:** https://youtu.be/7emZKHAH7TQ
 
-## Ironwood (NU6.3) support is not in v0.1.0 yet
+## Ironwood (NU6.3) support is not in v0.1.x yet
 
 The Ironwood network upgrade activates on mainnet at **block height 3,428,143,
 around 28 July 2026**. It introduces a new shielded pool and a v6 transaction
 format, and the Orchard pool stops accepting new activity. Funds move out of
 Orchard and into Ironwood.
 
-**ZecLedger v0.1.0 was built before Ironwood and cannot see the Ironwood pool.**
+**ZecLedger v0.1.x was built before Ironwood and cannot see the Ironwood pool.**
 It is built on `zcash_client_backend` 0.23, which has no Ironwood support. Once
-you migrate funds out of Orchard, v0.1.0 will not count them, so any balance or
+you migrate funds out of Orchard, v0.1.x will not count them, so any balance or
 report it produces after that point may be wrong. It may also fail to sync across
 the new transaction format.
 
@@ -30,7 +30,7 @@ This is stated here rather than discovered later. An accounting tool that quietl
 reports the wrong number is worse than no tool at all.
 
 **What to do:** v0.2.0 with Ironwood support is being worked on now and is
-intended to land before 28 July 2026. Until then, treat v0.1.0 output as valid
+intended to land before 28 July 2026. Until then, treat v0.1.x output as valid
 only for pre-Ironwood history, and do not rely on it for balances after you
 migrate funds. Watch the
 [releases page](https://github.com/vancube2/zecledger/releases) for v0.2.0.
