@@ -37,17 +37,21 @@ fn exe_dir() -> Option<PathBuf> {
         .and_then(|p| p.parent().map(|d| d.to_path_buf()))
 }
 
-/// Is there already a wallet on this machine, on either network?
+/// Which network has a wallet on this machine, if any.
 ///
-/// Checking both matters: someone set up on testnet still has a wallet, and
-/// should not be told they have none.
-fn wallet_exists() -> bool {
+/// This returns the network rather than a bare yes or no, because knowing that a
+/// wallet exists is useless if you then go and open the wrong one. Mainnet wins
+/// when both are present, matching what the plain commands default to.
+fn existing_wallet_network() -> Option<zcash_protocol::consensus::Network> {
     use zcash_protocol::consensus::Network;
-    let Ok(cfg) = crate::core::config::load() else {
-        return false;
-    };
-    crate::wallet::db::wallet_db_path(&cfg.data_dir, Network::MainNetwork).exists()
-        || crate::wallet::db::wallet_db_path(&cfg.data_dir, Network::TestNetwork).exists()
+    let cfg = crate::core::config::load().ok()?;
+    if crate::wallet::db::wallet_db_path(&cfg.data_dir, Network::MainNetwork).exists() {
+        Some(Network::MainNetwork)
+    } else if crate::wallet::db::wallet_db_path(&cfg.data_dir, Network::TestNetwork).exists() {
+        Some(Network::TestNetwork)
+    } else {
+        None
+    }
 }
 
 /// Which network is the viewing key for?
@@ -101,10 +105,14 @@ fn confirm(question: &str) -> bool {
 pub async fn run() -> anyhow::Result<()> {
     banner();
 
-    if wallet_exists() {
-        // They have a wallet already, so hand them the menu rather than a list of
-        // commands to go and type in some other window.
-        let (network, endpoint) = crate::core::config::resolve_network(false, false);
+    if let Some(found) = existing_wallet_network() {
+        // Open the wallet they actually have. Defaulting to mainnet here meant a
+        // testnet user got an empty mainnet database and a wall of "no such table".
+        let testnet = matches!(found, zcash_protocol::consensus::Network::TestNetwork);
+        let (network, endpoint) = crate::core::config::resolve_network(testnet, !testnet);
+        if testnet {
+            println!("  Using your testnet wallet.");
+        }
         menu(network, endpoint).await?;
         println!();
         commands();

@@ -54,6 +54,21 @@ fn sql_quote(s: &str) -> String {
 /// Open a connection to the wallet database with the SQLCipher key applied,
 /// verified, and the array module loaded ready for `zcash_client_sqlite`.
 pub fn open_conn(db_path: &Path, passphrase: &str) -> Result<Connection> {
+    // `Connection::open` creates the file when it is missing. On a read path that
+    // is exactly wrong: it turns "you have no wallet here" into a blank database
+    // that opens cleanly, accepts any passphrase, and then fails every query with
+    // something like "no such table: scan_queue". Say the true thing instead.
+    if !db_path.exists() {
+        return Err(anyhow!(
+            "no wallet database at {}. Run 'zecledger sync' to set one up.",
+            db_path.display()
+        ));
+    }
+    open_or_create_conn(db_path, passphrase)
+}
+
+/// The same, but allowed to create the file. Only first-time set up should use it.
+pub fn open_or_create_conn(db_path: &Path, passphrase: &str) -> Result<Connection> {
     let conn = Connection::open(db_path)
         .with_context(|| format!("could not open {}", db_path.display()))?;
     conn.pragma_update(None, "key", passphrase)
@@ -90,6 +105,17 @@ fn verify_readable(db_path: &Path, conn: &Connection) -> Result<()> {
 pub fn open_wallet_db(data_dir: &Path, network: Network, passphrase: &str) -> Result<ZecWalletDb> {
     let db_path = wallet_db_path(data_dir, network);
     let conn = open_conn(&db_path, passphrase)?;
+    Ok(WalletDb::from_connection(conn, network, SystemClock, OsRng))
+}
+
+/// As above, but allowed to create the database. Only for first-time set up.
+fn open_or_create_wallet_db(
+    data_dir: &Path,
+    network: Network,
+    passphrase: &str,
+) -> Result<ZecWalletDb> {
+    let db_path = wallet_db_path(data_dir, network);
+    let conn = open_or_create_conn(&db_path, passphrase)?;
     Ok(WalletDb::from_connection(conn, network, SystemClock, OsRng))
 }
 
@@ -144,7 +170,7 @@ pub fn open_and_init(data_dir: &Path, network: Network, passphrase: &str) -> Res
     let db_path = wallet_db_path(data_dir, network);
     println!("  Wallet database: {}", db_path.display());
 
-    let mut db = open_wallet_db(data_dir, network, passphrase)?;
+    let mut db = open_or_create_wallet_db(data_dir, network, passphrase)?;
 
     zcash_client_sqlite::wallet::init::init_wallet_db(&mut db, None)
         .context("failed to initialize wallet database schema")?;
