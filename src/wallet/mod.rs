@@ -239,10 +239,7 @@ pub async fn generate_report(output: Option<String>, network: Network) -> Result
 /// Interactive-menu report: the user has chosen a format, so write that. The
 /// output name is always automatic here - the menu deliberately does not ask for
 /// a filename, and the saved-file guide tells them where it landed.
-pub async fn generate_report_choice(
-    network: Network,
-    format: report::ReportFormat,
-) -> Result<()> {
+pub async fn generate_report_choice(network: Network, format: report::ReportFormat) -> Result<()> {
     let config = crate::core::config::load()?;
     let out_base = format!(
         "zecledger_ledger_{}",

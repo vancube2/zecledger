@@ -92,8 +92,8 @@ fn write_json(out_base: &str, entries: &[LedgerEntry]) -> Result<String> {
 
 fn write_csv(out_base: &str, entries: &[LedgerEntry]) -> Result<String> {
     let csv_path = format!("{out_base}.csv");
-    let mut wtr =
-        csv::Writer::from_path(&csv_path).with_context(|| format!("failed to create {csv_path}"))?;
+    let mut wtr = csv::Writer::from_path(&csv_path)
+        .with_context(|| format!("failed to create {csv_path}"))?;
     for e in entries {
         wtr.serialize(e).context("failed to write CSV row")?;
     }
