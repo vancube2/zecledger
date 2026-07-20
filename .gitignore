@@ -13,3 +13,5 @@ full_report*.json
 mainnet_report*.json
 my_first_report*.csv
 report.json
+
+zecledger_ledger_*

@@ -85,7 +85,15 @@ pub async fn sync_blocks(
 
     let mut db = super::db::open_wallet_db(data_dir, network, passphrase)?;
 
-    println!("  Scanning blocks (this may take a moment) ...");
+    println!();
+    println!("  Scanning blocks. Every block from your birthday height to the tip is");
+    println!("  fetched and decrypted here on your machine, because that is what keeps");
+    println!("  your activity private. A first sync can take a long time, and the");
+    println!("  further back your birthday height, the longer it takes. Later syncs");
+    println!("  only cover new blocks and are quick.");
+    println!();
+    println!("  Progress follows. Leave it running.");
+    println!();
     zcash_client_backend::sync::run(&mut client, &network, &block_cache, &mut db, 1000)
         .await
         .map_err(|e| anyhow!("sync failed: {e:?}"))?;

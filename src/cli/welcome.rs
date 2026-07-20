@@ -37,17 +37,21 @@ fn exe_dir() -> Option<PathBuf> {
         .and_then(|p| p.parent().map(|d| d.to_path_buf()))
 }
 
-/// Is there already a wallet on this machine, on either network?
+/// Which network has a wallet on this machine, if any.
 ///
-/// Checking both matters: someone set up on testnet still has a wallet, and
-/// should not be told they have none.
-fn wallet_exists() -> bool {
+/// This returns the network rather than a bare yes or no, because knowing that a
+/// wallet exists is useless if you then go and open the wrong one. Mainnet wins
+/// when both are present, matching what the plain commands default to.
+fn existing_wallet_network() -> Option<zcash_protocol::consensus::Network> {
     use zcash_protocol::consensus::Network;
-    let Ok(cfg) = crate::core::config::load() else {
-        return false;
-    };
-    crate::wallet::db::wallet_db_path(&cfg.data_dir, Network::MainNetwork).exists()
-        || crate::wallet::db::wallet_db_path(&cfg.data_dir, Network::TestNetwork).exists()
+    let cfg = crate::core::config::load().ok()?;
+    if crate::wallet::db::wallet_db_path(&cfg.data_dir, Network::MainNetwork).exists() {
+        Some(Network::MainNetwork)
+    } else if crate::wallet::db::wallet_db_path(&cfg.data_dir, Network::TestNetwork).exists() {
+        Some(Network::TestNetwork)
+    } else {
+        None
+    }
 }
 
 /// Which network is the viewing key for?
@@ -93,6 +97,23 @@ fn confirm(question: &str) -> bool {
     answer.is_empty() || answer == "y" || answer == "yes"
 }
 
+/// Read one line of free text, trimmed. Returns an empty string when there is no
+/// terminal (piped or scripted) or on read error, so callers can treat empty as
+/// "no answer given" and skip rather than block.
+fn prompt(question: &str) -> String {
+    use std::io::{IsTerminal, Write};
+    if !std::io::stdin().is_terminal() {
+        return String::new();
+    }
+    print!("  {question} ");
+    let _ = std::io::stdout().flush();
+    let mut answer = String::new();
+    if std::io::stdin().read_line(&mut answer).is_err() {
+        return String::new();
+    }
+    answer.trim().to_string()
+}
+
 /// What happens when ZecLedger is run with no arguments.
 ///
 /// Someone in this position has usually just installed it and wants to start, so
@@ -101,10 +122,20 @@ fn confirm(question: &str) -> bool {
 pub async fn run() -> anyhow::Result<()> {
     banner();
 
-    if wallet_exists() {
-        // They have a wallet, so they know roughly what this is. Show what it can do.
+    if let Some(found) = existing_wallet_network() {
+        // Open the wallet they actually have. Defaulting to mainnet here meant a
+        // testnet user got an empty mainnet database and a wall of "no such table".
+        let testnet = matches!(found, zcash_protocol::consensus::Network::TestNetwork);
+        let (network, endpoint) = crate::core::config::resolve_network(testnet, !testnet);
+        if testnet {
+            println!("  Using your testnet wallet.");
+        }
+        menu(network, endpoint).await?;
+        println!();
         commands();
-        pause_if_double_clicked();
+        if launched_by_double_click() {
+            terminal_help();
+        }
         return Ok(());
     }
 
@@ -116,22 +147,31 @@ pub async fn run() -> anyhow::Result<()> {
     println!("  leaves this machine, and a viewing key cannot move funds.");
     println!();
 
-    if launched_by_double_click() {
-        // A double-clicked window is the wrong place to paste a long key and choose
-        // a passphrase, and it will vanish afterwards. Send them to a real terminal.
-        double_click_help();
-        commands();
-        pause_if_double_clicked();
-        return Ok(());
-    }
-
+    // A double-clicked console is a real console. You can paste into it and type
+    // in it, and the window is held open when we are done. There is no reason to
+    // send someone away to a different terminal just to answer three questions.
     if confirm("Set one up now?") {
         // Ask the network first, then hand off with a matching endpoint. Getting
         // this wrong points the sync at the wrong servers as well as the wrong key.
         let testnet = choose_network();
         let (network, endpoint) = crate::core::config::resolve_network(testnet, !testnet);
         println!();
-        return crate::wallet::sync(network, endpoint).await;
+        crate::wallet::sync(network, endpoint.clone()).await?;
+
+        println!();
+        println!("  Your wallet is set up and synced. You can use it right here.");
+
+        // Straight into the menu in the same window. They are already sitting in
+        // front of a working ZecLedger; sending them elsewhere to read their own
+        // balance would be silly.
+        menu(network, endpoint).await?;
+
+        println!();
+        commands();
+        if launched_by_double_click() {
+            terminal_help();
+        }
+        return Ok(());
     }
 
     println!();
@@ -153,10 +193,10 @@ fn banner() {
     println!();
 }
 
-fn double_click_help() {
+/// Where to go next, for the commands that a single window cannot cover.
+fn terminal_help() {
     {
-        println!("  It looks like you opened this by double-clicking it.");
-        println!("  Here is how to run it properly.");
+        println!("  To run any of these, open a terminal:");
         println!();
         println!("    1. Open PowerShell.");
         println!("       Press the Windows key, type powershell, and press Enter.");
@@ -167,8 +207,11 @@ fn double_click_help() {
             None => println!("         cd \"the folder you extracted ZecLedger into\""),
         }
         println!();
-        println!("    3. Then start here:");
-        println!("         .\\zecledger.exe sync");
+        println!("    3. Then run it, for example:");
+        println!("         .\\zecledger.exe balance");
+        println!();
+        println!("  Better still, put it on your PATH so you can just type");
+        println!("  zecledger from anywhere.");
         println!();
     }
 }
@@ -196,6 +239,9 @@ fn commands() {
     println!("    Privacy");
     println!("      privacy-check     what your own wallet data reveals");
     println!();
+    println!("    Copilot");
+    println!("      wallet-ask        ask an AI about your own wallet data");
+    println!();
     println!("  For the full list and every option:");
     println!("    zecledger --help");
     println!();
@@ -214,4 +260,119 @@ pub fn pause_if_double_clicked() {
     println!("  Press Enter to close this window.");
     let mut discard = String::new();
     let _ = std::io::stdin().read_line(&mut discard);
+}
+
+/// A menu for the window you are already in.
+///
+/// The point of this is simple: if ZecLedger is open and your wallet is synced,
+/// you should be able to do your accounting right here. Telling someone to go and
+/// open a different terminal to read their own balance is not an answer.
+async fn menu(network: zcash_protocol::consensus::Network, endpoint: String) -> anyhow::Result<()> {
+    use std::io::{IsTerminal, Write};
+    if !std::io::stdin().is_terminal() {
+        return Ok(());
+    }
+
+    loop {
+        println!();
+        println!("  What would you like to do?");
+        println!();
+        println!("    1. Balance");
+        println!("    2. History");
+        println!("    3. Accounting report (choose CSV, JSON, or Markdown)");
+        println!("    4. Cost basis, gains and losses");
+        println!("    5. Privacy check");
+        println!("    6. Expected payments, and reconcile them");
+        println!("    7. Sync again");
+        println!("    8. Ask the copilot");
+        println!("    0. Quit");
+        println!();
+        print!("  Choose: ");
+        let _ = std::io::stdout().flush();
+
+        let mut choice = String::new();
+        if std::io::stdin().read_line(&mut choice).is_err() {
+            return Ok(());
+        }
+        let choice = choice.trim();
+
+        // A failing command should not throw the user out of the menu. Report it
+        // and let them try something else.
+        let outcome: anyhow::Result<()> = match choice {
+            "1" => crate::wallet::show_balance(network).await,
+            "2" => crate::wallet::show_history(network).await,
+            "3" => {
+                // Let them choose which file(s) they want. The report is saved
+                // with an automatic name and the guide tells them where; asking
+                // for a filename would expose plumbing no one cares about.
+                use crate::wallet::report::ReportFormat;
+                let fmt = match prompt("Format - 1) CSV  2) JSON  3) both  4) Markdown [both]:")
+                    .to_lowercase()
+                    .as_str()
+                {
+                    "1" | "csv" => ReportFormat::Csv,
+                    "2" | "json" => ReportFormat::Json,
+                    "4" | "markdown" | "md" => ReportFormat::Markdown,
+                    _ => ReportFormat::Both,
+                };
+                crate::wallet::generate_report_choice(network, fmt).await
+            }
+            "4" => {
+                // Expose what the cost-basis command already accepts instead of
+                // silently assuming fifo.
+                let method = match prompt("Method - 1) fifo  2) lifo  3) average [fifo]:")
+                    .to_lowercase()
+                    .as_str()
+                {
+                    "2" | "lifo" => "lifo",
+                    "3" | "average" | "avg" => "average",
+                    _ => "fifo",
+                };
+                let fetch = {
+                    let a = prompt("Fetch live market prices? (y/N):").to_lowercase();
+                    a == "y" || a == "yes"
+                };
+                crate::wallet::cost_basis_report(method, fetch, network).await
+            }
+            "5" => crate::wallet::privacy_report(network),
+            "6" => crate::wallet::reconcile_payments(network),
+            "7" => crate::wallet::sync(network, endpoint.clone()).await,
+            "8" => {
+                // The copilot sends a summary of local data to the Anthropic API,
+                // which needs a key. Check for it before prompting, so a new user
+                // is told how to set one up instead of typing a question and only
+                // then hitting an error.
+                if std::env::var("ANTHROPIC_API_KEY").is_err() {
+                    println!();
+                    println!("  The copilot needs an Anthropic API key, which is not set yet.");
+                    println!("  Get one at https://console.anthropic.com, then set it:");
+                    if cfg!(windows) {
+                        println!("    setx ANTHROPIC_API_KEY \"sk-ant-...\"");
+                        println!("  then close and reopen this window so it takes effect.");
+                    } else {
+                        println!("    export ANTHROPIC_API_KEY=sk-ant-...");
+                    }
+                    Ok(())
+                } else {
+                    let q = prompt("Ask about your wallet:");
+                    if q.is_empty() {
+                        Ok(())
+                    } else {
+                        crate::wallet::wallet_ask(&q, network).await
+                    }
+                }
+            }
+            "0" | "q" | "quit" | "exit" => return Ok(()),
+            "" => continue,
+            other => {
+                println!("  '{other}' is not one of the choices.");
+                continue;
+            }
+        };
+
+        if let Err(e) = outcome {
+            println!();
+            println!("  That did not work: {e}");
+        }
+    }
 }

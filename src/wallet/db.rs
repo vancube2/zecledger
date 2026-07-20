@@ -27,6 +27,22 @@ pub fn wallet_db_path(data_dir: &Path, network: Network) -> PathBuf {
     }
 }
 
+/// Stop SQLCipher printing its internals straight to stderr.
+///
+/// A wrong passphrase makes SQLCipher log three lines about hmac checks failing
+/// and pages not decrypting. That is exactly right for a developer and useless
+/// and frightening for everyone else: it reads like the wallet is corrupt, when
+/// in fact a character was mistyped. ZecLedger already says so in plain words, so
+/// route these into tracing, where anyone who wants them can ask with RUST_LOG.
+pub fn quiet_sqlite_logging() {
+    // Safe here because it runs once, before any connection is opened.
+    unsafe {
+        let _ = rusqlite::trace::config_log(Some(|code, msg| {
+            tracing::debug!("sqlite {code}: {msg}");
+        }));
+    }
+}
+
 /// Quote a value as a SQL string literal.
 ///
 /// SQLCipher parses the KEY clause of ATTACH before bound parameters are applied,
@@ -38,6 +54,21 @@ fn sql_quote(s: &str) -> String {
 /// Open a connection to the wallet database with the SQLCipher key applied,
 /// verified, and the array module loaded ready for `zcash_client_sqlite`.
 pub fn open_conn(db_path: &Path, passphrase: &str) -> Result<Connection> {
+    // `Connection::open` creates the file when it is missing. On a read path that
+    // is exactly wrong: it turns "you have no wallet here" into a blank database
+    // that opens cleanly, accepts any passphrase, and then fails every query with
+    // something like "no such table: scan_queue". Say the true thing instead.
+    if !db_path.exists() {
+        return Err(anyhow!(
+            "no wallet database at {}. Run 'zecledger sync' to set one up.",
+            db_path.display()
+        ));
+    }
+    open_or_create_conn(db_path, passphrase)
+}
+
+/// The same, but allowed to create the file. Only first-time set up should use it.
+pub fn open_or_create_conn(db_path: &Path, passphrase: &str) -> Result<Connection> {
     let conn = Connection::open(db_path)
         .with_context(|| format!("could not open {}", db_path.display()))?;
     conn.pragma_update(None, "key", passphrase)
@@ -62,6 +93,9 @@ fn verify_readable(db_path: &Path, conn: &Connection) -> Result<()> {
             "this wallet database is not encrypted yet. Run 'zecledger sync' to encrypt it."
         ));
     }
+    // Whatever passphrase we just used did not work, so stop holding onto it.
+    // Otherwise an interactive session would keep reusing a wrong one silently.
+    super::passphrase::forget();
     Err(anyhow!(
         "could not read the wallet database. The passphrase is wrong, or this file is not a ZecLedger database."
     ))
@@ -71,6 +105,17 @@ fn verify_readable(db_path: &Path, conn: &Connection) -> Result<()> {
 pub fn open_wallet_db(data_dir: &Path, network: Network, passphrase: &str) -> Result<ZecWalletDb> {
     let db_path = wallet_db_path(data_dir, network);
     let conn = open_conn(&db_path, passphrase)?;
+    Ok(WalletDb::from_connection(conn, network, SystemClock, OsRng))
+}
+
+/// As above, but allowed to create the database. Only for first-time set up.
+fn open_or_create_wallet_db(
+    data_dir: &Path,
+    network: Network,
+    passphrase: &str,
+) -> Result<ZecWalletDb> {
+    let db_path = wallet_db_path(data_dir, network);
+    let conn = open_or_create_conn(&db_path, passphrase)?;
     Ok(WalletDb::from_connection(conn, network, SystemClock, OsRng))
 }
 
@@ -125,7 +170,7 @@ pub fn open_and_init(data_dir: &Path, network: Network, passphrase: &str) -> Res
     let db_path = wallet_db_path(data_dir, network);
     println!("  Wallet database: {}", db_path.display());
 
-    let mut db = open_wallet_db(data_dir, network, passphrase)?;
+    let mut db = open_or_create_wallet_db(data_dir, network, passphrase)?;
 
     zcash_client_sqlite::wallet::init::init_wallet_db(&mut db, None)
         .context("failed to initialize wallet database schema")?;

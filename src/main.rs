@@ -8,16 +8,38 @@ use cli::{Cli, Commands};
 
 #[tokio::main]
 async fn main() -> Result<()> {
+    // The scan is the slow part of a first sync, and zcash_client_backend reports
+    // its progress through tracing rather than a callback. Filtering that out left
+    // the program printing one line and then sitting silent for many minutes,
+    // which is indistinguishable from being hung. Show it.
     tracing_subscriber::fmt()
-        .with_env_filter("zecledger=info")
+        .with_env_filter(
+            tracing_subscriber::EnvFilter::try_from_default_env().unwrap_or_else(|_| {
+                tracing_subscriber::EnvFilter::new("zecledger=info,zcash_client_backend::sync=info")
+            }),
+        )
+        .with_target(false)
         .init();
+
+    // Must happen before any database is opened.
+    wallet::db::quiet_sqlite_logging();
 
     // Someone who runs ZecLedger with no arguments is almost always someone who
     // just downloaded it and wants to know what it is. Clap's usage error is the
     // wrong answer to that, and on a double-clicked Windows console it is not even
     // readable before the window closes. Answer the actual question instead.
     if std::env::args().count() == 1 {
-        return cli::welcome::run().await;
+        let result = cli::welcome::run().await;
+        // Hold a double-clicked window open whatever happened, including on an
+        // error. A window that vanishes on failure is the original bug.
+        if let Err(e) = result {
+            eprintln!();
+            eprintln!("  Error: {e}");
+            cli::welcome::pause_if_double_clicked();
+            std::process::exit(1);
+        }
+        cli::welcome::pause_if_double_clicked();
+        return Ok(());
     }
 
     let cli = Cli::parse();
