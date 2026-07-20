@@ -13,9 +13,34 @@ Most blockchains make every payment public forever. Zcash fixes that with shield
 
 **Demo video:** https://youtu.be/7emZKHAH7TQ
 
+## Ironwood (NU6.3) support is not in v0.1.x yet
+
+The Ironwood network upgrade activates on mainnet at **block height 3,428,143,
+around 28 July 2026**. It introduces a new shielded pool and a v6 transaction
+format, and the Orchard pool stops accepting new activity. Funds move out of
+Orchard and into Ironwood.
+
+**ZecLedger v0.1.x was built before Ironwood and cannot see the Ironwood pool.**
+It is built on `zcash_client_backend` 0.23, which has no Ironwood support. Once
+you migrate funds out of Orchard, v0.1.x will not count them, so any balance or
+report it produces after that point may be wrong. It may also fail to sync across
+the new transaction format.
+
+This is stated here rather than discovered later. An accounting tool that quietly
+reports the wrong number is worse than no tool at all.
+
+**What to do:** v0.2.0 with Ironwood support is being worked on now and is
+intended to land before 28 July 2026. Until then, treat v0.1.x output as valid
+only for pre-Ironwood history, and do not rely on it for balances after you
+migrate funds. Watch the
+[releases page](https://github.com/vancube2/zecledger/releases) for v0.2.0.
+
+No funds are ever at risk either way. ZecLedger holds a viewing key, never a
+spending key, and cannot move a coin.
+
 ## Why it is different
 
-- **Read-only by design.** The viewing key is held in memory only. It is never written to disk and never sent to any server. When the program exits, the key is gone and you re-enter it next session.
+- **Read-only by design.** ZecLedger takes a Unified Full Viewing Key, never a spending key, so it structurally cannot move your funds. Your key stays on your machine and is never sent to any server. It is stored in your local wallet database, encrypted at rest with a passphrase only you know, so ZecLedger can scan the chain for your notes. See [SECURITY.md](SECURITY.md).
 - **Cost-basis for shielded ZEC.** Computes realised gains and losses using FIFO, LIFO, or average cost, with the holding period in days. Because shielded transactions keep price data off-chain, ZecLedger lets you capture it (manually or via an optional price fetch).
 - **Honest reconciliation.** When matching expected payments against received history, it flags partial matches for review instead of pretending they are confirmed.
 - **Privacy by consent.** The optional copilot shows you exactly what aggregate data will leave your machine and waits for your explicit confirmation before sending anything.
@@ -28,7 +53,7 @@ Most blockchains make every payment public forever. Zcash fixes that with shield
 | `sync` | Sync your wallet from a lightwalletd server (reads your viewing key) |
 | `balance` | Show your shielded balance per pool (Sapling, Orchard, transparent) |
 | `history` | Show transaction history, including decoded memos |
-| `wallet-report` | Generate an accounting report (monthly summary plus full ledger, CSV/JSON) |
+| `wallet-report` | Generate an accounting report (monthly summary plus full ledger, in CSV, JSON, or Markdown) |
 | `expect` / `reconcile` / `expected` | Record expected payments and reconcile them against received history |
 | `request` | Generate a ZIP-321 payment request URI to send to a payer |
 | `cost-basis` | Cost-basis and gain/loss report (`--method fifo\|lifo\|average`, optional `--fetch-prices`) |
@@ -40,7 +65,92 @@ Global flags: `--testnet` and `--mainnet`.
 
 ## Install
 
-Requirements: a recent Rust toolchain and `protoc` (Protocol Buffers compiler).
+### Linux and macOS, one line
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/vancube2/zecledger/master/install.sh | sh
+```
+
+That works out your platform, downloads the matching release, checks it against
+the published SHA256SUMS, verifies build provenance if you have the GitHub CLI,
+and puts `zecledger` on your PATH. Then:
+
+```bash
+zecledger
+```
+
+With no arguments it tells you what it is and, if you have no wallet yet, offers
+to set one up. If you already have a wallet, it opens an interactive menu so you
+can run any of the features below by choosing a number, without typing commands.
+You do not need to memorise anything to start.
+
+Piping a script from the internet into a shell is a reasonable thing to be wary
+of, especially for software that will read your viewing key. Read it first if you
+would rather:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/vancube2/zecledger/master/install.sh -o install.sh
+less install.sh
+sh install.sh
+```
+
+### Windows, or doing it by hand
+
+Grab the archive for your platform from the
+[latest release](https://github.com/vancube2/zecledger/releases/latest):
+
+| Platform | Archive |
+|---|---|
+| macOS (Apple Silicon) | `zecledger-<version>-aarch64-apple-darwin.tar.gz` |
+| macOS (Intel) | `zecledger-<version>-x86_64-apple-darwin.tar.gz` |
+| Linux (x86_64) | `zecledger-<version>-x86_64-unknown-linux-gnu.tar.gz` |
+| Windows (x86_64) | `zecledger-<version>-x86_64-pc-windows-msvc.zip` |
+
+```bash
+tar xzf zecledger-<version>-<target>.tar.gz
+cd zecledger-<version>-<target>
+./zecledger --help
+```
+
+On Windows, you can also just double-click `zecledger.exe`. It opens a window,
+explains that it is a command line program, and walks you through setup, holding
+the window open so nothing flashes past.
+
+Optionally move it onto your PATH, for example `sudo mv zecledger /usr/local/bin/`.
+
+On macOS, a binary you downloaded and extracted through Finder is quarantined,
+and Gatekeeper will refuse to run it because ZecLedger is not signed by a paid
+Apple developer account. The install script above clears that flag for you. By
+hand, either extract with `tar` in a terminal, or run:
+
+```bash
+xattr -d com.apple.quarantine zecledger
+```
+
+### Verify what you downloaded
+
+This tool reads your viewing key, so please check you got the real thing rather
+than taking our word for it. Download `SHA256SUMS` from the same release, then:
+
+```bash
+sha256sum -c SHA256SUMS
+```
+
+Every release is also built by a public GitHub Actions workflow with
+cryptographic build provenance, which proves the binary came from this repository
+and this source. If you have the GitHub CLI:
+
+```bash
+gh attestation verify zecledger-<version>-<target>.tar.gz -R vancube2/zecledger
+```
+
+Only ever download ZecLedger from this repository. Anything else claiming to be
+ZecLedger is fake.
+
+### Build from source
+
+If you would rather compile it yourself, you need a recent Rust toolchain and
+`protoc` (the Protocol Buffers compiler, used to generate the lightwalletd client).
 
 ```bash
 git clone https://github.com/vancube2/zecledger
@@ -69,13 +179,13 @@ zecledger cost-basis --method fifo --fetch-prices
 
 On first run ZecLedger asks for your Unified Full Viewing Key and your wallet birthday (the block height the wallet was created at). The key is used for that session only and is never stored.
 
-The copilot (`wallet-ask`) is optional and requires an `ANTHROPIC_API_KEY` in your environment. It only ever sends aggregate totals, never addresses or memos, and only after you confirm.
+The copilot (`wallet-ask`) is optional and requires an `ANTHROPIC_API_KEY` in your environment. It only ever sends aggregate totals, never addresses or memos, and only after you confirm. Every other feature works with no key and no account.
 
 ## Design principles
 
 - The core is strictly read-only. ZecLedger uses viewing keys and never spending keys, so it cannot send funds.
 - Payments happen by handoff. ZecLedger produces a ZIP-321 request; your own wallet performs any actual send.
-- The viewing key lives in memory only and leaves no trace on disk.
+- Your viewing key never leaves your machine and is never sent to any server. It is stored in the local wallet database, encrypted at rest with SQLCipher using your passphrase, which ZecLedger never stores.
 - Anything that sends data off the machine (the optional copilot) is opt-in and shown to you first.
 
 See [DESIGN.md](DESIGN.md) for the architecture and [SECURITY.md](SECURITY.md) for the security model.
@@ -86,6 +196,16 @@ See [DESIGN.md](DESIGN.md) for the architecture and [SECURITY.md](SECURITY.md) f
 - The average-cost method uses a running-average interpretation, and the holding period for a multi-lot disposal uses the earliest consumed lot.
 - The privacy check only inspects pool usage and amounts. It cannot see address reuse or timing patterns, so a clean report is not a guarantee.
 - Reconciliation matches on memo and amount; a clean confirmation needs the reference to appear in a memo.
+
+## Release history
+
+ZecLedger is built in the open, one working release at a time. Each version below is a real, downloadable build, and every change came from using the tool rather than from reading the code.
+
+**v0.1.3.** Reports can now be written in the format you choose: CSV, JSON, both, or Markdown. After a report is written, ZecLedger tells you exactly where the file is, including a Windows-friendly path when it is running under WSL, so the file is easy to find instead of left somewhere you have to hunt for. Key handling was made more forgiving, so a stray space or line break copied in alongside an API key no longer stops the copilot from working. The copilot's answers now come back as plain text suited to a terminal.
+
+**v0.1.2.** The interactive menu gained the copilot, so you can ask a question about your own wallet without leaving the program. Cost-basis reporting became selectable from the menu, letting you choose FIFO, LIFO, or average cost and whether to fetch live prices, rather than assuming one method. The reporting options were brought into the menu as well.
+
+**v0.1.1.** Running ZecLedger with no arguments now explains what it is and offers to set up a wallet, instead of printing a usage error and, on a double-clicked Windows console, closing before it could be read. A numbered menu was added so the features can be used without memorising commands. Sync shows its progress as it scans, so a long first sync no longer looks like a freeze. Opening the wrong network's wallet, or a wallet that was never created, was fixed, so ZecLedger opens the wallet you actually have and refuses to fabricate an empty one. A one-line install script was added for Linux and macOS.
 
 ## Built for
 
