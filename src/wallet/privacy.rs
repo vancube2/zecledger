@@ -72,6 +72,7 @@ pub fn report(data_dir: &Path, network: Network, passphrase: &str) -> Result<()>
     let mut transparent_count = 0usize;
     let mut sapling_count = 0usize;
     let mut orchard_count = 0usize;
+    let mut ironwood_count = 0usize;
     let mut transparent_value = 0i64;
     let mut round_count = 0usize;
 
@@ -83,6 +84,7 @@ pub fn report(data_dir: &Path, network: Network, passphrase: &str) -> Result<()>
             }
             2 => sapling_count += 1,
             3 => orchard_count += 1,
+            4 => ironwood_count += 1,
             _ => {}
         }
         if is_round_amount(zats_to_zec(o.value_zats)) {
@@ -90,14 +92,14 @@ pub fn report(data_dir: &Path, network: Network, passphrase: &str) -> Result<()>
         }
     }
 
-    let shielded_count = sapling_count + orchard_count;
+    let shielded_count = sapling_count + orchard_count + ironwood_count;
     let shielded_pct = (shielded_count as f64 / total as f64) * 100.0;
 
     // Pool breakdown.
     println!("  Outputs analyzed : {}", total);
     println!(
-        "  Shielded         : {} ({:.0}%)  [{} Orchard, {} Sapling]",
-        shielded_count, shielded_pct, orchard_count, sapling_count
+        "  Shielded         : {} ({:.0}%)  [{} Orchard, {} Ironwood, {} Sapling]",
+        shielded_count, shielded_pct, orchard_count, ironwood_count, sapling_count
     );
     println!("  Transparent      : {}", transparent_count);
     println!("  {:-<70}", "");
