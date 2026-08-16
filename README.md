@@ -13,27 +13,25 @@ Most blockchains make every payment public forever. Zcash fixes that with shield
 
 **Demo video:** https://youtu.be/7emZKHAH7TQ
 
-## Ironwood (NU6.3) support is not in v0.1.x yet
+## Ironwood (NU6.3) support
 
-The Ironwood network upgrade activates on mainnet at **block height 3,428,143,
-around 28 July 2026**. It introduces a new shielded pool and a v6 transaction
-format, and the Orchard pool stops accepting new activity. Funds move out of
-Orchard and into Ironwood.
+The Ironwood network upgrade activated on Zcash mainnet at block height
+3,428,143 (28 July 2026). It introduced a new shielded pool and a v6
+transaction format, and the Orchard pool stopped accepting new activity.
+Funds that migrate out of Orchard move into Ironwood.
 
-**ZecLedger v0.1.x was built before Ironwood and cannot see the Ironwood pool.**
-It is built on `zcash_client_backend` 0.23, which has no Ironwood support. Once
-you migrate funds out of Orchard, v0.1.x will not count them, so any balance or
-report it produces after that point may be wrong. It may also fail to sync across
-the new transaction format.
+**ZecLedger v0.2.0 supports Ironwood.** Balances, sync, and privacy analysis
+all correctly recognise Ironwood notes alongside Sapling and Orchard. This has
+been verified against live mainnet activity, with real Ironwood funds
+correctly detected and displayed after a full sync past the activation
+height.
 
-This is stated here rather than discovered later. An accounting tool that quietly
-reports the wrong number is worse than no tool at all.
+If you are upgrading from an earlier version, running `sync` applies the
+necessary database migration automatically. Existing wallets do not need to
+be re-imported.
 
-**What to do:** v0.2.0 with Ironwood support is being worked on now and is
-intended to land before 28 July 2026. Until then, treat v0.1.x output as valid
-only for pre-Ironwood history, and do not rely on it for balances after you
-migrate funds. Watch the
-[releases page](https://github.com/vancube2/zecledger/releases) for v0.2.0.
+Earlier versions (v0.1.x) were built before Ironwood and cannot see the
+Ironwood pool or its funds. If you are still on v0.1.x, upgrade to v0.2.0 or later.
 
 No funds are ever at risk either way. ZecLedger holds a viewing key, never a
 spending key, and cannot move a coin.
@@ -200,6 +198,14 @@ See [DESIGN.md](DESIGN.md) for the architecture and [SECURITY.md](SECURITY.md) f
 ## Release history
 
 ZecLedger is built in the open, one working release at a time. Each version below is a real, downloadable build, and every change came from using the tool rather than from reading the code.
+
+**v0.2.0.** ZecLedger now supports Ironwood (NU6.3), the shielded pool that
+activated on Zcash mainnet in July 2026. Balances, sync, and privacy analysis
+correctly recognise Ironwood notes alongside Sapling and Orchard. This was
+verified against real, live mainnet activity: real Ironwood funds were
+correctly detected and displayed after syncing a wallet past the activation
+height. Upgrading from v0.1.x is automatic — running `sync` migrates the
+existing wallet database with no re-import needed.
 
 **v0.1.3.** Reports can now be written in the format you choose: CSV, JSON, both, or Markdown. After a report is written, ZecLedger tells you exactly where the file is, including a Windows-friendly path when it is running under WSL, so the file is easy to find instead of left somewhere you have to hunt for. Key handling was made more forgiving, so a stray space or line break copied in alongside an API key no longer stops the copilot from working. The copilot's answers now come back as plain text suited to a terminal.
 
